@@ -10,7 +10,7 @@
 //   TIKTOK_SCOPES        - space separated scopes, defaults to user.info.basic
 
 const TIKTOK_AUTHORIZE_URL = 'https://www.tiktok.com/v2/auth/authorize/'
-const DEFAULT_SCOPES = 'user.info.basic'
+const DEFAULT_SCOPES = 'user.info.basic,video.publish,video.upload'
 const STATE_COOKIE = 'tiktok_oauth_state'
 const STATE_MAX_AGE_SECONDS = 600
 
