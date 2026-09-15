@@ -1,4 +1,15 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live Wire Entertainment</title><link rel="stylesheet" href="style.css"></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live Wire Entertainment</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.tiktok-box{max-width:760px;margin:0 auto}.tiktok-form{display:grid;gap:14px}.tiktok-form label{font-weight:700}.tiktok-form input,.tiktok-form select{width:100%;box-sizing:border-box;padding:12px;border-radius:8px;border:1px solid #aaa;font:inherit}.tiktok-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.tiktok-checks{display:grid;gap:8px}.tiktok-status{padding:12px;border-radius:8px;background:rgba(255,255,255,.08);min-height:22px}.tiktok-actions{display:flex;gap:10px;flex-wrap:wrap}.tiktok-help{font-size:.92rem;opacity:.85}@media(max-width:650px){.tiktok-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
 <div class="hero"><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><div class="brand">Live Wire Entertainment</div><p class="tag">Music • Live Entertainment • Community</p><p>Welcome to Live Wire Entertainment — music, live shows, original videos, nostalgia, banter and a community that loves great tunes.</p>
 <a class="btn" href="https://linktr.ee/livewireentertainment23">Our Links</a><a class="btn" href="#shows">Our Shows</a></div></div>
 <section id="shows"><div class="wrap"><h1>What's happening at Live Wire</h1>
@@ -6,6 +17,69 @@
 <div class="card"><h2>🔥 Saturday Entertainment</h2><p>Live Wire's weekend entertainment brings music, nostalgia, banter and community together.</p></div>
 <div class="card"><h2>🎵 Music & Nostalgia</h2><p>From classic favourites to forgotten gems, Live Wire celebrates music across the decades.</p></div>
 </div></section>
+<section id="tiktok"><div class="wrap"><div class="card tiktok-box"><h1>🎬 TikTok Publisher</h1><p>Connect your authorised TikTok account, choose your posting settings, and publish an original Live Wire video directly to TikTok.</p>
+<div class="tiktok-actions"><a class="btn" href="/.netlify/functions/tiktok-login">Connect TikTok</a><button class="btn" id="loadCreator" type="button">Load TikTok settings</button></div>
+<form class="tiktok-form" id="publisherForm" style="margin-top:18px">
+<label for="video">Video (MP4)</label><input id="video" name="video" type="file" accept="video/mp4" required>
+<label for="title">Caption</label><input id="title" name="title" maxlength="2200" placeholder="Write your Live Wire caption and hashtags...">
+<div class="tiktok-row"><div><label for="privacy">Who can watch</label><select id="privacy" required><option value="">Load TikTok settings first</option></select></div><div><label for="interaction">Interaction</label><div class="tiktok-checks"><label><input id="comment" type="checkbox"> Allow comments</label><label><input id="duet" type="checkbox"> Allow Duet</label><label><input id="stitch" type="checkbox"> Allow Stitch</label></div></div></div>
+<button class="btn" id="publish" type="submit">Publish directly to TikTok</button>
+<div class="tiktok-status" id="status" role="status">Connect TikTok, then load your creator settings.</div>
+<p class="tiktok-help">Your TikTok access and refresh tokens are kept server-side. The selected video is uploaded directly to TikTok after you confirm publishing.</p>
+</form></div></div></section>
 <section><div class="wrap"><h1>Follow Live Wire Entertainment</h1><p>Find our latest videos, live entertainment and community updates through our social channels.</p><p><a href="https://linktr.ee/livewireentertainment23">Live Wire Entertainment Linktree</a></p></div></section>
 <footer><p>© 2026 Live Wire Entertainment</p><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></p></footer>
-</body></html>
+<script>
+const $ = (id) => document.getElementById(id)
+const status = (text) => { $('status').textContent = text }
+$('loadCreator').addEventListener('click', async () => {
+  status('Loading your TikTok creator settings...')
+  try {
+    const r = await fetch('/.netlify/functions/tiktok-creator', { cache:'no-store' })
+    const d = await r.json()
+    if (!r.ok || !d.ok) throw new Error(d.error || 'Could not load TikTok settings.')
+    const select = $('privacy'); select.innerHTML = ''
+    for (const value of (d.privacy_level_options || [])) {
+      const option = document.createElement('option'); option.value = value; option.textContent = value.replaceAll('_',' '); select.appendChild(option)
+    }
+    if (!select.options.length) throw new Error('TikTok did not return any available privacy settings.')
+    select.value = d.privacy_level_options.includes('PUBLIC_TO_EVERYONE') ? 'PUBLIC_TO_EVERYONE' : select.options[0].value
+    $('comment').checked = d.comment_disabled === false
+    $('duet').checked = d.duet_disabled === false
+    $('stitch').checked = d.stitch_disabled === false
+    status(`Connected${d.creator_nickname ? ' as ' + d.creator_nickname : ''}. Choose your video and publish when ready.`)
+  } catch (e) { status(e.message) }
+})
+$('publisherForm').addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const file = $('video').files[0]
+  if (!file) return status('Choose an MP4 video first.')
+  if (file.type !== 'video/mp4') return status('Please choose an MP4 video.')
+  $('publish').disabled = true
+  try {
+    status('Preparing the TikTok upload...')
+    const init = await fetch('/.netlify/functions/tiktok-publish', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ video_size:file.size, title:$('title').value, privacy_level:$('privacy').value, disable_comment:!$('comment').checked, disable_duet:!$('duet').checked, disable_stitch:!$('stitch').checked }) })
+    const data = await init.json()
+    if (!init.ok || !data.ok) throw new Error(data.error || 'TikTok upload could not be started.')
+    status('Uploading the video to TikTok...')
+    const upload = await fetch(data.upload_url, { method:'PUT', headers:{'Content-Type':'video/mp4','Content-Length':String(file.size),'Content-Range':`bytes 0-${file.size-1}/${file.size}`}, body:file })
+    if (!upload.ok) throw new Error(`TikTok video upload failed (${upload.status}).`)
+    status('Upload complete. Checking TikTok publishing status...')
+    let state = 'PROCESSING_UPLOAD'
+    for (let i=0;i<12 && state==='PROCESSING_UPLOAD';i++) {
+      await new Promise(r=>setTimeout(r,2500))
+      const check = await fetch('/.netlify/functions/tiktok-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({publish_id:data.publish_id})})
+      const result = await check.json()
+      if (!check.ok || !result.ok) throw new Error(result.error || 'Could not check TikTok publishing status.')
+      state = result.status || result.publish_status || 'PROCESSING_UPLOAD'
+      if (state === 'PUBLISH_COMPLETE') { status('✅ Published to TikTok successfully.'); break }
+      if (state === 'FAILED') throw new Error(result.fail_reason || 'TikTok reported that the post failed.')
+      status(`TikTok status: ${state}`)
+    }
+    if (state !== 'PUBLISH_COMPLETE') status('TikTok is still processing the post. You can check the TikTok app shortly.')
+  } catch (e) { status('❌ ' + e.message) }
+  finally { $('publish').disabled = false }
+})
+</script>
+</body>
+</html>
