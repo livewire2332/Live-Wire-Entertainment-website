@@ -7,15 +7,17 @@
 <link rel="stylesheet" href="style.css">
 <style>
 .tiktok-box{max-width:760px;margin:0 auto}.tiktok-form{display:grid;gap:14px}.tiktok-form label{font-weight:700}.tiktok-form input,.tiktok-form select{width:100%;box-sizing:border-box;padding:12px;border-radius:8px;border:1px solid #aaa;font:inherit}.tiktok-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.tiktok-checks{display:grid;gap:8px}.tiktok-checks label{font-weight:400}.tiktok-status{padding:12px;border-radius:8px;background:rgba(255,255,255,.08);min-height:22px}.tiktok-actions{display:flex;gap:10px;flex-wrap:wrap}.tiktok-help{font-size:.92rem;opacity:.85}.tiktok-preview{display:none;width:100%;max-height:420px;border-radius:12px;margin-top:8px;background:#000}.tiktok-consent,.tiktok-commercial{padding:12px;border-radius:8px;background:rgba(255,255,255,.06)}.tiktok-consent label,.tiktok-commercial label{font-weight:400}.tiktok-subcheck{margin:8px 0 0 28px;display:grid;gap:8px}.tiktok-account{font-weight:700}.tiktok-warning{font-size:.9rem;opacity:.85}@media(max-width:650px){.tiktok-row{grid-template-columns:1fr}}
+.show-card h2{font-size:30px;margin-top:0}.show-card .show-kicker{color:#ffd43b;font-weight:800;letter-spacing:1px;text-transform:uppercase}.show-card .show-time{color:#58eaff;font-weight:800;font-size:19px}.show-card p{font-size:17px}.show-card ul{padding-left:22px}.flagship{border-color:#00eaff;box-shadow:0 0 14px rgba(0,234,255,.18)}
 </style>
 </head>
 <body>
 <div class="hero"><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><div class="brand">Live Wire Entertainment</div><p class="tag">Music • Live Entertainment • Community</p><p>Welcome to Live Wire Entertainment — music, live shows, original videos, nostalgia, banter and a community that loves great tunes.</p>
 <a class="btn" href="https://linktr.ee/livewireentertainment23">Our Links</a><a class="btn" href="#shows">Our Shows</a></div></div>
-<section id="shows"><div class="wrap"><h1>What's happening at Live Wire</h1>
-<div class="card"><h2>🎧 Feel Good Friday</h2><p>DJ Disco Dan brings music spanning the decades, big tunes and plenty of Live Wire Bar energy.</p></div>
-<div class="card"><h2>🔥 Saturday Entertainment</h2><p>Live Wire's weekend entertainment brings music, nostalgia, banter and community together.</p></div>
-<div class="card"><h2>🎵 Music & Nostalgia</h2><p>From classic favourites to forgotten gems, Live Wire celebrates music across the decades.</p></div>
+<section id="shows"><div class="wrap"><h1>⚡ Live Wire Flagship Shows</h1>
+<p>At the heart of Live Wire Entertainment are two long-standing regular weekend shows — bringing music, nostalgia, banter and the Live Wire community together week after week.</p>
+<div class="card show-card flagship"><div class="show-kicker">🎧 Friday nights</div><h2>Feel Good Friday with DJ Disco Dan</h2><p class="show-time">🕢 Fridays from 7:30pm</p><p><strong>Your weekend starts here!</strong> Feel Good Friday is one of Live Wire Entertainment's flagship regular shows, hosted by DJ Disco Dan from the Live Wire Bar.</p><p>Expect music spanning the decades, big singalong favourites, forgotten gems, nostalgia, banter and plenty of feel-good energy. It's a proper Friday-night mix designed to get the weekend started.</p><ul><li>🎶 Music spanning the decades</li><li>💿 Forgotten gems and music nostalgia</li><li>🍹 Live Wire Bar atmosphere</li><li>🔥 Regular Friday features and plenty of banter</li></ul></div>
+<div class="card show-card flagship"><div class="show-kicker">🚂 Saturday nights</div><h2>The Music Train with Mr Phoenix</h2><p class="show-time">🕢 Saturdays from 7:30pm</p><p><strong>Next stop... The Music Train!</strong> Mr Phoenix brings Live Wire's Saturday flagship show, taking the community on another musical journey through the decades.</p><p>Expect big tunes, nostalgia, banter and plenty of surprises as the Music Train rolls into another Saturday night. The show is a long-standing part of the Live Wire Entertainment weekend.</p><ul><li>🚂 A musical journey through the decades</li><li>🎵 Classic favourites and memorable tunes</li><li>😂 Live Wire banter and community</li><li>🔥 Saturday-night entertainment with Mr Phoenix</li></ul></div>
+<div class="card"><h2>🎵 Music & Nostalgia</h2><p>From classic favourites to forgotten gems, Live Wire celebrates music across the decades — with the community, the memories and the tunes at the centre of everything we do.</p></div>
 </div></section>
 <section id="tiktok"><div class="wrap"><div class="card tiktok-box"><h1>🎬 TikTok Publisher</h1><p>Connect your authorised TikTok account, review the video and posting settings, then publish an original Live Wire video directly to TikTok.</p>
 <div class="tiktok-actions"><a class="btn" href="/.netlify/functions/tiktok-login">Connect TikTok</a><button class="btn" id="loadCreator" type="button">Load TikTok settings</button></div>
@@ -40,117 +42,13 @@ const $ = (id) => document.getElementById(id)
 const status = (text) => { $('status').textContent = text }
 let creatorInfo = null
 let previewUrl = null
-
-$('video').addEventListener('change', () => {
-  const file = $('video').files[0]
-  if (!file) return
-  if (previewUrl) URL.revokeObjectURL(previewUrl)
-  previewUrl = URL.createObjectURL(file)
-  $('preview').src = previewUrl
-  $('preview').style.display = 'block'
-  $('preview').onloadedmetadata = () => {
-    const duration = $('preview').duration
-    $('videoInfo').textContent = Number.isFinite(duration) ? `Video length: ${Math.round(duration)} seconds` : ''
-    if (creatorInfo?.max_video_post_duration_sec && duration > Number(creatorInfo.max_video_post_duration_sec)) {
-      $('videoInfo').textContent += ` — too long for this TikTok account (maximum ${creatorInfo.max_video_post_duration_sec} seconds).`
-    }
-  }
-})
-
-$('loadCreator').addEventListener('click', async () => {
-  status('Loading your TikTok creator settings...')
-  try {
-    const r = await fetch('/.netlify/functions/tiktok-creator', { cache:'no-store' })
-    const d = await r.json()
-    if (!r.ok || !d.ok) throw new Error(d.error || 'Could not load TikTok settings.')
-    creatorInfo = d
-    $('creatorAccount').textContent = `TikTok account: ${d.creator_nickname || d.creator_username || 'Connected account'}`
-    const select = $('privacy')
-    select.innerHTML = '<option value="">Select who can watch</option>'
-    for (const value of (d.privacy_level_options || [])) {
-      const option = document.createElement('option')
-      option.value = value
-      option.textContent = value === 'PUBLIC_TO_EVERYONE' ? 'Everyone' : value === 'MUTUAL_FOLLOW_FRIENDS' ? 'Friends' : value === 'FOLLOWER_OF_CREATOR' ? 'Followers' : 'Only me'
-      if (value === 'SELF_ONLY') option.dataset.private = 'true'
-      select.appendChild(option)
-    }
-    select.disabled = false
-    $('comment').disabled = d.comment_disabled === true
-    $('duet').disabled = d.duet_disabled === true
-    $('stitch').disabled = d.stitch_disabled === true
-    $('comment').checked = false
-    $('duet').checked = false
-    $('stitch').checked = false
-    status(`Connected as ${d.creator_nickname || d.creator_username || 'your TikTok account'}. Choose the video and posting settings.`)
-  } catch (e) { status(e.message) }
-})
-
-$('commercial').addEventListener('change', () => {
-  $('commercialOptions').hidden = !$('commercial').checked
-  if (!$('commercial').checked) {
-    $('brandOrganic').checked = false
-    $('brandContent').checked = false
-  }
-})
-
-$('privacy').addEventListener('change', () => {
-  if ($('privacy').value === 'SELF_ONLY' && $('brandContent').checked) {
-    $('brandContent').checked = false
-    status('Branded content cannot use private/Only Me visibility. Choose Everyone/Friends or leave branded content off.')
-  }
-})
-
-$('brandContent').addEventListener('change', () => {
-  if ($('brandContent').checked && $('privacy').value === 'SELF_ONLY') {
-    $('brandContent').checked = false
-    status('Branded content cannot use private/Only Me visibility.')
-  }
-  if ($('brandContent').checked) $('commercial').checked = true
-})
+$('video').addEventListener('change', () => { const file = $('video').files[0]; if (!file) return; if (previewUrl) URL.revokeObjectURL(previewUrl); previewUrl = URL.createObjectURL(file); $('preview').src = previewUrl; $('preview').style.display = 'block'; $('preview').onloadedmetadata = () => { const duration = $('preview').duration; $('videoInfo').textContent = Number.isFinite(duration) ? `Video length: ${Math.round(duration)} seconds` : ''; if (creatorInfo?.max_video_post_duration_sec && duration > Number(creatorInfo.max_video_post_duration_sec)) $('videoInfo').textContent += ` — too long for this TikTok account (maximum ${creatorInfo.max_video_post_duration_sec} seconds).` } })
+$('loadCreator').addEventListener('click', async () => { status('Loading your TikTok creator settings...'); try { const r = await fetch('/.netlify/functions/tiktok-creator', { cache:'no-store' }); const d = await r.json(); if (!r.ok || !d.ok) throw new Error(d.error || 'Could not load TikTok settings.'); creatorInfo = d; $('creatorAccount').textContent = `TikTok account: ${d.creator_nickname || d.creator_username || 'Connected account'}`; const select = $('privacy'); select.innerHTML = '<option value="">Select who can watch</option>'; for (const value of (d.privacy_level_options || [])) { const option = document.createElement('option'); option.value = value; option.textContent = value === 'PUBLIC_TO_EVERYONE' ? 'Everyone' : value === 'MUTUAL_FOLLOW_FRIENDS' ? 'Friends' : value === 'FOLLOWER_OF_CREATOR' ? 'Followers' : 'Only me'; select.appendChild(option) } select.disabled = false; $('comment').disabled = d.comment_disabled === true; $('duet').disabled = d.duet_disabled === true; $('stitch').disabled = d.stitch_disabled === true; $('comment').checked = false; $('duet').checked = false; $('stitch').checked = false; status(`Connected as ${d.creator_nickname || d.creator_username || 'your TikTok account'}. Choose the video and posting settings.`) } catch (e) { status(e.message) } })
+$('commercial').addEventListener('change', () => { $('commercialOptions').hidden = !$('commercial').checked; if (!$('commercial').checked) { $('brandOrganic').checked = false; $('brandContent').checked = false } })
+$('privacy').addEventListener('change', () => { if ($('privacy').value === 'SELF_ONLY' && $('brandContent').checked) { $('brandContent').checked = false; status('Branded content cannot use private/Only Me visibility. Choose Everyone/Friends or leave branded content off.') } })
+$('brandContent').addEventListener('change', () => { if ($('brandContent').checked && $('privacy').value === 'SELF_ONLY') { $('brandContent').checked = false; status('Branded content cannot use private/Only Me visibility.') } if ($('brandContent').checked) $('commercial').checked = true })
 $('brandOrganic').addEventListener('change', () => { if ($('brandOrganic').checked) $('commercial').checked = true })
-
-$('publisherForm').addEventListener('submit', async (e) => {
-  e.preventDefault()
-  const file = $('video').files[0]
-  if (!file) return status('Choose an MP4 video first.')
-  if (file.type !== 'video/mp4') return status('Please choose an MP4 video.')
-  if (!creatorInfo) return status('Load TikTok settings first.')
-  if (!$('privacy').value) return status('Choose who can watch the TikTok post.')
-  if (!$('consentCheck').checked) return status("Please confirm TikTok's Music Usage Confirmation before posting.")
-  const commercial = $('commercial').checked
-  const brandOrganic = $('brandOrganic').checked
-  const brandContent = $('brandContent').checked
-  if (commercial && !brandOrganic && !brandContent) return status('Choose whether the commercial content promotes your brand, another brand, or both.')
-  if (brandContent && $('privacy').value === 'SELF_ONLY') return status('Branded content cannot be posted with private/Only Me visibility.')
-  const duration = $('preview').duration
-  if (creatorInfo.max_video_post_duration_sec && Number.isFinite(duration) && duration > Number(creatorInfo.max_video_post_duration_sec)) return status(`This video is too long. TikTok allows up to ${creatorInfo.max_video_post_duration_sec} seconds for this account.`)
-  if (file.size > 128 * 1024 * 1024) return status('For this test, please use a video no larger than 128 MB.')
-
-  $('publish').disabled = true
-  try {
-    status('Preparing the TikTok upload...')
-    const init = await fetch('/.netlify/functions/tiktok-publish', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ video_size:file.size, video_duration:Number.isFinite(duration) ? duration : 0, title:$('title').value, privacy_level:$('privacy').value, disable_comment:!$('comment').checked, disable_duet:!$('duet').checked, disable_stitch:!$('stitch').checked, commercial_content:commercial, brand_organic_toggle:brandOrganic, brand_content_toggle:brandContent }) })
-    const data = await init.json()
-    if (!init.ok || !data.ok) throw new Error(data.error || 'TikTok upload could not be started.')
-    status('Uploading the video to TikTok...')
-    const upload = await fetch(data.upload_url, { method:'PUT', headers:{'Content-Type':'video/mp4','Content-Length':String(file.size),'Content-Range':`bytes 0-${file.size-1}/${file.size}`}, body:file })
-    if (!upload.ok) throw new Error(`TikTok video upload failed (${upload.status}).`)
-    status('Upload complete. Checking TikTok publishing status...')
-    let state = 'PROCESSING_UPLOAD'
-    for (let i=0;i<12 && state==='PROCESSING_UPLOAD';i++) {
-      await new Promise(r=>setTimeout(r,2500))
-      const check = await fetch('/.netlify/functions/tiktok-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({publish_id:data.publish_id})})
-      const result = await check.json()
-      if (!check.ok || !result.ok) throw new Error(result.error || 'Could not check TikTok publishing status.')
-      state = result.status || result.publish_status || 'PROCESSING_UPLOAD'
-      if (state === 'PUBLISH_COMPLETE') { status('✅ Published to TikTok successfully. TikTok may take a few minutes to finish processing.'); break }
-      if (state === 'FAILED') throw new Error(result.fail_reason || 'TikTok reported that the post failed.')
-      status(`TikTok status: ${state}`)
-    }
-    if (state !== 'PUBLISH_COMPLETE') status('TikTok is still processing the post. You can check the TikTok app shortly.')
-  } catch (e) { status('❌ ' + e.message) }
-  finally { $('publish').disabled = false }
-})
+$('publisherForm').addEventListener('submit', async (e) => { e.preventDefault(); const file = $('video').files[0]; if (!file) return status('Choose an MP4 video first.'); if (file.type !== 'video/mp4') return status('Please choose an MP4 video.'); if (!creatorInfo) return status('Load TikTok settings first.'); if (!$('privacy').value) return status('Choose who can watch the TikTok post.'); if (!$('consentCheck').checked) return status("Please confirm TikTok's Music Usage Confirmation before posting."); const commercial = $('commercial').checked, brandOrganic = $('brandOrganic').checked, brandContent = $('brandContent').checked; if (commercial && !brandOrganic && !brandContent) return status('Choose whether the commercial content promotes your brand, another brand, or both.'); if (brandContent && $('privacy').value === 'SELF_ONLY') return status('Branded content cannot be posted with private/Only Me visibility.'); const duration = $('preview').duration; if (creatorInfo.max_video_post_duration_sec && Number.isFinite(duration) && duration > Number(creatorInfo.max_video_post_duration_sec)) return status(`This video is too long. TikTok allows up to ${creatorInfo.max_video_post_duration_sec} seconds for this account.`); if (file.size > 128 * 1024 * 1024) return status('For this test, please use a video no larger than 128 MB.'); $('publish').disabled = true; try { status('Preparing the TikTok upload...'); const init = await fetch('/.netlify/functions/tiktok-publish', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ video_size:file.size, video_duration:Number.isFinite(duration) ? duration : 0, title:$('title').value, privacy_level:$('privacy').value, disable_comment:!$('comment').checked, disable_duet:!$('duet').checked, disable_stitch:!$('stitch').checked, commercial_content:commercial, brand_organic_toggle:brandOrganic, brand_content_toggle:brandContent }) }); const data = await init.json(); if (!init.ok || !data.ok) throw new Error(data.error || 'TikTok upload could not be started.'); status('Uploading the video to TikTok...'); const upload = await fetch(data.upload_url, { method:'PUT', headers:{'Content-Type':'video/mp4','Content-Length':String(file.size),'Content-Range':`bytes 0-${file.size-1}/${file.size}`}, body:file }); if (!upload.ok) throw new Error(`TikTok video upload failed (${upload.status}).`); status('Upload complete. Checking TikTok publishing status...'); let state = 'PROCESSING_UPLOAD'; for (let i=0;i<12 && state==='PROCESSING_UPLOAD';i++) { await new Promise(r=>setTimeout(r,2500)); const check = await fetch('/.netlify/functions/tiktok-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({publish_id:data.publish_id})}); const result = await check.json(); if (!check.ok || !result.ok) throw new Error(result.error || 'Could not check TikTok publishing status.'); state = result.status || result.publish_status || 'PROCESSING_UPLOAD'; if (state === 'PUBLISH_COMPLETE') { status('✅ Published to TikTok successfully. TikTok may take a few minutes to finish processing.'); break } if (state === 'FAILED') throw new Error(result.fail_reason || 'TikTok reported that the post failed.'); status(`TikTok status: ${state}`) } if (state !== 'PUBLISH_COMPLETE') status('TikTok is still processing the post. You can check the TikTok app shortly.') } catch (e) { status('❌ ' + e.message) } finally { $('publish').disabled = false } })
 </script>
 </body>
 </html>
