@@ -1,0 +1,8 @@
+{
+  "name": "live-wire-tiktok-worker",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "wrangler": "^4.68.0"
+  }
+}
