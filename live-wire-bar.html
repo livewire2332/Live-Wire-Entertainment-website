@@ -6,8 +6,39 @@
 <title>Live Wire Bar | Live Wire Entertainment</title>
 <link rel="stylesheet" href="style.css">
 <style>
-.bar-hero{text-align:center;padding:55px 20px 35px;background:radial-gradient(circle at 50% 20%,#35104d 0,#090913 50%,#030307 100%)}
-.bar-hero h1{font-size:clamp(38px,8vw,68px);margin:10px 0;text-shadow:0 0 10px #ff2bd6,0 0 24px #00eaff}.bar-intro{font-size:20px;max-width:820px;margin:20px auto}.player{border:1px solid #00eaff;border-radius:22px;padding:32px;text-align:center;background:#0d1020;box-shadow:0 0 18px rgba(0,234,255,.25),0 0 35px rgba(255,43,214,.12);margin:25px 0}.live-status{display:inline-block;border:1px solid #ff2bd6;border-radius:22px;padding:7px 16px;font-weight:800;box-shadow:0 0 14px rgba(255,43,214,.45);margin-bottom:18px}.listen-btn{font-size:20px;padding:16px 30px}.coming{color:#ffd43b;font-weight:800}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:25px}.grid .card{margin:0}.back{text-align:center}
+/* Live Wire Bar: ambient nightclub/bar atmosphere — not a poster */
+body{background:#03040a;overflow-x:hidden}
+body::after{opacity:.7}
+.bar-hero{text-align:center;padding:65px 20px 45px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 5%,rgba(255,43,214,.28) 0,rgba(0,234,255,.10) 24%,transparent 55%),linear-gradient(180deg,#090816 0,#03040a 100%);border-bottom:1px solid rgba(0,234,255,.45);box-shadow:0 12px 45px rgba(255,43,214,.10),inset 0 -18px 35px rgba(0,234,255,.06)}
+.bar-hero::before{content:"";position:absolute;left:-10%;right:-10%;top:0;height:3px;background:linear-gradient(90deg,transparent,#00eaff,transparent,#ff2bd6,transparent,#ffd43b,transparent);box-shadow:0 0 12px #00eaff,0 0 28px #ff2bd6;animation:barSweep 7s linear infinite}
+.bar-hero::after{content:"";position:absolute;width:520px;height:520px;left:50%;top:-390px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,43,214,.20),rgba(0,234,255,.08) 38%,transparent 70%);filter:blur(5px);animation:barPulse 5s ease-in-out infinite}
+.bar-hero .wrap{position:relative;z-index:2}
+.bar-hero h1{font-size:clamp(38px,8vw,68px);margin:10px 0;text-shadow:0 0 10px #ff2bd6,0 0 24px #00eaff,0 0 45px rgba(255,43,214,.45)}
+.bar-intro{font-size:20px;max-width:820px;margin:20px auto;position:relative}
+section{position:relative;padding:42px 0}
+section:not(.back)::before{content:"";position:absolute;left:4%;right:4%;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,234,255,.75),rgba(255,43,214,.8),rgba(255,212,59,.65),transparent);box-shadow:0 0 10px rgba(0,234,255,.55),0 0 18px rgba(255,43,214,.3)}
+section:not(.back)::after{content:"";position:absolute;inset:18px 2% 18px;background:radial-gradient(ellipse at 10% 50%,rgba(0,234,255,.055),transparent 25%),radial-gradient(ellipse at 90% 50%,rgba(255,43,214,.055),transparent 25%);pointer-events:none;z-index:-1}
+section h1{text-shadow:0 0 8px rgba(0,234,255,.65),0 0 18px rgba(255,43,214,.3)}
+.player{position:relative;border:1px solid rgba(0,234,255,.85);border-radius:22px;padding:36px;text-align:center;background:linear-gradient(145deg,rgba(13,16,32,.96),rgba(18,8,28,.92));box-shadow:0 0 12px rgba(0,234,255,.35),0 0 30px rgba(255,43,214,.18),inset 0 0 28px rgba(0,234,255,.045);margin:25px 0;overflow:hidden}
+.player::before{content:"";position:absolute;inset:0;border-radius:22px;padding:1px;background:linear-gradient(115deg,transparent 10%,rgba(0,234,255,.9) 35%,transparent 50%,rgba(255,43,214,.9) 72%,transparent 90%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.7;animation:edgeFlow 5s linear infinite;pointer-events:none}
+.live-status{display:inline-block;border:1px solid #ff2bd6;border-radius:22px;padding:7px 16px;font-weight:800;box-shadow:0 0 10px rgba(255,43,214,.5),0 0 24px rgba(255,43,214,.22);margin-bottom:18px;animation:statusGlow 2.5s ease-in-out infinite}
+.listen-btn{font-size:20px;padding:16px 30px}
+.coming{color:#ffd43b;font-weight:800;text-shadow:0 0 8px rgba(255,212,59,.45)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;margin-top:25px}
+.grid .card{margin:0;position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(12,14,27,.92),rgba(20,8,25,.88));border:1px solid rgba(0,234,255,.45);box-shadow:0 0 9px rgba(0,234,255,.16),0 0 22px rgba(255,43,214,.08),inset 0 0 18px rgba(255,255,255,.018);transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.grid .card::before{content:"";position:absolute;top:0;left:-35%;width:28%;height:2px;background:#00eaff;box-shadow:0 0 10px #00eaff,0 0 22px #00eaff;animation:cardLight 5s linear infinite}
+.grid .card:nth-child(2)::before{background:#ff2bd6;box-shadow:0 0 10px #ff2bd6,0 0 22px #ff2bd6;animation-delay:1.2s}
+.grid .card:nth-child(3)::before{background:#ffd43b;box-shadow:0 0 10px #ffd43b,0 0 22px #ffd43b;animation-delay:2.4s}
+.grid .card:nth-child(4)::before{background:#00eaff;box-shadow:0 0 10px #00eaff,0 0 22px #00eaff;animation-delay:3.6s}
+.grid .card:hover{transform:translateY(-4px);border-color:rgba(255,43,214,.8);box-shadow:0 0 16px rgba(0,234,255,.3),0 0 32px rgba(255,43,214,.18),inset 0 0 24px rgba(255,43,214,.035)}
+.back{text-align:center}
+@keyframes barSweep{0%{transform:translateX(-20%)}100%{transform:translateX(20%)}}
+@keyframes barPulse{0%,100%{opacity:.55;transform:translateX(-50%) scale(.9)}50%{opacity:1;transform:translateX(-50%) scale(1.08)}}
+@keyframes edgeFlow{0%{transform:translateX(-25%)}100%{transform:translateX(25%)}}
+@keyframes statusGlow{0%,100%{opacity:.78}50%{opacity:1;box-shadow:0 0 14px rgba(255,43,214,.75),0 0 30px rgba(255,43,214,.28)}}
+@keyframes cardLight{0%{left:-35%}55%,100%{left:110%}}
+@media(max-width:600px){.bar-hero{padding-top:45px}.player{padding:27px 18px}section{padding:32px 0}.grid{gap:17px}}
+@media(prefers-reduced-motion:reduce){.bar-hero::before,.bar-hero::after,.player::before,.live-status,.grid .card::before{animation:none}}
 </style>
 </head>
 <body>
