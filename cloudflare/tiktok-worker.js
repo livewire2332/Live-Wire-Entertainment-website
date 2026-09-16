@@ -98,7 +98,14 @@ async function publish(request, env) {
     const token = await accessToken(env);
     const response = await fetch(TIKTOK_PUBLISH_URL, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify({ post_info: { title: String(body.title || '').slice(0, 2200), privacy_level: body.privacy_level, disable_comment: Boolean(body.disable_comment), disable_duet: Boolean(body.disable_duet), disable_stitch: Boolean(body.disable_stitch), video_cover_timestamp_ms: 1000, brand_content_toggle: Boolean(body.brand_content_toggle), brand_organic_toggle: Boolean(body.brand_organic_toggle) }, source_info: { source: 'FILE_UPLOAD', video_size: Number(body.video_size), chunk_size: Number(body.video_size), total_chunk_count: 1 } }) });
     const data = await response.json().catch(() => null);
-    if (!response.ok || data?.error?.code) return json({ ok: false, error: data?.error?.message || 'TikTok upload could not be started.' }, 502);
+    if (!response.ok || data?.error?.code && data.error.code !== 'ok') {
+      return json({
+        ok: false,
+        error: data?.error?.message || data?.error?.code || 'TikTok upload could not be started.',
+        tiktok_error_code: data?.error?.code || null,
+        tiktok_log_id: data?.error?.log_id || null
+      }, response.status >= 400 ? response.status : 502);
+    }
     return json({ ok: true, ...data.data });
   } catch (error) { return json({ ok: false, error: error.message }, 400); }
 }
