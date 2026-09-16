@@ -4,5 +4,10 @@
   "main": "./tiktok-worker.js",
   "compatibility_date": "2026-09-16",
   "workers_dev": true,
-  "keep_vars": true
+  "keep_vars": true,
+  "kv_namespaces": [
+    {
+      "binding": "TIKTOK_TOKENS"
+    }
+  ]
 }
