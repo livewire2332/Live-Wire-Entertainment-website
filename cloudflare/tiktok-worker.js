@@ -4,6 +4,7 @@ const TIKTOK_CREATOR_INFO_URL = 'https://open.tiktokapis.com/v2/post/publish/cre
 const TIKTOK_PUBLISH_URL = 'https://open.tiktokapis.com/v2/post/publish/video/init/';
 const TIKTOK_STATUS_URL = 'https://open.tiktokapis.com/v2/post/publish/status/fetch/';
 const TOKEN_KEY = 'tokens';
+const CLOUDFLARE_REDIRECT_URI = 'https://live-wire-entertainment-website.dlyons184.workers.dev/tiktok-callback';
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
@@ -13,7 +14,7 @@ function html(body, status = 200) {
   return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live Wire Entertainment</title></head><body style="font-family:system-ui;padding:30px"><h1>⚡ Live Wire Entertainment</h1>${body}<p><a href="https://livewire2332.github.io/Live-Wire-Entertainment-website/">Back to Live Wire Entertainment</a></p></body></html>`, { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
 }
 
-function redirectUri(env) { return env.TIKTOK_REDIRECT_URI || `${env.WORKER_BASE_URL}/tiktok-callback`; }
+function redirectUri(env) { return CLOUDFLARE_REDIRECT_URI; }
 function requireMethod(request, method) { return request.method === method; }
 async function getTokens(env) { return await env.TIKTOK_TOKENS.get(TOKEN_KEY, 'json'); }
 
