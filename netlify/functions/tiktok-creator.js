@@ -28,11 +28,7 @@ async function getAccessToken() {
   const fresh = await response.json().catch(() => null)
   if (!response.ok || !fresh?.access_token) throw new Error('TikTok access expired. Please connect TikTok again.')
 
-  await store.setJSON(KEY, {
-    ...tokens,
-    ...fresh,
-    saved_at: Date.now(),
-  })
+  await store.setJSON(KEY, { ...tokens, ...fresh, saved_at: Date.now() })
   return fresh.access_token
 }
 
@@ -40,10 +36,17 @@ export default async () => {
   try {
     const accessToken = await getAccessToken()
     const response = await fetch(CREATOR_URL, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({}),
     })
     const data = await response.json().catch(() => null)
-    if (!response.ok || data?.error?.code) throw new Error(data?.error?.message || 'TikTok creator settings could not be loaded.')
+    if (!response.ok || (data?.error?.code && data.error.code !== 'ok')) {
+      throw new Error(data?.error?.message || 'TikTok creator settings could not be loaded.')
+    }
 
     return new Response(JSON.stringify({ ok: true, ...data.data }), {
       status: 200,
