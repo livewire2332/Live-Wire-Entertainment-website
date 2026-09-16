@@ -5,9 +5,10 @@ const TIKTOK_PUBLISH_URL = 'https://open.tiktokapis.com/v2/post/publish/video/in
 const TIKTOK_STATUS_URL = 'https://open.tiktokapis.com/v2/post/publish/status/fetch/';
 const TOKEN_KEY = 'tokens';
 const CLOUDFLARE_REDIRECT_URI = 'https://live-wire-entertainment-website.dlyons184.workers.dev/tiktok-callback';
+const ALLOWED_ORIGIN = 'https://livewire2332.github.io';
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
+  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'Access-Control-Allow-Origin': ALLOWED_ORIGIN, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
 }
 
 function html(body, status = 200) {
@@ -118,6 +119,7 @@ async function status(request, env) {
 export default {
   async fetch(request, env) {
     if (!env.TIKTOK_CLIENT_KEY || !env.TIKTOK_CLIENT_SECRET || !env.TIKTOK_TOKENS) return json({ ok: false, error: 'TikTok Worker is not configured yet.' }, 500);
+    if (request.method === 'OPTIONS') return json({ ok: true });
     const path = new URL(request.url).pathname.replace(/\/$/, '');
     try {
       if (path === '/tiktok-login') return login(request, env);
