@@ -9,6 +9,23 @@
 .show-card h2{font-size:30px;margin-top:0}.show-card .show-kicker{color:#ffd43b;font-weight:800;letter-spacing:1px;text-transform:uppercase}.show-card .show-time{color:#58eaff;font-weight:800;font-size:19px}.show-card p{font-size:17px}.show-card ul{padding-left:22px}.flagship{border-color:#00eaff;box-shadow:0 0 14px rgba(0,234,255,.18)}
 .admin-link{font-size:.9rem;opacity:.8}
 .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:25px}.feature-grid .card{margin:0}.live-badge{display:inline-block;padding:7px 14px;border:1px solid #ff2bd6;border-radius:20px;color:#fff;box-shadow:0 0 14px rgba(255,43,214,.5);font-weight:800}.cta{text-align:center}
+/* Homepage ambient lighting — lively website atmosphere, not poster graphics */
+section{position:relative;overflow:hidden}
+section:not(#shows)::before,section#shows::before{content:"";position:absolute;left:3%;right:3%;top:0;height:2px;background:linear-gradient(90deg,transparent,#00eaff,transparent,#ff2bd6,transparent,#ffd43b,transparent);background-size:220% 100%;box-shadow:0 0 10px rgba(0,234,255,.6),0 0 24px rgba(255,43,214,.28);animation:homeRail 8s linear infinite}
+section:not(#shows)::after,section#shows::after{content:"";position:absolute;inset:10px 0;pointer-events:none;background:radial-gradient(ellipse at 8% 45%,rgba(0,234,255,.07),transparent 23%),radial-gradient(ellipse at 92% 55%,rgba(255,43,214,.07),transparent 23%),radial-gradient(ellipse at 50% 100%,rgba(255,212,59,.035),transparent 35%);z-index:-1}
+.feature-grid .card,.card:not(.show-card){position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(12,14,27,.94),rgba(20,8,25,.90));border:1px solid rgba(0,234,255,.42);box-shadow:0 0 10px rgba(0,234,255,.14),0 0 24px rgba(255,43,214,.07),inset 0 0 18px rgba(255,255,255,.018);transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.feature-grid .card::before,.card:not(.show-card)::before{content:"";position:absolute;top:0;left:-30%;width:24%;height:2px;background:#00eaff;box-shadow:0 0 10px #00eaff,0 0 22px #00eaff;animation:homeCardLight 6s linear infinite}
+.feature-grid .card:nth-child(2)::before{background:#ff2bd6;box-shadow:0 0 10px #ff2bd6,0 0 22px #ff2bd6;animation-delay:1.5s}
+.feature-grid .card:nth-child(3)::before{background:#ffd43b;box-shadow:0 0 10px #ffd43b,0 0 22px #ffd43b;animation-delay:3s}
+.feature-grid .card:nth-child(4)::before{background:#00eaff;box-shadow:0 0 10px #00eaff,0 0 22px #00eaff;animation-delay:4.5s}
+.feature-grid .card:hover,.card:not(.show-card):hover{transform:translateY(-4px);border-color:rgba(255,43,214,.8);box-shadow:0 0 17px rgba(0,234,255,.3),0 0 34px rgba(255,43,214,.18),inset 0 0 24px rgba(255,43,214,.035)}
+.flagship{position:relative;overflow:hidden}
+.flagship::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(110deg,transparent 15%,rgba(0,234,255,.08) 38%,transparent 52%,rgba(255,43,214,.08) 70%,transparent 88%);background-size:220% 100%;animation:flagshipSweep 9s linear infinite}
+@keyframes homeRail{0%{background-position:0% 50%}100%{background-position:220% 50%}}
+@keyframes homeCardLight{0%{left:-30%}55%,100%{left:110%}}
+@keyframes flagshipSweep{0%{background-position:120% 0}100%{background-position:-120% 0}}
+@media(max-width:600px){section:not(#shows)::before,section#shows::before{left:5%;right:5%}}
+@media(prefers-reduced-motion:reduce){section::before,.feature-grid .card::before,.card:not(.show-card)::before,.flagship::after{animation:none}}
 </style>
 </head>
 <body>
