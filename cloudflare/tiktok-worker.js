@@ -100,7 +100,7 @@ async function status(request, env) {
     const token = await accessToken(env);
     const response = await fetch(TIKTOK_STATUS_URL, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify({ publish_id: body.publish_id }) });
     const data = await response.json().catch(() => null);
-    if (!response.ok || data?.error?.code) return json({ ok: false, error: data?.error?.message || 'Could not check TikTok publishing status.', tiktok_error_code: data?.error?.code || null, tiktok_log_id: data?.error?.log_id || null }, response.status >= 400 ? response.status : 502);
+    if (!response.ok || data?.error?.code && data.error.code !== 'ok') return json({ ok: false, error: data?.error?.message || 'Could not check TikTok publishing status.', tiktok_error_code: data?.error?.code || null, tiktok_log_id: data?.error?.log_id || null }, response.status >= 400 ? response.status : 502);
     return json({ ok: true, ...data.data });
   } catch (error) { return json({ ok: false, error: error.message }, 400); }
 }
