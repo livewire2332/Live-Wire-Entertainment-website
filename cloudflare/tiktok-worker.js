@@ -67,7 +67,24 @@ async function callback(request, env) {
 
 async function creator(request, env) {
   if (!requireMethod(request, 'GET')) return json({ ok: false, error: 'Method not allowed.' }, 405);
-  try { const token = await accessToken(env); const response = await fetch(TIKTOK_CREATOR_INFO_URL, { method: 'POST', headers: { Authorization: `Bearer ${token}` } }); const data = await response.json().catch(() => null); if (!response.ok || data?.error?.code) return json({ ok: false, error: data?.error?.message || 'Could not load TikTok creator settings.' }, 502); return json({ ok: true, ...data.data }); } catch (error) { return json({ ok: false, error: error.message }, 401); }
+  try {
+    const token = await accessToken(env);
+    const response = await fetch(TIKTOK_CREATOR_INFO_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: '{}',
+    });
+    const data = await response.json().catch(() => null);
+    if (!response.ok || data?.error?.code !== 'ok') {
+      return json({ ok: false, error: data?.error?.message || data?.error?.code || 'Could not load TikTok creator settings.', tiktok_error_code: data?.error?.code || null, tiktok_log_id: data?.error?.log_id || null }, response.status || 502);
+    }
+    return json({ ok: true, ...data.data });
+  } catch (error) {
+    return json({ ok: false, error: error.message }, 401);
+  }
 }
 
 async function publish(request, env) {
