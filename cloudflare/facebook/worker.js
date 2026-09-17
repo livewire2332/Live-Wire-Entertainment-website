@@ -2,7 +2,6 @@ const META_GRAPH_VERSION = 'v24.0';
 const META_AUTHORIZE_URL = `https://www.facebook.com/${META_GRAPH_VERSION}/dialog/oauth`;
 const META_TOKEN_URL = `https://graph.facebook.com/${META_GRAPH_VERSION}/oauth/access_token`;
 const META_GRAPH_URL = `https://graph.facebook.com/${META_GRAPH_VERSION}`;
-const CONFIG_ID = '1095870756233272';
 const APP_ID = '1855203898976920';
 const ALLOWED_ORIGIN = 'https://livewire2332.github.io';
 const TOKEN_KEY = 'facebook_page_connection';
@@ -38,7 +37,7 @@ async function login(request, env) {
     client_id: APP_ID,
     redirect_uri: redirectUri(request),
     response_type: 'code',
-    config_id: CONFIG_ID,
+    scope: 'pages_show_list,pages_manage_posts',
     state,
   });
   return new Response(null, { status: 302, headers: { Location: `${META_AUTHORIZE_URL}?${params}`, 'Cache-Control': 'no-store' } });
