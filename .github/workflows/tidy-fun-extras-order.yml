@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Move interactive zone above archive sections
+      - name: Move archive sections below interactive zone
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -25,7 +25,6 @@ jobs:
           p = Path('live-wire-extras.html')
           s = p.read_text(encoding='utf-8')
 
-          # Work only on the body section blocks. Do not rewrite styles or scripts.
           body_start = s.find('<body>')
           body_end = s.rfind('</body>')
           if body_start < 0 or body_end < 0:
@@ -35,51 +34,56 @@ jobs:
           body = s[body_start:body_end]
           after = s[body_end:]
 
-          sections = list(re.finditer(r'<section class="extras-section">.*?</section>', body, flags=re.S))
-          if not sections:
-              raise SystemExit('No extras sections found')
+          section_pattern = re.compile(r'<section class="extras-section">.*?</section>', re.S)
+          blocks = [m.group(0) for m in section_pattern.finditer(body)]
 
-          blocks = [m.group(0) for m in sections]
+          def find_block(text):
+              return next((b for b in blocks if text in b), None)
+
+          memories = find_block('<h1>📸 Live Wire Memories</h1>')
+          hall = find_block('<h1>🏆 Live Wire Hall of Fame</h1>')
+          nav = next((b for b in blocks if 'Back To The Live Wire Bar' in b and 'Back To Live Wire Entertainment' in b), None)
+
+          # The quirky marker sits immediately before its section, so locate the
+          # section by searching forward from the marker rather than expecting
+          # the comment to be inside the section match.
+          quirky_marker = '<!-- LIVE-WIRE-QUIRKY-EXTRAS -->'
+          qm = body.find(quirky_marker)
           interactive = None
-          memories = None
-          hall = None
-          nav = None
-
-          for b in blocks:
-              if '<!-- LIVE-WIRE-QUIRKY-EXTRAS -->' in b:
-                  interactive = b
-              elif '<h1>📸 Live Wire Memories</h1>' in b:
-                  memories = b
-              elif '<h1>🏆 Live Wire Hall of Fame</h1>' in b:
-                  hall = b
-              elif 'Back To The Live Wire Bar' in b and 'Back To Live Wire Entertainment' in b:
-                  nav = b
+          if qm >= 0:
+              m = section_pattern.search(body, qm)
+              if m:
+                  interactive = m.group(0)
 
           if not all([interactive, memories, hall, nav]):
               raise SystemExit(f'Missing target block: interactive={bool(interactive)} memories={bool(memories)} hall={bool(hall)} nav={bool(nav)}')
 
-          # Remove the four target blocks from their current positions.
-          for target in [interactive, memories, hall, nav]:
+          # Remove only the three archive/navigation blocks. Leave the entire
+          # quirky interactive block exactly where it already is.
+          for target in [memories, hall, nav]:
               body = body.replace(target, '', 1)
 
-          # Put all interactive content together, then Memories, then Hall of Fame, then navigation.
-          marker = '</div></div></section>'
-          insert_at = body.rfind(marker)
-          # Insert just before the first footer if present; otherwise before closing body.
-          footer_pos = body.find('<footer')
-          if footer_pos < 0:
-              footer_pos = len(body)
-
-          ordered = '\n' + interactive + '\n' + memories + '\n' + hall + '\n' + nav + '\n'
-          body = body[:footer_pos] + ordered + body[footer_pos:]
+          # Re-find the interactive block after removals and place Memories,
+          # Hall of Fame and navigation directly after it.
+          qm = body.find(quirky_marker)
+          m = section_pattern.search(body, qm)
+          if not m:
+              raise SystemExit('Interactive block disappeared unexpectedly')
+          end = m.end()
+          ordered = '\n' + memories + '\n' + hall + '\n' + nav + '\n'
+          body = body[:end] + ordered + body[end:]
 
           p.write_text(before + body + after, encoding='utf-8')
           PY
 
-      - name: Commit tidy layout and remove one-time workflow
+      - name: Commit tidy layout
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add live-wire-extras.html .github/workflows/tidy-fun-extras-order.yml
-          git commit -m "Tidy Fun & Extras section order [fun-extras-order-done]"
-          git push
+          git add live-wire-extras.html
+          if git diff --cached --quiet; then
+            echo "No changes needed"
+          else
+            git commit -m "Tidy Fun & Extras section order [fun-extras-order-done]"
+            git push
+          fi
