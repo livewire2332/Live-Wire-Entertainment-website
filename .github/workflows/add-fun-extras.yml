@@ -1,0 +1,149 @@
+name: Add quirky Fun & Extras features
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-extras:
+    if: "!contains(github.event.head_commit.message, '[fun-extras-done]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add quirky interactive features
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('live-wire-extras.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '<!-- LIVE-WIRE-QUIRKY-EXTRAS -->'
+          if marker in s:
+              print('Quirky extras already present; nothing to do.')
+              raise SystemExit(0)
+
+          css = '''
+          <style>
+          .quirky-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;margin-top:24px}
+          .quirky-card{margin:0;position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(12,14,27,.96),rgba(25,7,31,.94));border:1px solid rgba(0,234,255,.48);border-radius:18px;padding:26px;box-shadow:0 0 14px rgba(0,234,255,.16),0 0 28px rgba(255,43,214,.09);transition:.3s}
+          .quirky-card:hover{transform:translateY(-4px);border-color:#ff2bd6;box-shadow:0 0 20px rgba(0,234,255,.28),0 0 36px rgba(255,43,214,.18)}
+          .quirky-card h2{margin-top:0}.quirky-answer{margin-top:18px;padding:16px;border-radius:14px;border:1px solid rgba(255,212,59,.55);background:rgba(5,5,12,.65);text-align:center;min-height:28px;color:#fff}.quirky-choices{display:grid;gap:10px;margin-top:18px}.quirky-choice{cursor:pointer;border:1px solid #00eaff;border-radius:22px;background:#11152a;color:#fff;padding:11px 15px;font-size:16px;box-shadow:0 0 9px rgba(0,234,255,.25);transition:.2s}.quirky-choice:hover{transform:translateY(-2px);box-shadow:0 0 14px #00eaff,0 0 22px #ff2bd6}.quirky-score{text-align:center;color:#58eaff;font-weight:900;margin-top:15px}.quirky-big{text-align:center;font-size:22px;font-weight:900;margin:18px 0}.quirky-random{font-size:24px;font-weight:900;text-align:center;line-height:1.35;min-height:70px}.quirky-sub{text-align:center;color:#bbb;line-height:1.55}.quirky-card .fun-btn{margin-top:12px}
+          </style>
+          '''
+
+          html = '''
+          <!-- LIVE-WIRE-QUIRKY-EXTRAS -->
+          <section class="extras-section">
+            <div class="wrap">
+              <h1>😂⚡ The Dan vs Will Zone</h1>
+              <div class="quirky-grid">
+                <div class="quirky-card">
+                  <div class="mini-label">Who’s more likely?</div>
+                  <h2>🎤 Dan vs Will</h2>
+                  <p>Pick who you reckon is more likely. No arguments afterwards... probably. 😂</p>
+                  <div id="dwQuestion" class="quirky-big">Who is more likely to start the banter?</div>
+                  <div class="quirky-choices"><button class="quirky-choice" data-dw="Dan">⚡ DAN</button><button class="quirky-choice" data-dw="Will">🔥 WILL</button></div>
+                  <div id="dwAnswer" class="quirky-answer" aria-live="polite">Choose one...</div>
+                  <button type="button" class="fun-btn" id="dwNext">🎲 Next One</button>
+                </div>
+
+                <div class="quirky-card">
+                  <div class="mini-label">No rules. Just press it.</div>
+                  <h2>🎲 Live Wire Randomiser</h2>
+                  <p class="quirky-sub">Need a completely random bit of Live Wire nonsense? This button has you covered.</p>
+                  <div id="randomResult" class="quirky-random" aria-live="polite">YOUR RANDOM LIVE WIRE MOMENT IS WAITING...</div>
+                  <button type="button" class="fun-btn" id="randomBtn">⚡ GIVE ME SOMETHING RANDOM</button>
+                </div>
+
+                <div class="quirky-card">
+                  <div class="mini-label">Musical challenge</div>
+                  <h2>🧠 Finish The Tune</h2>
+                  <p>Pick the missing title from three choices. Short clue, big nostalgia.</p>
+                  <div id="tuneQuestion" class="quirky-big">Which song belongs with this clue: “Dancing queen...”?</div>
+                  <div id="tuneChoices" class="quirky-choices"></div>
+                  <div id="tuneAnswer" class="quirky-answer" aria-live="polite">Your answer is waiting...</div>
+                </div>
+
+                <div class="quirky-card">
+                  <div class="mini-label">All aboard</div>
+                  <h2>🚂 Where’s The Music Train Going?</h2>
+                  <p class="quirky-sub">Mr Phoenix has handed over the controls. What could possibly go wrong?</p>
+                  <div id="trainRandom" class="quirky-random">NEXT STOP: ???</div>
+                  <button type="button" class="fun-btn" id="trainRandomBtn">🚂 PICK A DESTINATION</button>
+                </div>
+
+                <div class="quirky-card">
+                  <div class="mini-label">The ultimate personality test</div>
+                  <h2>🎧 Are You A Dan Or A Will?</h2>
+                  <p>Answer a few quick questions and discover which side of Live Wire your personality leans towards.</p>
+                  <div id="personalityQuestion" class="quirky-big">Your ideal night starts with...</div>
+                  <div id="personalityChoices" class="quirky-choices"></div>
+                  <div id="personalityResult" class="quirky-answer" aria-live="polite">Question 1 of 5</div>
+                </div>
+              </div>
+            </div>
+          </section>
+          '''
+
+          js = '''
+          <script>
+          (function(){
+            const dw=[
+              ['Who is more likely to start the banter?','Dan probably started it. Will definitely carried it on. 😂'],
+              ['Who is more likely to mention the radio?','Dan. Give him five minutes and the radio stories are coming. 📻'],
+              ['Who is more likely to sneak Nickelback into the night?','Will. The Nickelback Guarantee remains suspiciously strong. 🎸'],
+              ['Who is more likely to turn a simple question into a full conversation?','Dan. Broadcaster mode: ACTIVATED. 🎙️'],
+              ['Who is more likely to throw in a random quiz?','Will. Nobody saw it coming. Again. 🧠😂'],
+              ['Who is more likely to wind the other one up?','Both. This is Live Wire, after all. 😂⚡']
+            ];
+            let dwIndex=0;
+            const q=document.getElementById('dwQuestion'),a=document.getElementById('dwAnswer');
+            function showDW(){q.textContent=dw[dwIndex][0];a.textContent='Choose one...';}
+            document.querySelectorAll('[data-dw]').forEach(b=>b.addEventListener('click',()=>{a.textContent=b.dataset.dw+'? We’ll allow it. The official Live Wire answer: '+dw[dwIndex][1];}));
+            document.getElementById('dwNext').addEventListener('click',()=>{dwIndex=(dwIndex+1)%dw.length;showDW();});
+
+            const randoms=['YOUR NEXT TUNE SHOULD PROBABLY BE LOUDER. 🔊⚡','YOU HAVE BEEN RANDOMLY ASSIGNED TO 80s AVENUE. 🚂','MR PHOENIX IS CURRENTLY BLAMING NICKELBACK. 🎸😂','DJ DISCO DAN HAS ENTERED RADIO MODE. 📻','THE LIVE WIRE BAR HAS RESERVED YOU A STOOL. 🍹','ONE MORE SONG. GO ON THEN. 🎶','BANter LEVEL: DANGEROUSLY HIGH. 😂⚡','YOU ARE OFFICIALLY CLEARED FOR GOOD VIBES. 🚀'];
+            const rr=document.getElementById('randomResult');document.getElementById('randomBtn').addEventListener('click',()=>{rr.textContent=randoms[Math.floor(Math.random()*randoms.length)];});
+
+            const tunes=[
+              ['Which song belongs with this clue: “Dancing queen...”',['Dancing Queen','Don’t Stop Me Now','Mr. Brightside'],'Dancing Queen'],
+              ['Which song belongs with this clue: “Livin’ on a prayer...”',['Livin’ on a Prayer','Wannabe','Sex on Fire'],'Livin’ on a Prayer'],
+              ['Which song belongs with this clue: “Mr. Brightside...”',['Mr. Brightside','Rhythm Is a Dancer','Uptown Funk'],'Mr. Brightside'],
+              ['Which song belongs with this clue: “I wanna dance...”',['I Wanna Dance with Somebody','Hips Don’t Lie','Twist and Shout'],'I Wanna Dance with Somebody']
+            ];
+            let ti=0;const tq=document.getElementById('tuneQuestion'),tc=document.getElementById('tuneChoices'),ta=document.getElementById('tuneAnswer');
+            function tune(){const x=tunes[ti];tq.textContent=x[0];tc.innerHTML='';x[1].forEach(v=>{const b=document.createElement('button');b.className='quirky-choice';b.textContent=v;b.onclick=()=>{ta.textContent=v===x[2]?'⚡ CORRECT! Live Wire music brain activated.':'😂 Not quite! The answer is '+x[2]+'.';ti=(ti+1)%tunes.length;setTimeout(tune,900);};tc.appendChild(b);});ta.textContent='Your answer is waiting...';} tune();
+
+            const stops=['80s Avenue','90s Junction','70s Disco Street','00s Rock Road','Forgotten Gems Central','Vinyl Village','Top of the Pops Terrace','Nickelback Junction (Will insists)'];
+            document.getElementById('trainRandomBtn').addEventListener('click',()=>{document.getElementById('trainRandom').textContent='NEXT STOP: '+stops[Math.floor(Math.random()*stops.length)].toUpperCase();});
+
+            const personality=[
+              ['Your ideal night starts with...',['A microphone and a stack of music history.','A guitar, some rock and probably Nickelback.']],
+              ['Pick your natural role...',['The chatty broadcaster.','The quirky one-liner specialist.']],
+              ['A surprise quiz appears. You...',['Get ready with a music fact.','Pretend you knew the answer all along. 😂']],
+              ['Someone starts the banter. You...',['Keep it going.','Take it up another level. 😂']],
+              ['Choose your soundtrack...',['A journey through the decades.','00s rock with a few surprises.']]
+            ];
+            let pi=0,dan=0,will=0;const pq=document.getElementById('personalityQuestion'),pc=document.getElementById('personalityChoices'),pr=document.getElementById('personalityResult');
+            function personality(){if(pi>=personality.length){const winner=dan>will?'DAN MODE':will>dan?'WILL MODE':'FULL LIVE WIRE MODE';pq.textContent='⚡ RESULT: '+winner;pc.innerHTML='';pr.textContent=dan===will?'Perfectly balanced. You’re basically Live Wire itself. 😂⚡':'Your Live Wire personality is leaning '+winner+'. ⚡';return;}const x=personality[pi];pq.textContent=x[0];pc.innerHTML='';x[1].forEach((v,i)=>{const b=document.createElement('button');b.className='quirky-choice';b.textContent=v;b.onclick=()=>{i===0?dan++:will++;pi++;personality();};pc.appendChild(b);});pr.textContent='Question '+(pi+1)+' of '+personality.length;} personality();
+          })();
+          </script>
+          '''
+
+          s = s.replace('</head>', css + '\n</head>', 1)
+          s = s.replace('<footer>', html + '\n<footer>', 1)
+          s = s.replace('</body>', js + '\n</body>', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit changes and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add live-wire-extras.html .github/workflows/add-fun-extras.yml
+          git commit -m "Add quirky Fun & Extras features [fun-extras-done]"
+          git push
