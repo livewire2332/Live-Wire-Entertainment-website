@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live Wire Music Quiz | Live Wire Entertainment</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.quiz-wrap{max-width:900px;margin:auto;padding:36px 20px 60px}.quiz-hero{text-align:center;padding:45px 20px 25px}.quiz-hero h1{font-size:clamp(36px,8vw,62px);text-shadow:0 0 10px #ff2bd6,0 0 24px #00eaff}.quiz-card{background:linear-gradient(145deg,rgba(12,14,27,.96),rgba(22,8,28,.94));border:1px solid rgba(0,234,255,.5);border-radius:20px;padding:26px;box-shadow:0 0 18px rgba(0,234,255,.16),0 0 30px rgba(255,43,214,.1)}.progress{color:#58eaff;font-weight:800;text-align:center}.question{font-size:25px;font-weight:900;margin:20px 0}.answers{display:grid;gap:12px}.answer{width:100%;text-align:left;padding:15px 18px;border:1px solid rgba(0,234,255,.45);border-radius:14px;background:#11152a;color:#fff;font-size:16px;cursor:pointer}.answer:hover{border-color:#ff2bd6;transform:translateY(-1px)}.answer:disabled{cursor:default;opacity:.85}.answer.correct{border-color:#58eaff;box-shadow:0 0 14px rgba(0,234,255,.35)}.answer.wrong{border-color:#ff2bd6;box-shadow:0 0 14px rgba(255,43,214,.3)}.feedback{margin-top:16px;padding:14px;border-radius:12px;background:rgba(255,255,255,.04);min-height:24px}.quiz-actions{text-align:center;margin-top:20px}.quiz-btn{border:1px solid #00eaff;border-radius:25px;background:#11152a;color:#fff;padding:12px 22px;font-size:16px;cursor:pointer;box-shadow:0 0 10px rgba(0,234,255,.35)}.result{text-align:center}.score{font-size:48px;font-weight:900;color:#ffd43b}.result h2{font-size:30px}.back{text-align:center;margin-top:25px}
+</style>
+</head>
+<body>
+<div class="quiz-hero"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🎵 Live Wire Music Quiz</h1><p>10 questions. Music across the decades. How well do you know your tunes?</p></div>
+<main class="quiz-wrap"><div class="quiz-card" id="quiz"><div class="progress" id="progress"></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="quiz-actions"><button class="quiz-btn" id="next" type="button" hidden>Next Question ⚡</button></div></div><div class="back"><a class="btn" href="live-wire-extras.html">🎉 Back To Fun & Extras</a></div></main>
+<footer><p>© 2026 Live Wire Entertainment</p><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></p></footer>
+<script>
+(function(){
+const questions=[
+['Which band released the song “Dancing Queen” in 1976?',['ABBA','Queen','The Bee Gees','Blondie'],0],
+['Which group had the 1980s hit “Everybody Wants to Rule the World”?',['Tears for Fears','Duran Duran','a-ha','Wham!'],0],
+['Which artist released “Like a Prayer” in 1989?',['Madonna','Cher','Cyndi Lauper','Belinda Carlisle'],0],
+['Which Britpop band released “Don’t Look Back in Anger”?',['Oasis','Blur','Pulp','Suede'],0],
+['Which singer recorded “I Wanna Dance with Somebody” in 1987?',['Whitney Houston','Tina Turner','Diana Ross','Gloria Estefan'],0],
+['Which band released “Mr. Brightside” in 2003?',['The Killers','Keane','Snow Patrol','Franz Ferdinand'],0],
+['Which group recorded “Stayin’ Alive”?',['Bee Gees','ABBA','Earth, Wind & Fire','KC and the Sunshine Band'],0],
+['Which band is associated with “Livin’ on a Prayer”?',['Bon Jovi','Europe','Def Leppard','Poison'],0],
+['Which artist released “Uptown Funk” with Mark Ronson?',['Bruno Mars','Justin Timberlake','Usher','Pharrell Williams'],0],
+['Which band had the 1965 hit “You Really Got Me”?',['The Kinks','The Who','The Animals','The Hollies'],0]
+];
+let index=0,score=0,answered=false;
+const q=document.getElementById('question'),a=document.getElementById('answers'),f=document.getElementById('feedback'),p=document.getElementById('progress'),n=document.getElementById('next'),box=document.getElementById('quiz');
+function render(){answered=false;n.hidden=true;f.textContent='';const item=questions[index];p.textContent='Question '+(index+1)+' of '+questions.length;q.textContent=item[0];a.innerHTML='';item[1].forEach((label,i)=>{const b=document.createElement('button');b.type='button';b.className='answer';b.textContent=label;b.addEventListener('click',()=>choose(i,b));a.appendChild(b);});}
+function choose(i,b){if(answered)return;answered=true;const correct=questions[index][2];document.querySelectorAll('.answer').forEach(x=>x.disabled=true);if(i===correct){score++;b.classList.add('correct');f.textContent='⚡ Correct! That one belongs in the Live Wire memory bank.';}else{b.classList.add('wrong');document.querySelectorAll('.answer')[correct].classList.add('correct');f.textContent='Not quite! The correct answer is '+questions[index][1][correct]+'. Keep the tunes coming!';}n.hidden=false;n.textContent=index===questions.length-1?'See My Score 🏆':'Next Question ⚡';}
+n.addEventListener('click',()=>{if(index<questions.length-1){index++;render();}else{showResult();}});
+function showResult(){box.innerHTML='<div class="result"><div class="progress">QUIZ COMPLETE ⚡</div><div class="score">'+score+'/10</div><h2>'+resultText()+'</h2><p>You’ve just taken the Live Wire Music Quiz. Fancy another go?</p><button class="quiz-btn" type="button" id="again">🔄 Play Again</button></div>';document.getElementById('again').addEventListener('click',()=>location.reload());}
+function resultText(){if(score===10)return'ABSOLUTE LIVE WIRE LEGEND! 🎵';if(score>=8)return'LIVE WIRE QUIZ MASTER! 🔥';if(score>=6)return'PROPER TUNE SPOTTER! ⚡';if(score>=4)return'NOT BAD, BUT THE JUKEBOX WANTS MORE! 😂';return'BACK TO THE LIVE WIRE BAR FOR SOME REVISION! 🍹😂';}
+render();
+})();
+</script>
+</body>
+</html>
