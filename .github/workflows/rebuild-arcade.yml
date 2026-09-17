@@ -1,0 +1,52 @@
+name: Rebuild Live Wire Arcade
+on:
+  push:
+    paths:
+      - '.github/workflows/rebuild-arcade.yml'
+permissions:
+  contents: write
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild arcade script and layout
+        run: |
+          cat > live-wire-more-games.js <<'JS'
+          (()=>{
+          'use strict';
+          if(window.__liveWireMoreGamesLoaded)return;window.__liveWireMoreGamesLoaded=true;
+          const pick=a=>a[Math.floor(Math.random()*a.length)];
+          const games=[
+          ['🎟️ Live Wire Music Bingo','bingo'],['🎼 Song Intro Challenge','intro'],['🔀 Shuffle The Decade','decade'],['🎤 Finish The Lyric','lyric'],['🥁 Drumroll Reveal','drum'],['🎸 Rock or Pop?','rock'],['💿 Album Cover Detective','album'],['🏆 Music Hall of Fame Quiz','hall'],['🚨 Who Would Do It?','who'],['🤣 Banter Bingo','bbingo'],['⏱️ Chaos Countdown','count'],['🧠 Live Wire Brain Test','brain'],['📢 DJ Announcement Generator','dj'],['🕺 Dancefloor Decision Maker','dance'],['🎫 Ticket Checker','ticket'],['🚉 Station Master','station'],['🎵 Train Playlist Builder','playlist'],['🚦 Signal Box Challenge','signal'],['🍹 Build Your Live Wire Cocktail','cocktail'],['🪩 Bar Jukebox','juke'],['🎵 What Should The Bar Play Next?','barplay'],['🪑 VIP Table Generator','vip']];
+          const songs=['ABBA — Dancing Queen','Queen — Don’t Stop Me Now','Oasis — Wonderwall','The Killers — Mr. Brightside','Bon Jovi — Livin’ on a Prayer','The Beatles — Twist and Shout','Whitney Houston — I Wanna Dance with Somebody','Spice Girls — Wannabe','Shakira — Hips Don’t Lie','Tears for Fears — Everybody Wants to Rule the World','Elton John — Crocodile Rock','Madonna — Like a Prayer','Wham! — Wake Me Up Before You Go-Go','Fleetwood Mac — Go Your Own Way','Bee Gees — Stayin’ Alive','Michael Jackson — Billie Jean','The Police — Every Breath You Take','Cyndi Lauper — Girls Just Want to Have Fun','George Michael — Faith','Soft Cell — Tainted Love','Snap! — Rhythm Is a Dancer','Franz Ferdinand — Take Me Out','Blur — Song 2','Coldplay — Viva la Vida'];
+          const css=document.createElement('style');css.textContent='.lwmore{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px}.lwgame{background:linear-gradient(145deg,rgba(12,14,27,.97),rgba(25,7,31,.94));border:1px solid rgba(0,234,255,.48);border-radius:18px;padding:22px;box-shadow:0 0 14px rgba(0,234,255,.16)}.lwgame h2{margin-top:0}.lwout{text-align:center;min-height:48px;margin:15px 0;font-weight:900}.lwc{display:grid;gap:8px}.lwc button,.lwgo{cursor:pointer;border:1px solid #00eaff;border-radius:22px;background:#11152a;color:#fff;padding:10px 14px;font-size:15px}.lwb{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.lwb button{aspect-ratio:1;background:#11152a;color:#fff;border:1px solid #00eaff;border-radius:7px;font-size:10px}.lwb .on{background:rgba(255,43,214,.35);border-color:#ffd43b}.lw-open{display:block;margin:0 auto 12px}.lw-panel{display:none}.lw-panel.open{display:block}@media(max-width:600px){.lwmore{grid-template-columns:1fr}}';document.head.appendChild(css);
+          const top=document.querySelector('body > .extras-hero');
+          const open=document.createElement('button');open.type='button';open.className='fun-btn lw-open';open.textContent='🎮⚡ OPEN THE NEW LIVE WIRE ARCADE';
+          const panel=document.createElement('section');panel.className='extras-section lw-panel';panel.innerHTML='<div class="wrap"><h1>🎮⚡ Live Wire Arcade — New Games</h1><p>22 extra games of music, banter and complete Live Wire chaos! 😂⚡</p><div class="lwmore"></div></div>';
+          const grid=panel.querySelector('.lwmore');
+          games.forEach((g,i)=>{const card=document.createElement('div');card.className='lwgame';card.innerHTML='<div class="mini-label">NEW ⚡</div><h2>'+g[0]+'</h2><p>'+g[1]+' — have a go!</p><div id="lo'+i+'" class="lwout">READY?</div><div id="lc'+i+'" class="lwc"></div><button type="button" class="lwgo" id="lg'+i+'">⚡ PLAY</button>';grid.appendChild(card)});
+          if(top){top.insertAdjacentElement('afterend',open);open.insertAdjacentElement('afterend',panel)}else{document.body.prepend(open);open.insertAdjacentElement('afterend',panel)}
+          open.addEventListener('click',()=>{panel.classList.toggle('open');open.textContent=panel.classList.contains('open')?'🎮⚡ CLOSE NEW ARCADE':'🎮⚡ OPEN THE NEW LIVE WIRE ARCADE';if(panel.classList.contains('open'))panel.scrollIntoView({behavior:'smooth',block:'start'})});
+          const out=i=>document.getElementById('lo'+i),choices=i=>document.getElementById('lc'+i);
+          const quiz={1:[['Clue: Mr Brightside',['Mr. Brightside','Take Me Out','Wonderwall'],'Mr. Brightside'],['Clue: Dancing Queen',['Dancing Queen','Waterloo','Mamma Mia'],'Dancing Queen']],3:[['“Don’t stop…”',['me now','believing','the music'],'me now'],['“Girls just wanna…”',['have fun','dance','rock'],'have fun']],6:[['Manchester 90s Britpop',['(What’s the Story) Morning Glory?','Definitely Maybe','Be Here Now'],'(What’s the Story) Morning Glory?'],['Purple rain — iconic 80s album',['Purple Rain','1999','Sign o’ the Times'],'Purple Rain']],7:[['Who recorded Don’t Stop Me Now?',['Queen','ABBA','Bee Gees'],'Queen'],['Who sang I Wanna Dance with Somebody?',['Whitney Houston','Madonna','Cyndi Lauper'],'Whitney Houston']],11:[['Which decade gave us Dancing Queen?',['1970s','1960s','1980s'],'1970s'],['Who sang Mr Brightside?',['The Killers','Oasis','Blur'],'The Killers'],['Which band had Wonderwall?',['Oasis','Blur','Pulp'],'Oasis']]};
+          function quizGame(i){const x=pick(quiz[i]),o=out(i),c=choices(i);o.textContent=x[0];c.innerHTML='';x[1].slice().sort(()=>Math.random()-.5).forEach(v=>{const b=document.createElement('button');b.type='button';b.textContent=v;b.addEventListener('click',()=>{o.textContent=v===x[2]?'⚡ CORRECT! 🔥':'😂 NOT QUITE — '+x[2]});c.appendChild(b)})}
+          function bingo(i,items,msg){const o=out(i),c=choices(i);c.className='lwb';c.innerHTML='';const vals=items.slice().sort(()=>Math.random()-.5).slice(0,24);let k=0;for(let r=0;r<5;r++)for(let j=0;j<5;j++){const b=document.createElement('button');b.type='button';b.textContent=r===2&&j===2?'FREE':vals[k++];if(r===2&&j===2)b.classList.add('on');b.addEventListener('click',()=>{b.classList.toggle('on');const z=[...c.children],m=n=>z[n].classList.contains('on');if([0,1,2,3,4].some(r=>[0,1,2,3,4].every(j=>m(r*5+j)))||[0,1,2,3,4].some(j=>[0,1,2,3,4].every(r=>m(r*5+j)))||[0,6,12,18,24].every(m)||[4,8,12,16,20].every(m))o.textContent=msg});c.appendChild(b)}o.textContent='NEW CARD READY!'}
+          const simple=(i,text)=>{out(i).textContent=text;choices(i).innerHTML=''};
+          const banter=['DAN SAYS ONE MORE SONG','WILL MENTIONS NICKELBACK','SOMEONE IS LATE','RADIO FACT APPEARS','MUSIC TRAIN MENTIONED','SAVAGE BANTER','SOMEONE SINGS ALONG','QUIZ QUESTION APPEARS','DAN LAUGHS','WILL BLAMES THE TRAIN','ONE MORE TUNE','LIVE WIRE BAR MENTIONED','FORGOTTEN GEM','DANCEFLOOR CHAOS','TOP OF THE POPS MENTIONED','DJ MODE ACTIVATED','BANTER LEVEL RISES','THE CHAT GOES MAD','DAN REMEMBERS A FACT','WILL MAKES A ONE-LINER'];
+          const actions={0:()=>bingo(0,songs,'🎉 MUSIC BINGO! ⚡🔥'),1:()=>quizGame(1),2:()=>simple(2,pick(['50s','60s','70s','80s','90s','00s','10s'])+' 🎵'),3:()=>quizGame(3),4:()=>simple(4,pick(['🥁🥁🥁 A forgotten 80s gem!','🥁🥁🥁 Nickelback detected! 🎸😂','🥁🥁🥁 Music Train cleared! 🚂','🥁🥁🥁 Serious Jockin approaching! 🔥'])),5:()=>simple(5,pick(['🎸 ROCK','🎤 POP'])),6:()=>quizGame(6),7:()=>quizGame(7),8:()=>simple(8,pick(['Dan 😂','Will 😂','Definitely Dan.','Definitely Will.'])),9:()=>bingo(9,banter,'🎉 BANTER BINGO! 😂⚡'),10:()=>{let n=10,o=out(10);clearInterval(window.lwChaosTimer);window.lwChaosTimer=setInterval(()=>{n--;o.textContent=n;if(n<=0){clearInterval(window.lwChaosTimer);o.textContent='💥 CHAOS WINS! 😂'}},400)},11:()=>quizGame(11),12:()=>simple(12,pick(['📢 GOOD EVENING LIVE WIRE! THE BAR IS OPEN!','📢 ONE MORE TUNE HAS BEEN AUTHORISED!','📢 THE MUSIC TRAIN IS NOW BOARDING! 🚂'])),13:()=>simple(13,pick(['YES — GET DANCING! 🕺🔥','ABSOLUTELY! 🔥','SIT DOWN FOR 30 SECONDS 😂'])),14:()=>simple(14,pick(['🎫 VALID — FEEL GOOD FRIDAY','🎫 VALID — MUSIC TRAIN','😂 INVALID — PRINTED ON A NAPKIN'])),15:()=>simple(15,'PLATFORM '+pick(['1','2','3','4','5','80s','90s'])+' 🚂'),16:()=>simple(16,[1,2,3].map(n=>n+'. '+pick(['80s Avenue','90s Junction','70s Disco Street','00s Boulevard','Vinyl Village'])).join(' • ')),17:()=>simple(17,'🚦 '+pick(['GREEN — TRAIN MOVING! 🚂','RED — STOP!','AMBER — GET READY!'])),18:()=>simple(18,pick(['Electric Sunset','Neon Memory','Disco Thunder','Vinyl Voltage','Phoenix Fire'])+' ⚡'),19:()=>simple(19,pick(['80s CLASSIC — TURN IT UP!','90s DANCE FLOOR!','70s DISCO!','00s THROWBACK!','FORGOTTEN GEM!'])),20:()=>simple(20,pick(['A BIG 80s ANTHEM! 🎧','A 90s FLOOR FILLER! 🕺','A 70s DISCO CLASSIC! 💿','A 00s SINGALONG! 🎤','A FORGOTTEN GEM! 💎'])),21:()=>simple(21,pick(['VIP Table 1 — Speakers 🔊','VIP Table 2 — Banter view 😂','VIP Table 3 — Train side 🚂','VIP Table 4 — Nickelback danger 🎸']))};
+          games.forEach((_,i)=>{const b=document.getElementById('lg'+i);if(b)b.addEventListener('click',actions[i])});
+          })();
+          JS
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('live-wire-extras.html');s=p.read_text(encoding='utf-8')
+          tag='<script src="live-wire-more-games.js"></script>'
+          if tag not in s:s=s.replace('</body>',tag+'\n</body>')
+          p.write_text(s,encoding='utf-8')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add live-wire-more-games.js live-wire-extras.html
+          git commit -m 'Fix all new arcade buttons and add arcade opener' || true
+          git push
