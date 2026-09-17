@@ -11,6 +11,7 @@
     .lwb button{width:100%;min-width:0;max-width:100%;aspect-ratio:1/1;padding:4px 2px;font-size:clamp(8px,1.8vw,10px);line-height:1.08;white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden}
     .lw-arcade-toggle{display:block!important;width:calc(100% - 32px)!important;max-width:760px!important;min-height:64px!important;margin:22px auto!important;padding:16px 22px!important;border:2px solid #00eaff!important;border-radius:34px!important;background:linear-gradient(90deg,#11152a,#25102d)!important;color:#fff!important;font-weight:900!important;font-size:clamp(17px,4.5vw,22px)!important;line-height:1.2!important;cursor:pointer!important;box-shadow:0 0 18px rgba(0,234,255,.28)!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important;appearance:none!important;-webkit-appearance:none!important}
     .lw-arcade-toggle:hover{transform:translateY(-1px)}
+    .lw-bingo-instructions{margin:10px 0 16px;padding:12px 14px;border-left:3px solid #ffd43b;border-radius:10px;background:rgba(255,212,59,.06);color:#ddd;font-size:14px;line-height:1.5}
     @media(max-width:600px){
       .lwmore{grid-template-columns:minmax(0,1fr);gap:16px}
       .lwgame{padding:16px!important}
@@ -56,4 +57,17 @@
     document.body.appendChild(s);
   };
   loadClassicsFix();
+
+  const addBingoInstructions=()=>{
+    const cards=[...document.querySelectorAll('.lw-arcade-panel .lwgame')];
+    const card=cards.find(x=>x.querySelector('h2')?.textContent.includes('Live Wire Music Bingo'));
+    if(!card||card.querySelector('.lw-bingo-instructions'))return !!card;
+    const title=card.querySelector('h2');
+    const p=document.createElement('p');
+    p.className='lw-bingo-instructions';
+    p.innerHTML='<strong>🎵 HOW TO PLAY:</strong> This game is designed to be played during a Live Wire live. Open your bingo card, listen to the songs being played and tap each matching song as you hear it. Complete a line, then shout <strong>BINGO!</strong> ⚡';
+    title.insertAdjacentElement('afterend',p);
+    return true;
+  };
+  const bingoTimer=setInterval(()=>{if(addBingoInstructions())clearInterval(bingoTimer)},150);
 })();
