@@ -115,8 +115,13 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 })();
 </script>
 
+
+
 <script>
 (function(){
+  'use strict';
+  const qs=(x)=>document.querySelector(x);
+  const qsa=(x)=>Array.from(document.querySelectorAll(x));
   const dw=[
     ['Who is more likely to start the banter?','Dan probably started it. Will definitely carried it on. 😂'],
     ['Who is more likely to mention the radio?','Dan. Give him five minutes and the radio stories are coming. 📻'],
@@ -125,27 +130,23 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
     ['Who is more likely to throw in a random quiz?','Will. Nobody saw it coming. Again. 🧠😂'],
     ['Who is more likely to wind the other one up?','Both. This is Live Wire, after all. 😂⚡']
   ];
-  let dwIndex=0;
-  const q=document.getElementById('dwQuestion'),a=document.getElementById('dwAnswer');
-  function showDW(){q.textContent=dw[dwIndex][0];a.textContent='Choose one...';}
-  document.querySelectorAll('[data-dw]').forEach(b=>b.addEventListener('click',()=>{a.textContent=b.dataset.dw+'? We’ll allow it. The official Live Wire answer: '+dw[dwIndex][1];}));
-  document.getElementById('dwNext').addEventListener('click',()=>{dwIndex=(dwIndex+1)%dw.length;showDW();});
-
-  const randoms=['YOUR NEXT TUNE SHOULD PROBABLY BE LOUDER. 🔊⚡','YOU HAVE BEEN RANDOMLY ASSIGNED TO 80s AVENUE. 🚂','MR PHOENIX IS CURRENTLY BLAMING NICKELBACK. 🎸😂','DJ DISCO DAN HAS ENTERED RADIO MODE. 📻','THE LIVE WIRE BAR HAS RESERVED YOU A STOOL. 🍹','ONE MORE SONG. GO ON THEN. 🎶','BANter LEVEL: DANGEROUSLY HIGH. 😂⚡','YOU ARE OFFICIALLY CLEARED FOR GOOD VIBES. 🚀'];
-  const rr=document.getElementById('randomResult');document.getElementById('randomBtn').addEventListener('click',()=>{rr.textContent=randoms[Math.floor(Math.random()*randoms.length)];});
-
+  let di=0; const dq=qs('#dwQuestion'),da=qs('#dwAnswer');
+  function drawDW(){if(dq)dq.textContent=dw[di][0];if(da)da.textContent='Choose one...';}
+  qsa('[data-dw]').forEach(b=>b.onclick=function(){if(da)da.textContent=this.dataset.dw+'? We’ll allow it. '+dw[di][1];});
+  const dn=qs('#dwNext');if(dn)dn.onclick=function(){di=(di+1)%dw.length;drawDW();};
+  const randoms=['YOUR NEXT TUNE SHOULD PROBABLY BE LOUDER. 🔊⚡','YOU HAVE BEEN RANDOMLY ASSIGNED TO 80s AVENUE. 🚂','MR PHOENIX IS CURRENTLY BLAMING NICKELBACK. 🎸😂','DJ DISCO DAN HAS ENTERED RADIO MODE. 📻','THE LIVE WIRE BAR HAS RESERVED YOU A STOOL. 🍹','ONE MORE SONG. GO ON THEN. 🎶','BANTER LEVEL: DANGEROUSLY HIGH. 😂⚡','YOU ARE OFFICIALLY CLEARED FOR GOOD VIBES. 🚀'];
+  const rb=qs('#randomBtn'),rr=qs('#randomResult');if(rb)rb.onclick=function(){if(rr)rr.textContent=randoms[Math.floor(Math.random()*randoms.length)];};
   const tunes=[
     ['Which song belongs with this clue: “Dancing queen...”',['Dancing Queen','Don’t Stop Me Now','Mr. Brightside'],'Dancing Queen'],
     ['Which song belongs with this clue: “Livin’ on a prayer...”',['Livin’ on a Prayer','Wannabe','Sex on Fire'],'Livin’ on a Prayer'],
     ['Which song belongs with this clue: “Mr. Brightside...”',['Mr. Brightside','Rhythm Is a Dancer','Uptown Funk'],'Mr. Brightside'],
     ['Which song belongs with this clue: “I wanna dance...”',['I Wanna Dance with Somebody','Hips Don’t Lie','Twist and Shout'],'I Wanna Dance with Somebody']
   ];
-  let ti=0;const tq=document.getElementById('tuneQuestion'),tc=document.getElementById('tuneChoices'),ta=document.getElementById('tuneAnswer');
-  function tune(){const x=tunes[ti];tq.textContent=x[0];tc.innerHTML='';x[1].forEach(v=>{const b=document.createElement('button');b.className='quirky-choice';b.textContent=v;b.onclick=()=>{ta.textContent=v===x[2]?'⚡ CORRECT! Live Wire music brain activated.':'😂 Not quite! The answer is '+x[2]+'.';ti=(ti+1)%tunes.length;setTimeout(tune,900);};tc.appendChild(b);});ta.textContent='Your answer is waiting...';} tune();
-
+  let ti=0;const tq=qs('#tuneQuestion'),tc=qs('#tuneChoices'),ta=qs('#tuneAnswer');
+  function drawTune(){if(!tq||!tc||!ta)return;const x=tunes[ti];tq.textContent=x[0];tc.innerHTML='';ta.textContent='Your answer is waiting...';x[1].forEach(v=>{const b=document.createElement('button');b.type='button';b.className='quirky-choice';b.textContent=v;b.onclick=function(){ta.textContent=v===x[2]?'⚡ CORRECT! Live Wire music brain activated.':'😂 Not quite! The answer is '+x[2]+'.';ti=(ti+1)%tunes.length;setTimeout(drawTune,700);};tc.appendChild(b);});}
+  drawTune();
   const stops=['80s Avenue','90s Junction','70s Disco Street','00s Rock Road','Forgotten Gems Central','Vinyl Village','Top of the Pops Terrace','Nickelback Junction (Will insists)'];
-  document.getElementById('trainRandomBtn').addEventListener('click',()=>{document.getElementById('trainRandom').textContent='NEXT STOP: '+stops[Math.floor(Math.random()*stops.length)].toUpperCase();});
-
+  const trb=qs('#trainRandomBtn'),trr=qs('#trainRandom');if(trb)trb.onclick=function(){if(trr)trr.textContent='NEXT STOP: '+stops[Math.floor(Math.random()*stops.length)].toUpperCase();};
   const personality=[
     ['Your ideal night starts with...',['A microphone and a stack of music history.','A guitar, some rock and probably Nickelback.']],
     ['Pick your natural role...',['The chatty broadcaster.','The quirky one-liner specialist.']],
@@ -153,10 +154,10 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
     ['Someone starts the banter. You...',['Keep it going.','Take it up another level. 😂']],
     ['Choose your soundtrack...',['A journey through the decades.','00s rock with a few surprises.']]
   ];
-  let pi=0,dan=0,will=0;const pq=document.getElementById('personalityQuestion'),pc=document.getElementById('personalityChoices'),pr=document.getElementById('personalityResult');
-  function personality(){if(pi>=personality.length){const winner=dan>will?'DAN MODE':will>dan?'WILL MODE':'FULL LIVE WIRE MODE';pq.textContent='⚡ RESULT: '+winner;pc.innerHTML='';pr.textContent=dan===will?'Perfectly balanced. You’re basically Live Wire itself. 😂⚡':'Your Live Wire personality is leaning '+winner+'. ⚡';return;}const x=personality[pi];pq.textContent=x[0];pc.innerHTML='';x[1].forEach((v,i)=>{const b=document.createElement('button');b.className='quirky-choice';b.textContent=v;b.onclick=()=>{i===0?dan++:will++;pi++;personality();};pc.appendChild(b);});pr.textContent='Question '+(pi+1)+' of '+personality.length;} personality();
+  let pi=0,dan=0,will=0;const pq=qs('#personalityQuestion'),pc=qs('#personalityChoices'),pr=qs('#personalityResult');
+  function drawPersonality(){if(!pq||!pc||!pr)return;if(pi>=personality.length){const result=dan>will?'DAN MODE':will>dan?'WILL MODE':'FULL LIVE WIRE MODE';pq.textContent='⚡ RESULT: '+result;pc.innerHTML='';pr.textContent=dan===will?'Perfectly balanced. You’re basically Live Wire itself. 😂⚡':'Your Live Wire personality is leaning '+result+'. ⚡';return;}const x=personality[pi];pq.textContent=x[0];pc.innerHTML='';pr.textContent='Question '+(pi+1)+' of '+personality.length;x[1].forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='quirky-choice';b.textContent=v;b.onclick=function(){if(i===0)dan++;else will++;pi++;drawPersonality();};pc.appendChild(b);});}
+  drawPersonality();drawDW();
 })();
 </script>
-
 </body>
 </html>
