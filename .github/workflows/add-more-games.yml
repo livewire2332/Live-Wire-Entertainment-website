@@ -1,0 +1,27 @@
+name: Add More Live Wire Games
+on:
+  push:
+    paths:
+      - 'live-wire-more-games.js'
+permissions:
+  contents: write
+jobs:
+  add-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add game script to Fun & Extras
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('live-wire-extras.html')
+          s=p.read_text()
+          tag='<script src="live-wire-more-games.js"></script>'
+          if tag not in s:
+              s=s.replace('</body>',tag+'\n</body>')
+              p.write_text(s)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add live-wire-extras.html
+          git diff --cached --quiet || (git commit -m 'Load new Live Wire games' && git push)
