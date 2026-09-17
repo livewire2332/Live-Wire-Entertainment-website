@@ -1,0 +1,81 @@
+name: Update Banter Box
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-banter-box.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add savage banter
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('live-wire-extras.html')
+          s = p.read_text(encoding='utf-8')
+          old_start = "const banter=['"
+          start = s.index(old_start)
+          end = s.index("];\nconst destinations", start) + 2
+          banter = [
+            "WELCOME TO THE LIVE WIRE BAR. PLEASE LEAVE YOUR DIGNITY AT THE DOOR. 😂⚡",
+            "ONE MORE TUNE? THAT'S NOT A REQUEST. THAT'S A CRY FOR HELP. 😂",
+            "THE MUSIC IS LOUD, THE BANTER IS LOUDER, AND SOMEONE'S ALREADY OFFENDED. 🍹⚡",
+            "YOU'RE NOT LATE. YOU'RE JUST RUNNING ON PHOENIX TIME. 😂",
+            "SOMEONE SAY NICKELBACK? MR PHOENIX HAS HEARD THE CALL. 🎸😂",
+            "LIVE WIRE RULE #1: IF THERE'S NO BANTER, DAN WILL FIX THAT. ⚡",
+            "WILL SAID HE'D BE READY IN FIVE MINUTES. THAT WAS THREE BUSINESS DAYS AGO. 😂",
+            "DAN SAID IT WAS JUST ONE QUICK SONG. THE NIGHT HAS NOW BECOME A FULL FESTIVAL. 🎶😂",
+            "MR PHOENIX HAS ENTERED THE CHAT. EVERYONE HIDE THE NICKELBACK BUTTON. 😂",
+            "THE LIVE WIRE BAR IS OPEN. COMMON SENSE IS NOT. 🍹⚡",
+            "DAN'S RADIO BRAIN HAS STARTED. THERE IS NO OFF SWITCH. 📻😂",
+            "WILL'S MUSIC TRAIN HAS LEFT THE STATION. DESTINATION: SOMEWHERE HE REMEMBERS THE LYRICS. 🚂😂",
+            "IF YOU HEAR A RANDOM QUIZ QUESTION, JUST ACCEPT THAT WILL HAS BEEN INVOLVED. 🧠😂",
+            "PHOENIX PROMISED A QUICK SHOW. NICKELBACK HAVE OTHER PLANS. 🎸😂",
+            "DAN'S GOT A MEMORY FOR MUSIC. WILL'S GOT A MEMORY FOR WINDING DAN UP. 😂⚡",
+            "LIVE WIRE: WHERE 'JUST ONE MORE' IS A COMPLETELY MEANINGLESS PHRASE. 😂",
+            "WILL HAS TWO SETTINGS: MUSIC TRAIN AND NICKELBACK. THERE IS NO THIRD OPTION. 🚂🎸",
+            "DAN HAS ENTERED DJ MODE. PLEASE DO NOT ATTEMPT TO INTERRUPT THE BROADCASTER. 🎙️😂",
+            "SOME PEOPLE BRING TALENT. LIVE WIRE BRINGS TALENT AND ABSOLUTE NONSENSE. ⚡😂",
+            "IF THE BANTER GETS ANY SAVAGER, WE'LL NEED A WARNING SIGN. 🚨😂",
+            "MR PHOENIX IS LATE AGAIN. QUICK, SOMEBODY CHECK THE MUSIC TRAIN. 🚂😂",
+            "DAN SAID 'I WON'T TAKE THE MIC'. NARRATOR: HE TOOK THE MIC. 😂🎤",
+            "WILL HAS BEEN LEFT UNSUPERVISED. THIS IS NOT A DRILL. 🚨😂",
+            "THE NICKELBACK GUARANTEE: EVENTUALLY, IT WILL HAPPEN. 🎸😂",
+            "LIVE WIRE BAR SPECIAL: ONE DRINK, TWO TUNES, ZERO CHANCE OF PEACE AND QUIET. 🍹😂",
+            "IF YOU'VE COME FOR THE MUSIC, STAY FOR THE ARGUMENT ABOUT THE MUSIC. 😂⚡",
+            "DAN VS WILL: ONE HAS THE RADIO KNOWLEDGE. THE OTHER HAS THE CONFIDENCE OF A MAN WHO'S NEVER WRONG. 😂",
+            "PHOENIX HAS A PLAN. SOMEWHERE. PROBABLY WRITTEN ON THE BACK OF A NICKELBACK CD. 😂🎸",
+            "THE MUSIC TRAIN CONDUCTOR HAS BEEN DISTRACTED BY SALAD CREAM AGAIN. 🚂😂",
+            "LIVE WIRE BANTER: BECAUSE NORMAL CONVERSATION WAS NEVER GOING TO SURVIVE HERE. 😂⚡",
+            "YOU'VE OFFICIALLY ENTERED THE DANGER ZONE: DAN HAS REMEMBERED ANOTHER MUSICAL FACT. 📻😂",
+            "WILL CALLS IT A MUSIC TRAIN. DAN CALLS IT ANOTHER OPPORTUNITY FOR BANter. 🚂⚡",
+            "IF SOMEONE SHOUTS 'ONE MORE SONG', BLAME BOTH OF THEM. 😂🎶",
+            "LIVE WIRE DOESN'T DO QUIET NIGHTS. EVEN THE SILENCE WOULD GET ROASTED. 😂",
+            "PHOENIX'S ELVIS LIP ACTION HAS BEEN SPOTTED. PLEASE REMAIN CALM. 😂🎤",
+            "DAN'S BANter HAS ARRIVED EARLY. PHOENIX'S ARRIVAL IS STILL UNDER INVESTIGATION. 🕵️😂",
+            "THE LIVE WIRE BAR: COME FOR THE MUSIC, STAY BECAUSE YOU'VE BEEN TRAPPED BY THE BANTER. 🍹😂",
+            "WILL HAS DECLARED MANCHESTER IS RED. DAN HAS DECLARED THE BANTER WAR OPEN. 😂⚡",
+            "NO TEA, NO BISCUITS, JUST TUNES AND ABSOLUTE NONSENSE. 😂🎶",
+            "IF YOU'RE LOOKING FOR SERIOUSNESS, YOU MAY HAVE TAKEN A WRONG TURN. 😂⚡",
+          ]
+          js = 'const banter=' + '[' + ','.join(repr(x).replace("'", "\\'") for x in banter) + ']' 
+          # Use JSON-style quoting for safe JavaScript strings.
+          import json
+          js = 'const banter=' + json.dumps(banter, ensure_ascii=False) + ';'
+          p.write_text(s[:start] + js + s[end:], encoding='utf-8')
+          PY
+      - name: Commit banter update and remove updater
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add live-wire-extras.html
+          git rm .github/workflows/update-banter-box.yml
+          git commit -m 'Expand Live Wire Banter Box' || exit 0
+          git push
