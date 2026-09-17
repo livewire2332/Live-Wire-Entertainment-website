@@ -1,0 +1,85 @@
+name: Tidy Fun & Extras order
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  tidy:
+    if: "!contains(github.event.head_commit.message, '[fun-extras-order-done]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Move interactive zone above archive sections
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('live-wire-extras.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Work only on the body section blocks. Do not rewrite styles or scripts.
+          body_start = s.find('<body>')
+          body_end = s.rfind('</body>')
+          if body_start < 0 or body_end < 0:
+              raise SystemExit('Could not locate body')
+
+          before = s[:body_start]
+          body = s[body_start:body_end]
+          after = s[body_end:]
+
+          sections = list(re.finditer(r'<section class="extras-section">.*?</section>', body, flags=re.S))
+          if not sections:
+              raise SystemExit('No extras sections found')
+
+          blocks = [m.group(0) for m in sections]
+          interactive = None
+          memories = None
+          hall = None
+          nav = None
+
+          for b in blocks:
+              if '<!-- LIVE-WIRE-QUIRKY-EXTRAS -->' in b:
+                  interactive = b
+              elif '<h1>📸 Live Wire Memories</h1>' in b:
+                  memories = b
+              elif '<h1>🏆 Live Wire Hall of Fame</h1>' in b:
+                  hall = b
+              elif 'Back To The Live Wire Bar' in b and 'Back To Live Wire Entertainment' in b:
+                  nav = b
+
+          if not all([interactive, memories, hall, nav]):
+              raise SystemExit(f'Missing target block: interactive={bool(interactive)} memories={bool(memories)} hall={bool(hall)} nav={bool(nav)}')
+
+          # Remove the four target blocks from their current positions.
+          for target in [interactive, memories, hall, nav]:
+              body = body.replace(target, '', 1)
+
+          # Put all interactive content together, then Memories, then Hall of Fame, then navigation.
+          marker = '</div></div></section>'
+          insert_at = body.rfind(marker)
+          # Insert just before the first footer if present; otherwise before closing body.
+          footer_pos = body.find('<footer')
+          if footer_pos < 0:
+              footer_pos = len(body)
+
+          ordered = '\n' + interactive + '\n' + memories + '\n' + hall + '\n' + nav + '\n'
+          body = body[:footer_pos] + ordered + body[footer_pos:]
+
+          p.write_text(before + body + after, encoding='utf-8')
+          PY
+
+      - name: Commit tidy layout and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add live-wire-extras.html .github/workflows/tidy-fun-extras-order.yml
+          git commit -m "Tidy Fun & Extras section order [fun-extras-order-done]"
+          git push
