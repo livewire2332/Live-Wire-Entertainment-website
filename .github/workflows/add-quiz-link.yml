@@ -1,0 +1,38 @@
+name: Add Live Wire Quiz Link
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  add-quiz-link:
+    if: github.event.head_commit.message != 'Add Live Wire Music Quiz link'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add quiz link
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('live-wire-extras.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '<section class="extras-section"><div class="wrap"><h1>😂 The Live Wire Banter Box</h1>'
+          link = '<section class="extras-section"><div class="wrap"><div class="card fun-card" style="text-align:center"><div class="mini-label">NEW ⚡</div><h2>🎵 Live Wire Music Quiz</h2><p>Think you know your music? Test yourself across the decades and see if you can become a Live Wire Quiz Master! 🎧</p><a class="btn" href="live-wire-music-quiz.html">🎵 PLAY THE LIVE WIRE MUSIC QUIZ</a></div></div></section>'
+          if 'live-wire-music-quiz.html' not in s:
+              if marker not in s:
+                  raise SystemExit('Expected insertion point not found')
+              s = s.replace(marker, link + marker, 1)
+              p.write_text(s, encoding='utf-8')
+          else:
+              print('Quiz link already present')
+          PY
+      - name: Commit quiz link
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add live-wire-extras.html
+          git diff --cached --quiet || git commit -m 'Add Live Wire Music Quiz link'
+          git push
