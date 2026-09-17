@@ -41,26 +41,19 @@
     return true;
   };
 
-  const fixClassicButtons=()=>{
-    const ids=['savageBtn','slotBtn','chaosBtn','excuseBtn','karaokeBtn','djBtn','oneMoreBtn','ticketBtn','railBtn','challengeBtn','badgeBtn','drinkBtn','orderBtn','seatBtn','dailyBtn'];
-    ids.forEach(id=>{
-      const buttons=[...document.querySelectorAll('#'+id)];
-      if(buttons.length<2)return;
-      const source=buttons.find(b=>typeof b.onclick==='function');
-      if(!source)return;
-      buttons.forEach(b=>{if(b!==source)b.onclick=source.onclick;});
-    });
-  };
-
-  const runFix=()=>{
-    moveArcadeIntoPanel();
-    fixClassicButtons();
-    return !!document.querySelector('.lw-arcade-panel');
-  };
+  const runFix=()=>moveArcadeIntoPanel();
   if(!runFix()){
     let tries=0;
     const timer=setInterval(()=>{if(runFix()||++tries>50)clearInterval(timer)},100);
   }
-  let buttonTries=0;
-  const buttonTimer=setInterval(()=>{fixClassicButtons();if(++buttonTries>50)clearInterval(buttonTimer)},100);
+
+  const loadClassicsFix=()=>{
+    if(document.querySelector('script[data-live-wire-classics-fix]'))return;
+    const s=document.createElement('script');
+    s.src='live-wire-arcade-classics-fix.js';
+    s.dataset.liveWireClassicsFix='true';
+    s.defer=false;
+    document.body.appendChild(s);
+  };
+  loadClassicsFix();
 })();
