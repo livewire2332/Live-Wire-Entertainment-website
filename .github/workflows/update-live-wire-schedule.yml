@@ -1,0 +1,53 @@
+name: Update Live Wire current schedule
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update current show schedule
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('live-wire-extras.html')
+          s = p.read_text(encoding='utf-8')
+
+          old = "const dayShows={3:['The Wednesday Wire with DJ Disco Dan','8:00pm'],4:['Surprise Package Thursdays with Mr Phoenix','8:00pm'],5:['Feel Good Friday with DJ Disco Dan','7:30pm'],6:['The Music Train with Mr Phoenix','7:30pm']};"
+          new = """const getShowsForDate=(date)=>{const d=date.getDay();const iso=date.toISOString().slice(0,10);if(d===5)return [['Feel Good Friday with DJ Disco Dan','7:30pm']];if(d===6)return [iso<'2026-10-03'?['Saturday Floor Fillers with DJ Disco Dan','7:30pm']:['The Music Train with Mr Phoenix','7:30pm']];return [];};"""
+          if old not in s:
+              raise SystemExit('Expected schedule block not found')
+          s = s.replace(old, new, 1)
+
+          old_status = "function status(){const now=new Date(),d=now.getDay(),mins=now.getHours()*60+now.getMinutes(),show=dayShows[d];let live=false;if(show){const start=(d===5||d===6)?1170:1200;live=mins>=start&&mins<1380;}const pill=document.getElementById('statusPill'),title=document.getElementById('statusTitle'),time=document.getElementById('statusTime');if(!pill||!title||!time)return;if(live){pill.textContent='🔴 LIVE NOW';pill.classList.add('live');title.textContent=show[0];time.textContent='Scheduled from '+show[1];}else{pill.textContent='🟢 NEXT UP';pill.classList.remove('live');let next=null;for(let i=1;i<=7;i++){const nd=(d+i)%7;if(dayShows[nd]){next={show:dayShows[nd],days:i};break;}}if(next){title.textContent=next.show[0];time.textContent=(next.days===1?'Tomorrow':'In '+next.days+' days')+' • '+next.show[1];}}}"
+          new_status = """function status(){const now=new Date(),mins=now.getHours()*60+now.getMinutes(),todayShows=getShowsForDate(now),show=todayShows[0];let live=false;if(show){live=mins>=1170&&mins<1380;}const pill=document.getElementById('statusPill'),title=document.getElementById('statusTitle'),time=document.getElementById('statusTime'),note=document.getElementById('statusNote');if(!pill||!title||!time)return;if(note)note.textContent='Live Wire schedule updates automatically. LIVE NOW follows the current show schedule.';if(live){pill.textContent='🔴 LIVE NOW';pill.classList.add('live');title.textContent=show[0];time.textContent='Scheduled from '+show[1];}else{pill.textContent='🟢 NEXT UP';pill.classList.remove('live');let next=null;for(let i=1;i<=14;i++){const date=new Date(now);date.setDate(now.getDate()+i);const shows=getShowsForDate(date);if(shows.length){next={show:shows[0],days:i};break;}}if(next){title.textContent=next.show[0];time.textContent=(next.days===1?'Tomorrow':'In '+next.days+' days')+' • '+next.show[1];}}}"""
+          if old_status not in s:
+              raise SystemExit('Expected status function not found')
+          s = s.replace(old_status, new_status, 1)
+
+          old_data = "const data={Wednesday:'Midweek chat, great tunes and DJ Disco Dan from 8pm. ⚡',Thursday:'A musical mystery with Mr Phoenix from 8pm. 🎁',Friday:'Feel-good tunes, nostalgia and the weekend starting from 7:30pm. 🎧',Saturday:'All aboard The Music Train with Mr Phoenix from 7:30pm. 🚂'};"
+          new_data = "const data={Wednesday:'The Wednesday Wire is currently switched off. ⚡',Thursday:'Surprise Package is paused while Mr Phoenix is away. 🎁',Friday:'Feel-good tunes, nostalgia and the weekend starting from 7:30pm. 🎧',Saturday:'Saturday Floor Fillers with DJ Disco Dan from 7:30pm while Mr Phoenix is away. 🚀'};"
+          if old_data not in s:
+              raise SystemExit('Expected night-picker schedule not found')
+          s = s.replace(old_data, new_data, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit schedule update and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add live-wire-extras.html .github/workflows/update-live-wire-schedule.yml
+          git commit -m "Update Live Wire show schedule"
+          git rm .github/workflows/update-live-wire-schedule.yml
+          git commit -m "Remove one-time schedule updater"
+          git push
