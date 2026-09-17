@@ -1,0 +1,90 @@
+name: Add More Fun Extras
+on:
+  push:
+    paths:
+      - '.github/workflows/add-more-fun-extras.yml'
+permissions:
+  contents: write
+jobs:
+  add-games:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add games and remove updater
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('live-wire-extras.html')
+          s=p.read_text()
+          if 'LIVE-WIRE-MORE-GAMES' in s:
+              Path('.github/workflows/add-more-fun-extras.yml').unlink()
+              Path('live-wire-extras.html').write_text(s)
+              raise SystemExit(0)
+          block=r'''
+<!-- LIVE-WIRE-MORE-GAMES -->
+<style>
+.more-games{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;margin-top:24px}.more-card{position:relative;background:linear-gradient(145deg,rgba(12,14,27,.97),rgba(25,7,31,.95));border:1px solid rgba(0,234,255,.48);border-radius:18px;padding:24px;box-shadow:0 0 14px rgba(0,234,255,.16),0 0 28px rgba(255,43,214,.09)}.more-card h2{margin-top:0}.more-result{margin-top:15px;padding:15px;border-radius:14px;border:1px solid rgba(255,212,59,.55);background:rgba(5,5,12,.65);text-align:center;min-height:28px;font-weight:800}.more-btn{cursor:pointer;border:1px solid #00eaff;border-radius:24px;background:#11152a;color:#fff;padding:10px 16px;font-size:15px;box-shadow:0 0 9px rgba(0,234,255,.3);margin:5px}.more-btn:hover{box-shadow:0 0 14px #00eaff,0 0 22px #ff2bd6;transform:translateY(-2px)}.more-choices{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.bingo{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:15px}.bingo button{min-height:58px;padding:5px;border:1px solid #00eaff;background:#11152a;color:#fff;border-radius:8px;font-size:11px;cursor:pointer}.bingo button.marked{background:#ff2bd6;box-shadow:0 0 12px #ff2bd6}.bingo button.free{border-color:#ffd43b;font-weight:900}.countdown{font-size:44px;font-weight:900;text-align:center}.fake-cover{font-size:42px;text-align:center;min-height:55px}.mini-stat{text-align:center;color:#58eaff;font-weight:900;margin-top:10px}
+</style>
+<section class="extras-section" id="LIVE-WIRE-MORE-GAMES"><div class="wrap"><h1>🎮🎵 More Live Wire Games</h1><p>Even more Live Wire nonsense — all new games, with the original Fun & Extras still intact. 😂⚡</p><div class="more-games">
+<div class="more-card"><div class="mini-label">5 × 5 challenge</div><h2>🎟️ Live Wire Music Bingo</h2><p>Tap the songs you hear. Complete a row, column or diagonal and hit BINGO!</p><div id="bingo" class="bingo"></div><div class="mini-stat" id="bingoStatus">0 squares marked</div><button class="more-btn" id="bingoNew">🎟️ NEW CARD</button><button class="more-btn" id="bingoCheck">🏆 CHECK BINGO</button></div>
+<div class="more-card"><div class="mini-label">Three clues</div><h2>🎼 Song Intro Challenge</h2><div id="introResult" class="more-result">PRESS START...</div><button class="more-btn" id="introBtn">🎼 GIVE ME A SONG</button></div>
+<div class="more-card"><div class="mini-label">Odd one out</div><h2>🔀 Shuffle The Decade</h2><div id="shuffleResult" class="more-result">FIND THE ODD DECADE...</div><button class="more-btn" id="shuffleBtn">🔀 SHUFFLE IT</button></div>
+<div class="more-card"><div class="mini-label">Missing words</div><h2>🎤 Finish The Lyric</h2><div id="lyricResult" class="more-result">YOUR LYRIC IS WAITING...</div><div id="lyricChoices" class="more-choices"></div><button class="more-btn" id="lyricBtn">🎤 NEW LYRIC</button></div>
+<div class="more-card"><div class="mini-label">Clue by clue</div><h2>🥁 Drumroll Reveal</h2><div id="drumResult" class="more-result">MYSTERY ARTIST...</div><button class="more-btn" id="drumBtn">🥁 REVEAL A CLUE</button></div>
+<div class="more-card"><div class="mini-label">Genre detective</div><h2>🎸 Rock or Pop?</h2><div id="rockPopResult" class="more-result">WHAT'S THE CALL?</div><button class="more-btn" id="rockPopBtn">🎸 GIVE ME ONE</button></div>
+<div class="more-card"><div class="mini-label">Album detective</div><h2>💿 Album Cover Detective</h2><div id="albumResult" class="more-result">MYSTERY ALBUM...</div><button class="more-btn" id="albumBtn">💿 GIVE ME CLUES</button></div>
+<div class="more-card"><div class="mini-label">Music history</div><h2>🏆 Music Hall of Fame Quiz</h2><div id="hallQuiz" class="more-result">WHO'S READY?</div><div id="hallChoices" class="more-choices"></div><button class="more-btn" id="hallBtn">🏆 NEW QUESTION</button></div>
+<div class="more-card"><div class="mini-label">Dan or Will?</div><h2>🚨 Who Would Do It?</h2><div id="wouldResult" class="more-result">WHO WOULD DO IT?</div><button class="more-btn" id="wouldBtn">🚨 GIVE ME A SCENARIO</button></div>
+<div class="more-card"><div class="mini-label">Bingo, but savage</div><h2>🤣 Banter Bingo</h2><div id="banterBingoResult" class="more-result">YOUR BANTER SQUARE...</div><button class="more-btn" id="banterBingoBtn">🤣 DRAW A SQUARE</button></div>
+<div class="more-card"><div class="mini-label">30 seconds</div><h2>🎲 Chaos Countdown</h2><div id="countdown" class="countdown">30</div><div id="chaosTask" class="more-result">PRESS START</div><button class="more-btn" id="countdownBtn">⏱️ START CHAOS</button></div>
+<div class="more-card"><div class="mini-label">Quick fire</div><h2>🧠 Live Wire Brain Test</h2><div id="brainResult" class="more-result">QUESTION READY...</div><div id="brainChoices" class="more-choices"></div><button class="more-btn" id="brainBtn">🧠 NEW QUESTION</button></div>
+<div class="more-card"><div class="mini-label">Breaking news</div><h2>📢 DJ Announcement Generator</h2><div id="announceResult" class="more-result">LIVE FROM THE LIVE WIRE BAR...</div><button class="more-btn" id="announceBtn">📢 MAKE AN ANNOUNCEMENT</button></div>
+<div class="more-card"><div class="mini-label">Dancefloor diagnosis</div><h2>🕺 Dancefloor Decision Maker</h2><div id="danceResult" class="more-result">WHAT SORT OF DANCER ARE YOU?</div><button class="more-btn" id="danceBtn">🕺 DECIDE MY FATE</button></div>
+<div class="more-card"><div class="mini-label">Station master</div><h2>🎫 Ticket Checker</h2><div id="checkResult" class="more-result">TICKET REQUIRED...</div><button class="more-btn" id="checkBtn">🎫 CHECK MY TICKET</button></div>
+<div class="more-card"><div class="mini-label">Railway control</div><h2>🚉 Station Master</h2><div id="stationResult" class="more-result">ALLOCATING YOUR CARRIAGE...</div><button class="more-btn" id="stationBtn">🚉 ALLOCATE MY CARRIAGE</button></div>
+<div class="more-card"><div class="mini-label">Three-era journey</div><h2>🎵 Train Playlist Builder</h2><div id="playlistResult" class="more-result">BUILD YOUR ROUTE...</div><div class="more-choices"><button class="more-btn eraPick">70s</button><button class="more-btn eraPick">80s</button><button class="more-btn eraPick">90s</button><button class="more-btn eraPick">00s</button><button class="more-btn eraPick">10s</button></div></div>
+<div class="more-card"><div class="mini-label">Traffic lights</div><h2>🚦 Signal Box Challenge</h2><div id="signalResult" class="more-result">WAITING FOR THE SIGNAL...</div><button class="more-btn" id="signalBtn">🚦 PULL THE LEVER</button></div>
+<div class="more-card"><div class="mini-label">Live Wire Bar</div><h2>🍹 Build Your Live Wire Cocktail</h2><div id="cocktailResult" class="more-result">YOUR FICTIONAL MIX IS WAITING...</div><button class="more-btn" id="cocktailBtn">🍹 BUILD IT</button></div>
+<div class="more-card"><div class="mini-label">Jukebox</div><h2>🪩 Bar Jukebox</h2><div id="jukeboxResult" class="more-result">CHOOSE THE VIBE...</div><div class="more-choices"><button class="more-btn vibe">PARTY</button><button class="more-btn vibe">NOSTALGIA</button><button class="more-btn vibe">ROCK</button><button class="more-btn vibe">DANCE</button></div></div>
+<div class="more-card"><div class="mini-label">VIP treatment</div><h2>🎵 What Should The Bar Play Next?</h2><div id="barPlayResult" class="more-result">THE JUKEBOX IS THINKING...</div><button class="more-btn" id="barPlayBtn">🎵 PICK THE NEXT VIBE</button></div>
+<div class="more-card"><div class="mini-label">Very important person</div><h2>🪑 VIP Table Generator</h2><div id="vipResult" class="more-result">YOUR TABLE AWAITS...</div><button class="more-btn" id="vipBtn">🪑 ALLOCATE VIP TABLE</button></div>
+</div></div></section>
+<script>
+(function(){'use strict';const p=a=>a[Math.floor(Math.random()*a.length)],S=(id,v)=>{let e=document.getElementById(id);if(e)e.textContent=v};
+const bingoSongs=['Jailhouse Rock','Twist and Shout','Dancing Queen','Don’t Stop Me Now','Livin’ on a Prayer','The Power of Love','Wannabe','Wonderwall','Mr. Brightside','Hips Don’t Lie','Uptown Funk','I Wanna Dance with Somebody','Sweet Dreams','Stayin’ Alive','Go Your Own Way','California Dreamin’','You Really Got Me','What Is Love','Take Me Out','Sex on Fire','Blame It on the Boogie','Girls Just Want to Have Fun','Rhythm Is a Dancer','Don’t Look Back in Anger'];
+function bingo(){let b=document.getElementById('bingo');b.innerHTML='';p.shuffle?.();let a=bingoSongs.slice().sort(()=>Math.random()-.5).slice(0,24),i=0;while(a.length<24)a.push(p(bingoSongs));a.slice(0,24).forEach(x=>{let q=document.createElement('button');q.textContent=x;q.onclick=()=>{q.classList.toggle('marked');S('bingoStatus',b.querySelectorAll('.marked').length+' squares marked')};b.appendChild(q);if(i++===11){}});let f=document.createElement('button');f.textContent='FREE';f.className='free marked';f.onclick=()=>{f.classList.toggle('marked');S('bingoStatus',b.querySelectorAll('.marked').length+' squares marked')};b.insertBefore(f,b.children[12]);}bingo();document.getElementById('bingoNew').onclick=bingo;document.getElementById('bingoCheck').onclick=()=>{let cells=[...document.querySelectorAll('#bingo button')],w=false;for(let r=0;r<5;r++){if([0,1,2,3,4].every(c=>cells[r*5+c].classList.contains('marked')))w=true;if([0,1,2,3,4].every(c=>cells[c*5+r].classList.contains('marked')))w=true}if([0,6,12,18,24].every(i=>cells[i].classList.contains('marked'))||[4,8,12,16,20].every(i=>cells[i].classList.contains('marked')))w=true;S('bingoStatus',w?'🏆 BINGO! LIVE WIRE LEGEND! ⚡':'Keep going — no BINGO yet! 😂')};
+const intros=[['80s classic','Big hair','Huge chorus','Top of the Pops memories'],['90s anthem','Britpop','CD player','Everybody knows the chorus'],['00s favourite','MP3 era','Instant nostalgia','You probably know the first line'],['70s classic','Disco lights','Big melodies','Dancefloor incoming'],['60s classic','Vinyl','Transistor radio','Jukebox favourite']];document.getElementById('introBtn').onclick=()=>{let x=p(intros);S('introResult',x[0]+': '+x.slice(1).join(' • '))};
+const decades=['50s','60s','70s','80s','90s','00s','10s'];document.getElementById('shuffleBtn').onclick=()=>{let x=[p(decades),p(decades),p(decades),p(decades)];let odd=p(x);S('shuffleResult',x.join(' • ')+' — ODD ONE OUT: '+odd+' 😂')};
+const lyrics=[['“Is this the real life? Is this just…”',['fantasy','history','memory'],'fantasy'],['“We will, we will…”',['rock you','find you','need you'],'rock you'],['“I want to break…”',['free','away','through'],'free'],['“It’s a kind of magic…”',['feeling','mystery','power'],'feeling']];function lyric(){let x=p(lyrics);S('lyricResult',x[0]);let c=document.getElementById('lyricChoices');c.innerHTML='';x[1].forEach(v=>{let b=document.createElement('button');b.className='more-btn';b.textContent=v;b.onclick=()=>S('lyricResult',v===x[2]?'⚡ CORRECT!':'😂 NOPE — '+x[2]);c.appendChild(b)})}document.getElementById('lyricBtn').onclick=lyric;lyric();
+const clues=[['MYSTERY ARTIST:','Known for massive 80s hits','One of the biggest pop stars of the decade','Initials: M.J.'],['MYSTERY ARTIST:','Britpop icon','Band with a famous “Wonderwall” connection','90s'],['MYSTERY ARTIST:','Disco royalty','Swedish supergroup','70s'],['MYSTERY ARTIST:','Rock frontman','Famous for “Livin’ on a Prayer”','80s']];let ci=0;document.getElementById('drumBtn').onclick=()=>{let x=clues[ci++%clues.length];S('drumResult',x.join(' '))};
+const rp=['Oasis — ROCK 🎸','ABBA — POP 🪩','Bon Jovi — ROCK 🎸','Spice Girls — POP 💃','The Killers — ROCK 🎸','Dua Lipa — POP 🎤'];document.getElementById('rockPopBtn').onclick=()=>S('rockPopResult',p(rp));
+const albums=['Clue 1: black-and-white artwork • Clue 2: iconic 60s band • Clue 3: Abbey Road connection.','Clue 1: bright 80s artwork • Clue 2: huge pop star • Clue 3: Thriller-era territory.','Clue 1: 90s Britpop • Clue 2: instantly recognisable title • Clue 3: Oasis.','Clue 1: 00s rock • Clue 2: hit-packed album • Clue 3: The Killers.'];document.getElementById('albumBtn').onclick=()=>S('albumResult',p(albums));
+const hq=[['Which decade is associated with disco’s biggest mainstream boom?',['60s','70s','90s'],'70s'],['Which band recorded “Wonderwall”?',['Oasis','Blur','Pulp'],'Oasis'],['Which artist is strongly associated with “Thriller”?',['Michael Jackson','Prince','George Michael'],'Michael Jackson']];function hall(){let x=p(hq);S('hallQuiz',x[0]);let c=document.getElementById('hallChoices');c.innerHTML='';x[1].forEach(v=>{let b=document.createElement('button');b.className='more-btn';b.textContent=v;b.onclick=()=>S('hallQuiz',v===x[2]?'🏆 CORRECT!':'😂 NOPE — '+x[2]);c.appendChild(b)})}document.getElementById('hallBtn').onclick=hall;hall();
+const would=['Who would accidentally start a three-hour music conversation?','Who would sneak Nickelback into the playlist?','Who would turn “one more tune” into another hour?','Who would arrive with the most ridiculous excuse?'];document.getElementById('wouldBtn').onclick=()=>S('wouldResult',p(would)+' ⚡😂');
+const bb=['WILL MENTIONS NICKELBACK','DAN SAYS ONE MORE TUNE','SOMEONE SINGS ALONG','MUSIC FROM THE 80s','SOMEONE STARTS BANTER','THE MUSIC TRAIN GETS MENTIONED','SOMEONE SHOUTS FOR A REQUEST','SOMEONE SAYS “REMEMBER THIS?”'];document.getElementById('banterBingoBtn').onclick=()=>S('banterBingoResult',p(bb)+' — MARK IT! 😂');
+let timer;const tasks=['Name 5 artists in 10 seconds!','Name 3 songs from the 80s!','Do your best DJ intro!','Name 3 forgotten gems!','Say “one more tune” in a dramatic voice!'];document.getElementById('countdownBtn').onclick=()=>{clearInterval(timer);let n=30;S('countdown',n);S('chaosTask',p(tasks));timer=setInterval(()=>{n--;S('countdown',n);if(n<=0){clearInterval(timer);S('chaosTask','💥 TIME! 😂')}},1000)};
+const brain=[['How many members were in ABBA?',['3','4','5'],'4'],['Which decade was “Wannabe” released?',['80s','90s','00s'],'90s'],['Which instrument has black and white keys?',['Guitar','Piano','Drums'],'Piano']];function brainQ(){let x=p(brain);S('brainResult',x[0]);let c=document.getElementById('brainChoices');c.innerHTML='';x[1].forEach(v=>{let b=document.createElement('button');b.className='more-btn';b.textContent=v;b.onclick=()=>S('brainResult',v===x[2]?'🧠 CORRECT!':'😂 NOPE — '+x[2]);c.appendChild(b)})}document.getElementById('brainBtn').onclick=brainQ;brainQ();
+const ann=['🚨 BREAKING: Someone has requested ONE MORE TUNE. Experts say this could last all night.','📢 LIVE WIRE BAR NOTICE: Dancing is now compulsory.','🚨 MUSIC TRAIN UPDATE: The conductor has misplaced the timetable again.','📢 DJ NOTICE: Please keep your arms inside the dancefloor at all times. 😂'];document.getElementById('announceBtn').onclick=()=>S('announceResult',p(ann));
+const dance=['THE AIR GUITAR LEGEND 🎸','THE TWO-STEP SPECIALIST 🕺','THE DANCEFLOOR FREESTYLER ⚡','THE “I KNOW THIS ONE” BELTER 🎤','THE DAD-DANCE CHAMPION 😂'];document.getElementById('danceBtn').onclick=()=>S('danceResult',p(dance));
+document.getElementById('checkBtn').onclick=()=>S('checkResult',p(['🎫 VALID — STRAIGHT IN!','🎫 VALID — VIP BANTER ACCESS GRANTED!','🎫 SUSPICIOUS — TOO MUCH NICKELBACK ON THIS TICKET. 😂','🎫 VALID — ALL ABOARD! 🚂']));
+const carriages=['First Class Nostalgia','Banter Carriage','Dancefloor Carriage','Rock Carriage','Live Wire Bar Carriage'];document.getElementById('stationBtn').onclick=()=>S('stationResult',p(carriages)+' • Seat '+(Math.floor(Math.random()*40)+1));
+let route=[];document.querySelectorAll('.eraPick').forEach(b=>b.onclick=()=>{if(route.length===3)route=[];route.push(b.textContent);S('playlistResult',route.join(' → ')+(route.length===3?' 🚂 PLAYLIST COMPLETE!':' — choose '+(3-route.length)+' more'))});
+document.getElementById('signalBtn').onclick=()=>S('signalResult',p(['🟢 GREEN — PLAY IT!','🟡 AMBER — MAY CAUSE SINGING.','🔴 RED — TOO MUCH NICKELBACK. 😂','🟢 GREEN — DANCEFLOOR CLEARED!']));
+const cocktails=['DISCO FIZZ — fizzy fictional fun + 70s sparkle.','PHOENIX ROCKET — rock vibes + a Nickelback warning. 🎸','NOSTALGIA SPRITZ — 80s memories in a glass.','LIVE WIRE COOLER — pure good vibes + extra banter.'];document.getElementById('cocktailBtn').onclick=()=>S('cocktailResult',p(cocktails));
+const vibes={PARTY:'BIG CHORUSES + DANCEFLOOR CLASSICS ⚡',NOSTALGIA:'DECADES + FORGOTTEN GEMS 💿',ROCK:'GUITARS + ROCK ANTHEMS 🎸',DANCE:'BEATS + FULL DANCEFLOOR 🕺'};document.querySelectorAll('.vibe').forEach(b=>b.onclick=()=>S('jukeboxResult',vibes[b.textContent]));
+const plays=['80s anthem','90s singalong','00s rock classic','70s disco favourite','forgotten gem','massive party tune'];document.getElementById('barPlayBtn').onclick=()=>S('barPlayResult','THE BAR SHOULD PLAY: '+p(plays).toUpperCase()+' 🎵');
+const vip=['TABLE 1 — NEXT TO THE DJ','TABLE 2 — PRIME BANTER VIEW','VIP BOOTH — NO ESCAPE FROM THE MUSIC','CORNER TABLE — NICKELBACK DEFENCE POSITION','DANCEFLOOR VIP — YOU’RE EXPECTED TO DANCE'];document.getElementById('vipBtn').onclick=()=>S('vipResult',p(vip));
+})();
+</script>
+'''
+          s=s.replace('</body>',block+'</body>')
+          p.write_text(s)
+          wf=Path('.github/workflows/add-more-fun-extras.yml')
+          wf.unlink()
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add live-wire-extras.html .github/workflows/add-more-fun-extras.yml
+          git commit -m 'Add Live Wire music bingo and more games' || exit 0
+          git push
