@@ -37,7 +37,7 @@ async function login(request, env) {
     client_id: APP_ID,
     redirect_uri: redirectUri(request),
     response_type: 'code',
-    scope: 'pages_show_list,pages_manage_posts',
+    scope: 'pages_show_list,pages_manage_posts,pages_read_engagement',
     state,
   });
   return new Response(null, { status: 302, headers: { Location: `${META_AUTHORIZE_URL}?${params}`, 'Cache-Control': 'no-store' } });
