@@ -189,64 +189,91 @@ function escapeHtml(value) {
 function buildDailySchedulePost(shows, date = new Date()) {
   const dateKey = isoDateInLondon(date);
   const dayNumber = Number(dateKey.replace(/-/g, ''));
-  const engagementPosts = [
+
+  const noShowPosts = [
     `⚡ LIVE WIRE CHECK-IN ⚡
 
-What song can NEVER fail to get you singing along? 🎶😂
+Right then… who's about and causing trouble today? 😂⚡
 
-Drop your absolute belter in the comments — old-school classic, guilty pleasure or modern banger. We want to know! 👇
-
-🔗 https://linktr.ee/livewireentertainment23
-
-#LiveWireEntertainment #LiveWireBar #Music #Banter #MusicMemories ⚡`,
-    `⚡ LIVE WIRE QUESTION OF THE DAY ⚡
-
-You're in charge of the music tonight… what's the FIRST song you're putting on? 🎵🔥
-
-No judging at the Live Wire Bar — we're here for the tunes, the banter and the memories! 😂🍹
+No show tonight, but that doesn't mean the Live Wire Bar is closed for banter. Music, memories and a bit of nonsense as usual! 🎶🍹
 
 🔗 https://linktr.ee/livewireentertainment23
 
-#LiveWireEntertainment #LiveWireBar #Music #Banter #LiveWire ⚡`,
-    `⚡ LIVE WIRE MUSIC MEMORY ⚡
+#LiveWireEntertainment #LiveWireBar #Music #Banter ⚡`,
+    `⚡ A LITTLE LIVE WIRE NOSTALGIA ⚡
 
-Which decade had the tunes you could never get enough of? 📻🎶
+You know when one song comes on and you're instantly back in another decade? 😂🎶
 
-50s, 60s, 70s, 80s, 90s, 00s… or are you going all the way back? 😂
-
-Tell us your decade — and the ONE track that takes you straight back there! 👇
+That's the sort of music magic we love around here. Some tunes just never get old!
 
 🔗 https://linktr.ee/livewireentertainment23
 
-#LiveWireEntertainment #LiveWireBar #MusicMemories #Nostalgia #Banter ⚡`,
-    `⚡ LIVE WIRE ROLL CALL ⚡
+#LiveWireEntertainment #LiveWireBar #MusicMemories #Nostalgia ⚡`,
+    `⚡ LIVE WIRE BAR NOTICE ⚡
 
-Who's up for some music, banter and a bit of madness? 😂⚡
+The bar might be quiet tonight… but the playlist certainly isn't! 😂🍹🎶
 
-Tag the mate who would absolutely hijack the playlist if we gave them the controls! 🎶🤣
+Plenty of music, plenty of memories and absolutely no shortage of banter around here. That's Live Wire! ⚡
 
 🔗 https://linktr.ee/livewireentertainment23
 
-#LiveWireEntertainment #LiveWireBar #Music #Banter #LiveWire ⚡`,
+#LiveWireEntertainment #LiveWireBar #Banter #Music ⚡`,
+    `⚡ WHO LET THE MUSIC LOOSE? 😂⚡
+
+One minute you're having a quiet day… next thing you're remembering every word to a song you haven't heard since 1997! 🎶🤣
+
+Live Wire does have a habit of bringing the memories back.
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #MusicMemories #Banter ⚡`,
+    `⚡ LIVE WIRE WEEKEND IS LOADING… ⚡
+
+You know what that means… music, banter and probably somebody taking the playlist far too seriously! 😂🎶
+
+Keep your eyes peeled — we're getting ready for another Live Wire weekend.
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #Weekend #Music #Banter ⚡`,
+    `⚡ JUST A QUICK ONE FROM LIVE WIRE ⚡
+
+Hope you're having a cracking day! ❤️⚡
+
+Keep the music on, keep the good vibes going and remember… there's always room for a bit of Live Wire banter. 😂🎶
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #GoodVibes #Banter ⚡`,
+    `⚡ LIVE WIRE RANDOM THOUGHT OF THE DAY 😂
+
+Why is it that the songs we claim we "don't like" are usually the ones we know every single word to? 🤣🎶
+
+We've all got one. Don't even try denying it!
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #Music #Banter #GuiltyPleasures ⚡`,
   ];
 
-  if (!shows.length) return engagementPosts[dayNumber % engagementPosts.length];
+  const showExtras = [
+    'Get yourself settled in — the music and banter are about to start! 🎶😂',
+    'Another night at the Live Wire Bar… you know how this usually ends! 😂🍹',
+    'The tunes are lined up, the banter is ready and we are good to go! ⚡🎶',
+    'Grab yourself a drink, turn the volume up and join us! 🍹🎶',
+    'Right then… let the music do the talking tonight! 😂🎶',
+    'You know the drill — music, memories and a bit of Live Wire madness! ⚡🤣',
+    'Another Live Wire night incoming. Let’s have it! ⚡🎶',
+  ];
+
+  if (!shows.length) return noShowPosts[dayNumber % noShowPosts.length];
 
   const lines = shows.map(show => `⚡ ${show.name} — ${show.time}`);
-  const engagement = [
-    'What tune are you hoping to hear tonight? 🎶👇',
-    'Who is joining us tonight? Get yourself in the comments! 😂👇',
-    'What decade are we travelling back to tonight? 📻🎶',
-    'Tag your music-mad mate — they need to be here! 😂⚡',
-  ][dayNumber % 4];
-
   return `⚡ LIVE WIRE TONIGHT ⚡
 
 ${lines.join('\n')}
 
-Get ready for another night of music, banter and Live Wire Bar vibes! 🎶🍹
-
-${engagement}
+${showExtras[dayNumber % showExtras.length]}
 
 🔗 https://linktr.ee/livewireentertainment23
 
