@@ -92,6 +92,27 @@ async function publish(request, env) {
   } catch (error) { return json({ ok: false, error: error.message }, 400); }
 }
 
+async function casterStreamStatus(request) {
+  if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
+  try {
+    const url = 'https://sapircast.caster.fm:12036/admin/publicstats.json?t=' + Date.now();
+    const response = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json', 'Cache-Control': 'no-cache' }, cf: { cacheTtl: 0, cacheEverything: false } });
+    if (!response.ok) return json({ ok: false, online: false, error: 'Caster status returned HTTP ' + response.status }, 502);
+    const data = await response.json();
+    const source = data?.find?.(item => item?.source)?.source || {};
+    const mount = source['/6W6zw'] || null;
+    return json({
+      ok: true,
+      online: !!mount,
+      mount: mount ? '/6W6zw' : null,
+      stream_start: mount?.stream_start_iso8601 || null,
+      content_type: mount?.['content-type'] || null
+    });
+  } catch (error) {
+    return json({ ok: false, online: false, error: error.message }, 502);
+  }
+}
+
 async function status(request, env) {
   if (!requireMethod(request, 'POST')) return json({ ok: false, error: 'Method not allowed.' }, 405);
   try {
@@ -116,6 +137,7 @@ export default {
       if (path === '/tiktok-creator') return creator(request, env);
       if (path === '/tiktok-publish') return publish(request, env);
       if (path === '/tiktok-status') return status(request, env);
+      if (path === '/stream-status') return casterStreamStatus(request);
       return json({ ok: true, service: 'Live Wire Entertainment TikTok Worker' });
     } catch (error) { return json({ ok: false, error: 'Unexpected Worker error.' }, 500); }
   },
