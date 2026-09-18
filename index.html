@@ -79,45 +79,23 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     if(el)el.textContent=value;
   };
 
-  const refresh = async () => {
+  const refresh = () => {
     const now=new Date();
     const today=showForDate(now);
     const mins=now.getHours()*60+now.getMinutes();
-    let mount=null;
 
-    try{
-      const r=await fetch(STATUS_URL+'?t='+Date.now(),{cache:'no-store'});
-      if(!r.ok)throw new Error('status '+r.status);
-      const data=await r.json();
-      mount=data?.[0]?.source?.[MOUNT]||null;
-    }catch(e){ mount=null; }
-
-    const within=!!today && mins>=today[2] && mins<today[3];
-
-    if(within && mount){
+    if(today && mins>=today[2] && mins<today[3]){
       set('homeLivePill','🔴 LIVE NOW');
       document.getElementById('homeLivePill')?.classList.add('live');
       set('homeLiveTitle',today[0]);
       set('homeLiveTime','ON AIR NOW • '+today[1]);
-      set('homeLiveNote','🎧 Streaming live from the Live Wire Bar');
-    }else if(within && !mount){
-      set('homeLivePill','🟠 TONIGHT');
-      document.getElementById('homeLivePill')?.classList.remove('live');
-      set('homeLiveTitle',today[0]);
-      set('homeLiveTime','Starts '+today[1]);
-      set('homeLiveNote','🎧 Live Wire show tonight — stream not currently detected');
+      set('homeLiveNote','⚡ Live Wire show is active on the schedule');
     }else if(today){
       set('homeLivePill','🟡 TONIGHT');
       document.getElementById('homeLivePill')?.classList.remove('live');
       set('homeLiveTitle',today[0]);
       set('homeLiveTime','Starts '+today[1]);
       set('homeLiveNote','⚡ Tonight on Live Wire');
-    }else if(mount){
-      set('homeLivePill','🔵 LIVE RADIO');
-      document.getElementById('homeLivePill')?.classList.remove('live');
-      set('homeLiveTitle','Live Wire Random Music Shuffle');
-      set('homeLiveTime','STREAMING NOW • WEBSITE RADIO');
-      set('homeLiveNote','🎧 The Live Wire Bar radio is playing');
     }else{
       set('homeLivePill','🟢 NEXT UP');
       document.getElementById('homeLivePill')?.classList.remove('live');
@@ -129,7 +107,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
         set('homeLiveTitle','Live Wire Entertainment');
         set('homeLiveTime','No show currently scheduled');
       }
-      set('homeLiveNote','⚡ Check back here when the Live Wire action starts');
+      set('homeLiveNote','⚡ Live Wire schedule');
     }
   };
 
