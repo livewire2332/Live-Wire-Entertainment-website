@@ -235,6 +235,10 @@ export default {
       if (path === '/facebook-callback') return callback(request, env);
       if (path === '/facebook-status') return status(request, env);
       if (path === '/facebook-schedule') return json({ ok: true, timezone: 'Europe/London', today: isoDateInLondon(), today_shows: getShowsForDate(), upcoming: getUpcomingShows() });
+      if (path === '/facebook-preview') {
+        const shows = getShowsForDate();
+        return json({ ok: true, date: isoDateInLondon(), shows, message: buildDailySchedulePost(shows) });
+      }
       if (path === '/facebook-publish') return publish(request, env);
       return json({ ok: true, service: 'Live Wire Entertainment Facebook Worker' });
     } catch (error) {
