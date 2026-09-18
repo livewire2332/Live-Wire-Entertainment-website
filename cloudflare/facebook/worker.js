@@ -255,7 +255,7 @@ export default {
         const shows = getShowsForDate();
         return json({ ok: true, date: isoDateInLondon(), shows, message: buildDailySchedulePost(shows) });
       }
-      if (path === '/facebook-test') return html('<h2>Facebook Test</h2><p>This will publish one clearly labelled test post to the connected Live Wire Entertainment Facebook Page. Automatic posting remains OFF.</p><form method="post"><button type="submit" style="font-size:18px;padding:12px 18px">Publish Test Post</button></form>');
+      if (path === '/facebook-test' && request.method === 'GET') return html('<h2>Facebook Test</h2><p>This will publish one clearly labelled test post to the connected Live Wire Entertainment Facebook Page. Automatic posting remains OFF.</p><form method="post"><button type="submit" style="font-size:18px;padding:12px 18px">Publish Test Post</button></form>');
       if (path === '/facebook-test' && request.method === 'POST') return publishTest(request, env);
       if (path === '/facebook-publish') return publish(request, env);
       return json({ ok: true, service: 'Live Wire Entertainment Facebook Worker' });
