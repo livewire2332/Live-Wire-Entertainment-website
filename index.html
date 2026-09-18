@@ -101,11 +101,17 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
       set('homeLiveTime','ON AIR NOW • '+today[1]);
       set('homeLiveNote','🎧 Streaming live from the Live Wire Bar');
     }else if(within && !mount){
-      set('homeLivePill','🟠 SCHEDULED');
+      set('homeLivePill','🟠 TONIGHT');
       document.getElementById('homeLivePill')?.classList.remove('live');
       set('homeLiveTitle',today[0]);
-      set('homeLiveTime','Scheduled from '+today[1]);
-      set('homeLiveNote','Show time is here — stream not currently detected');
+      set('homeLiveTime','Starts '+today[1]);
+      set('homeLiveNote','🎧 Live Wire show tonight — stream not currently detected');
+    }else if(today){
+      set('homeLivePill','🟡 TONIGHT');
+      document.getElementById('homeLivePill')?.classList.remove('live');
+      set('homeLiveTitle',today[0]);
+      set('homeLiveTime','Starts '+today[1]);
+      set('homeLiveNote','⚡ Tonight on Live Wire');
     }else if(mount){
       set('homeLivePill','🔵 LIVE RADIO');
       document.getElementById('homeLivePill')?.classList.remove('live');
