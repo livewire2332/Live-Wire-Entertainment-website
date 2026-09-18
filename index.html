@@ -79,6 +79,20 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     if(el)el.textContent=value;
   };
 
+  let streamOnline=false;
+
+  const readStreamStatus = async () => {
+    try{
+      const r=await fetch('https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status?t='+Date.now(),{cache:'no-store'});
+      if(!r.ok)throw new Error('status '+r.status);
+      const data=await r.json();
+      streamOnline=!!data?.online;
+    }catch(e){
+      streamOnline=false;
+    }
+    refresh();
+  };
+
   const refresh = () => {
     const now=new Date();
     const mins=now.getHours()*60+now.getMinutes();
@@ -90,7 +104,17 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
       ? ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,30]
       : today;
 
-    if(fridayLive){
+    const streamShow=(day===6 && mins<30)
+      ? ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,30]
+      : activeShow;
+
+    if(streamOnline){
+      set('homeLivePill','🔴 LIVE NOW');
+      document.getElementById('homeLivePill')?.classList.add('live');
+      set('homeLiveTitle',streamShow?.[0] || 'Live Wire Entertainment');
+      set('homeLiveTime','ON AIR NOW • '+(streamShow?.[1] || 'Live'));
+      set('homeLiveNote','📡 Live stream detected • schedule also checked');
+    }else if(fridayLive){
       set('homeLivePill','🔴 LIVE NOW');
       document.getElementById('homeLivePill')?.classList.add('live');
       set('homeLiveTitle',activeShow[0]);
@@ -118,7 +142,8 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
   };
 
   refresh();
-  setInterval(refresh,30000);
+  readStreamStatus();
+  setInterval(readStreamStatus,15000);
 })();
 </script>
 
