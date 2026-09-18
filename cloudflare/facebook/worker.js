@@ -173,7 +173,8 @@ export default {
     try {
       if (path === '/facebook-login') return login(request, env);
       if (path === '/facebook-callback') return callback(request, env);
-      if (path === '/facebook-status') return status(request, env);\n      if (path === '/facebook-schedule') return json({ ok: true, timezone: 'Europe/London', today: isoDateInLondon(), today_shows: getShowsForDate(), upcoming: getUpcomingShows() });
+      if (path === '/facebook-status') return status(request, env);
+      if (path === '/facebook-schedule') return json({ ok: true, timezone: 'Europe/London', today: isoDateInLondon(), today_shows: getShowsForDate(), upcoming: getUpcomingShows() });
       if (path === '/facebook-publish') return publish(request, env);
       return json({ ok: true, service: 'Live Wire Entertainment Facebook Worker' });
     } catch (error) {
