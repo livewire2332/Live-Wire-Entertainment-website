@@ -14,19 +14,25 @@ const SHOW_SCHEDULE = [
 ];
 
 function isoDateInLondon(date = new Date()) {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/London',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
 }
 
-function londonParts(date = new Date()) {
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Europe/London', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false,
-  }).formatToParts(date);
-  return Object.fromEntries(parts.filter(p => p.type !== 'literal').map(p => [p.type, p.value]));
+function getLondonWeekday(date = new Date()) {
+  const weekday = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/London',
+    weekday: 'short',
+  }).format(date);
+  return { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 }[weekday];
 }
 
 function getShowsForDate(date = new Date()) {
   const dateKey = isoDateInLondon(date);
-  const weekday = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/London', weekday: 'numeric' }).format(date));
+  const weekday = getLondonWeekday(date);
   return SHOW_SCHEDULE.filter(show => {
     if (show.day !== weekday || !show.active) return false;
     if (show.from && dateKey < show.from) return false;
@@ -43,7 +49,6 @@ function getUpcomingShows(date = new Date(), days = 14) {
   }
   return results;
 }
-
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
