@@ -186,14 +186,67 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
 }
 
-function buildDailySchedulePost(shows) {
-  if (!shows.length) return null;
+function buildDailySchedulePost(shows, date = new Date()) {
+  const dateKey = isoDateInLondon(date);
+  const dayNumber = Number(dateKey.replace(/-/g, ''));
+  const engagementPosts = [
+    `⚡ LIVE WIRE CHECK-IN ⚡
+
+What song can NEVER fail to get you singing along? 🎶😂
+
+Drop your absolute belter in the comments — old-school classic, guilty pleasure or modern banger. We want to know! 👇
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #Music #Banter #MusicMemories ⚡`,
+    `⚡ LIVE WIRE QUESTION OF THE DAY ⚡
+
+You're in charge of the music tonight… what's the FIRST song you're putting on? 🎵🔥
+
+No judging at the Live Wire Bar — we're here for the tunes, the banter and the memories! 😂🍹
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #Music #Banter #LiveWire ⚡`,
+    `⚡ LIVE WIRE MUSIC MEMORY ⚡
+
+Which decade had the tunes you could never get enough of? 📻🎶
+
+50s, 60s, 70s, 80s, 90s, 00s… or are you going all the way back? 😂
+
+Tell us your decade — and the ONE track that takes you straight back there! 👇
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #MusicMemories #Nostalgia #Banter ⚡`,
+    `⚡ LIVE WIRE ROLL CALL ⚡
+
+Who's up for some music, banter and a bit of madness? 😂⚡
+
+Tag the mate who would absolutely hijack the playlist if we gave them the controls! 🎶🤣
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #Music #Banter #LiveWire ⚡`,
+  ];
+
+  if (!shows.length) return engagementPosts[dayNumber % engagementPosts.length];
+
   const lines = shows.map(show => `⚡ ${show.name} — ${show.time}`);
+  const engagement = [
+    'What tune are you hoping to hear tonight? 🎶👇',
+    'Who is joining us tonight? Get yourself in the comments! 😂👇',
+    'What decade are we travelling back to tonight? 📻🎶',
+    'Tag your music-mad mate — they need to be here! 😂⚡',
+  ][dayNumber % 4];
+
   return `⚡ LIVE WIRE TONIGHT ⚡
 
 ${lines.join('\n')}
 
 Get ready for another night of music, banter and Live Wire Bar vibes! 🎶🍹
+
+${engagement}
 
 🔗 https://linktr.ee/livewireentertainment23
 
