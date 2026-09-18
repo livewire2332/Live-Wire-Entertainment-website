@@ -5,13 +5,24 @@ const META_GRAPH_URL = `https://graph.facebook.com/${META_GRAPH_VERSION}`;
 const APP_ID = '1855203898976920';
 const ALLOWED_ORIGIN = 'https://livewire2332.github.io';
 const TOKEN_KEY = 'facebook_page_connection';
-const SHOW_SCHEDULE = [
+const DEFAULT_SHOW_SCHEDULE = [
   { day: 3, name: 'The Wednesday Wire with DJ Disco Dan', time: 'around 8pm', active: true },
   { day: 4, name: 'Surprise Package Thursdays with Mr Phoenix', time: 'around 8pm', active: false },
   { day: 5, name: 'Feel Good Friday with DJ Disco Dan', time: '7:30pm', active: true },
   { day: 6, name: 'Saturday Floor Fillers with DJ Disco Dan', time: '7:30pm', active: true, until: '2026-10-02' },
   { day: 6, name: 'The Music Train with Mr Phoenix', time: '7:30pm', active: true, from: '2026-10-03' },
 ];
+const SCHEDULE_URL = 'https://raw.githubusercontent.com/livewire2332/Live-Wire-Entertainment-website/facebook-automation-worker/cloudflare/facebook/schedule.json';
+
+async function getShowSchedule() {
+  try {
+    const response = await fetch(SCHEDULE_URL, { cf: { cacheTtl: 60, cacheEverything: true } });
+    if (!response.ok) throw new Error('Schedule fetch failed');
+    const schedule = await response.json();
+    if (Array.isArray(schedule)) return schedule;
+  } catch {}
+  return DEFAULT_SHOW_SCHEDULE;
+}
 
 function isoDateInLondon(date = new Date()) {
   return new Intl.DateTimeFormat('en-CA', {
@@ -30,10 +41,11 @@ function getLondonWeekday(date = new Date()) {
   return { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 }[weekday];
 }
 
-function getShowsForDate(date = new Date()) {
+async function getShowsForDate(date = new Date(), schedule = null) {
   const dateKey = isoDateInLondon(date);
   const weekday = getLondonWeekday(date);
-  return SHOW_SCHEDULE.filter(show => {
+  const showSchedule = schedule || await getShowSchedule();
+  return showSchedule.filter(show => {
     if (show.day !== weekday || !show.active) return false;
     if (show.from && dateKey < show.from) return false;
     if (show.until && dateKey > show.until) return false;
@@ -45,7 +57,7 @@ function getUpcomingShows(date = new Date(), days = 14) {
   const results = [];
   for (let i = 0; i < days; i++) {
     const d = new Date(date.getTime() + i * 86400000);
-    for (const show of getShowsForDate(d)) results.push({ date: isoDateInLondon(d), ...show });
+    for (const show of await getShowsForDate(d, schedule)) results.push({ date: isoDateInLondon(d), ...show });
   }
   return results;
 }
@@ -316,7 +328,8 @@ async function scheduled(event, env) {
   const sentKey = `facebook_daily_post:${dateKey}`;
   if (await env.FACEBOOK_TOKENS.get(sentKey)) return;
 
-  const message = buildDailySchedulePost(getShowsForDate(new Date(event.scheduledTime)));
+  const schedule = await getShowSchedule();
+  const message = buildDailySchedulePost(await getShowsForDate(new Date(event.scheduledTime), schedule));
   if (!message) return;
 
   const saved = await connection(env);
@@ -350,7 +363,7 @@ export default {
       if (path === '/facebook-login') return login(request, env);
       if (path === '/facebook-callback') return callback(request, env);
       if (path === '/facebook-status') return status(request, env);
-      if (path === '/facebook-schedule') return json({ ok: true, timezone: 'Europe/London', today: isoDateInLondon(), today_shows: getShowsForDate(), upcoming: getUpcomingShows() });
+      if (path === '/facebook-schedule') { const schedule = await getShowSchedule(); return json({ ok: true, timezone: 'Europe/London', today: isoDateInLondon(), today_shows: await getShowsForDate(new Date(), schedule), upcoming: await getUpcomingShows(new Date(), 14, schedule), source: 'Live Wire HQ schedule config' }); }
       if (path === '/facebook-schedule-dry-run') {
         const testTime = new URL(request.url).searchParams.get('time') || new Date().toISOString();
         const testDate = new Date(testTime);
@@ -365,7 +378,8 @@ export default {
         const hour = Number(londonParts.find(p => p.type === 'hour')?.value);
         const minute = Number(londonParts.find(p => p.type === 'minute')?.value);
         const dateKey = isoDateInLondon(testDate);
-        const shows = getShowsForDate(testDate);
+        const schedule = await getShowSchedule();
+        const shows = await getShowsForDate(testDate, schedule);
         const message = buildDailySchedulePost(shows, testDate);
         const sentKey = `facebook_daily_post:${dateKey}`;
         const alreadySent = Boolean(await env.FACEBOOK_TOKENS.get(sentKey));
@@ -393,7 +407,8 @@ export default {
         });
       }
       if (path === '/facebook-preview') {
-        const shows = getShowsForDate();
+        const schedule = await getShowSchedule();
+        const shows = await getShowsForDate(new Date(), schedule);
         return json({ ok: true, date: isoDateInLondon(), shows, message: buildDailySchedulePost(shows) });
       }
       if (path === '/facebook-test' && request.method === 'GET') return html('<h2>Facebook Test</h2><p>This will publish one clearly labelled test post to the connected Live Wire Entertainment Facebook Page. Automatic posting remains OFF.</p><form method="post"><button type="submit" style="font-size:18px;padding:12px 18px">Publish Test Post</button></form>');
