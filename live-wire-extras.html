@@ -259,13 +259,30 @@ const CASTER_MOUNT='/6W6zw';
 let streamOnline=false;
 async function readCasterStatus(){try{const r=await fetch(CASTER_STATUS_URL+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Caster status '+r.status);const data=await r.json();const source=data?.[0]?.source||{};const mount=source[CASTER_MOUNT];streamOnline=!!mount;return mount||null;}catch(e){streamOnline=false;return null;}}
 function nextScheduled(now){for(let i=1;i<=14;i++){const date=new Date(now);date.setDate(now.getDate()+i);const shows=getShowsForDate(date);if(shows.length)return {show:shows[0],days:i};}return null;}
+let streamOnline=false;
+async function readStreamStatus(){
+try{
+const r=await fetch('https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status?t='+Date.now(),{cache:'no-store'});
+if(!r.ok)throw new Error('status '+r.status);
+const data=await r.json();
+streamOnline=!!data?.online;
+}catch(e){streamOnline=false;}
+status();
+}
 function status(){
 const now=new Date(),mins=now.getHours()*60+now.getMinutes(),day=now.getDay(),todayShows=getShowsForDate(now),show=todayShows[0];
 const pill=document.getElementById('statusPill'),title=document.getElementById('statusTitle'),time=document.getElementById('statusTime'),note=document.getElementById('statusNote');
 if(!pill||!title||!time)return;
 const fridayLive=(day===5&&mins>=1170)||(day===6&&mins<30);
 const activeShow=fridayLive?['Feel Good Friday with DJ Disco Dan','7:30pm']:show;
-if(fridayLive){
+const streamShow=(day===6&&mins<30)?['Feel Good Friday with DJ Disco Dan','7:30pm']:activeShow;
+if(streamOnline){
+pill.textContent='🔴 LIVE NOW';
+pill.classList.add('live');
+title.textContent=streamShow?.[0]||'Live Wire Entertainment';
+time.textContent='ON AIR NOW • '+(streamShow?.[1]||'Live');
+if(note)note.textContent='📡 Live stream detected • schedule also checked.';
+}else if(fridayLive){
 pill.textContent='🔴 LIVE NOW';
 pill.classList.add('live');
 title.textContent=activeShow[0];
@@ -289,7 +306,7 @@ const decadeBox=document.getElementById('decadeButtons');if(decadeBox)Object.key
 const friday=document.getElementById('fridayMoodBtn');if(friday)friday.addEventListener('click',function(){const m=pick(fridayMoods);document.getElementById('fridayMood').textContent=m[0];document.getElementById('fridaySub').textContent=m[1];});
 const banterBtn=document.getElementById('banterBtn');if(banterBtn)banterBtn.addEventListener('click',function(){document.getElementById('banterText').textContent=pick(banter);});
 const train=document.getElementById('trainBtn');if(train)train.addEventListener('click',function(){document.getElementById('destination').textContent='NEXT STOP: '+pick(destinations).toUpperCase();});
-const data={Wednesday:'The Wednesday Wire with DJ Disco Dan from around 8pm. ⚡',Thursday:'Surprise Package is paused while Mr Phoenix is away. 🎁',Friday:'Feel-good tunes, nostalgia and the weekend starting from 7:30pm. 🎧',Saturday:'Saturday Floor Fillers with DJ Disco Dan from 7:30pm while Mr Phoenix is away. 🚀'};document.querySelectorAll('.night').forEach(b=>b.addEventListener('click',function(){document.getElementById('selectedNight').textContent=this.dataset.night+': '+data[this.dataset.night];}));try{status();}catch(e){} setInterval(()=>{try{status();}catch(e){}},30000);}
+const data={Wednesday:'The Wednesday Wire with DJ Disco Dan from around 8pm. ⚡',Thursday:'Surprise Package is paused while Mr Phoenix is away. 🎁',Friday:'Feel-good tunes, nostalgia and the weekend starting from 7:30pm. 🎧',Saturday:'Saturday Floor Fillers with DJ Disco Dan from 7:30pm while Mr Phoenix is away. 🚀'};document.querySelectorAll('.night').forEach(b=>b.addEventListener('click',function(){document.getElementById('selectedNight').textContent=this.dataset.night+': '+data[this.dataset.night];}));try{status();}catch(e){} readStreamStatus(); setInterval(readStreamStatus,15000);}
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init,{once:true});}else{init();}})();
 </script>
 <script>
