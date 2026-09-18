@@ -193,77 +193,97 @@ function buildDailySchedulePost(shows, date = new Date()) {
   const noShowPosts = [
     `⚡ LIVE WIRE CHECK-IN ⚡
 
-Right then… who's about and causing trouble today? 😂⚡
+Right then, what's everyone been up to today? 😂⚡
 
-No show tonight, but that doesn't mean the Live Wire Bar is closed for banter. Music, memories and a bit of nonsense as usual! 🎶🍹
+We've got no show tonight, but you know us — that doesn't mean the Live Wire Bar goes quiet. There's always a tune playing somewhere, somebody remembering a song from years ago, and usually a bit of nonsense going on too! 😂🎶🍹
 
-🔗 https://linktr.ee/livewireentertainment23
-
-#LiveWireEntertainment #LiveWireBar #Music #Banter ⚡`,
-    `⚡ A LITTLE LIVE WIRE NOSTALGIA ⚡
-
-You know when one song comes on and you're instantly back in another decade? 😂🎶
-
-That's the sort of music magic we love around here. Some tunes just never get old!
+Hope you're all having a cracking day. Stick around, keep the music on and we'll be back with another Live Wire night before you know it. ⚡
 
 🔗 https://linktr.ee/livewireentertainment23
 
-#LiveWireEntertainment #LiveWireBar #MusicMemories #Nostalgia ⚡`,
-    `⚡ LIVE WIRE BAR NOTICE ⚡
+#LiveWireEntertainment #LiveWireBar #Music #Banter #Community ⚡`,
+    `⚡ JUST BEEN THINKING… 😂🎶
 
-The bar might be quiet tonight… but the playlist certainly isn't! 😂🍹🎶
+How many songs have you heard today that you haven't heard for years?
 
-Plenty of music, plenty of memories and absolutely no shortage of banter around here. That's Live Wire! ⚡
+That's one of the things we love about music at Live Wire. One minute you're getting on with your day and the next, a tune comes on and suddenly you're back in a completely different time! ❤️📻
 
-🔗 https://linktr.ee/livewireentertainment23
+That's what the music is all about — memories, stories, good times and a bit of Live Wire banter along the way.
 
-#LiveWireEntertainment #LiveWireBar #Banter #Music ⚡`,
-    `⚡ WHO LET THE MUSIC LOOSE? 😂⚡
-
-One minute you're having a quiet day… next thing you're remembering every word to a song you haven't heard since 1997! 🎶🤣
-
-Live Wire does have a habit of bringing the memories back.
+No show tonight, but we're still here. ⚡🍹
 
 🔗 https://linktr.ee/livewireentertainment23
 
-#LiveWireEntertainment #LiveWireBar #MusicMemories #Banter ⚡`,
-    `⚡ LIVE WIRE WEEKEND IS LOADING… ⚡
+#LiveWireEntertainment #LiveWireBar #MusicMemories #Nostalgia #Banter ⚡`,
+    `⚡ LIVE WIRE BAR IS OPEN FOR BANTER 😂🍹
 
-You know what that means… music, banter and probably somebody taking the playlist far too seriously! 😂🎶
+Well… not literally, you know what we mean! 😂
 
-Keep your eyes peeled — we're getting ready for another Live Wire weekend.
+It's one of those days where you can put your feet up, stick some music on and forget about everything else for a while.
+
+We've got plenty more Live Wire music and madness coming up, so keep your eyes peeled. And if you've got a tune stuck in your head today, we're blaming the playlist. 🎶🤣
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #Banter #Music #GoodVibes ⚡`,
+    `⚡ A LITTLE MUSIC CHAT… 🎶
+
+There's always that ONE song that takes you straight back.
+
+Could be your first night out, an old school disco, a family memory, a holiday, or just something you absolutely hammered on repeat back in the day! 😂
+
+That's why we love throwing different decades into Live Wire shows. There's always a tune somebody remembers.
+
+No show tonight — just a bit of Live Wire chat. ❤️⚡
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #MusicMemories #Music #Banter ⚡`,
+    `⚡ WEEKEND MODE IS LOADING… 😂⚡
+
+You know what happens around here when the weekend gets closer…
+
+The tunes get louder, the banter gets worse and somebody inevitably decides their favourite song needs to be played immediately! 😂🎶
+
+We've got more Live Wire coming your way, so get yourself ready. The Bar is waiting. 🍹⚡
 
 🔗 https://linktr.ee/livewireentertainment23
 
 #LiveWireEntertainment #LiveWireBar #Weekend #Music #Banter ⚡`,
-    `⚡ JUST A QUICK ONE FROM LIVE WIRE ⚡
+    `⚡ RANDOM LIVE WIRE THOUGHT 😂
 
-Hope you're having a cracking day! ❤️⚡
+Why is it that you can forget someone's name, forget where you put your phone and forget what you walked into a room for…
 
-Keep the music on, keep the good vibes going and remember… there's always room for a bit of Live Wire banter. 😂🎶
+…but play a song from 1998 and suddenly you know every single bloody word? 🤣🎶
 
-🔗 https://linktr.ee/livewireentertainment23
+Music really does have a memory of its own.
 
-#LiveWireEntertainment #LiveWireBar #GoodVibes #Banter ⚡`,
-    `⚡ LIVE WIRE RANDOM THOUGHT OF THE DAY 😂
-
-Why is it that the songs we claim we "don't like" are usually the ones we know every single word to? 🤣🎶
-
-We've all got one. Don't even try denying it!
+Anyway… that's enough nonsense from us for today. 😂⚡
 
 🔗 https://linktr.ee/livewireentertainment23
 
-#LiveWireEntertainment #LiveWireBar #Music #Banter #GuiltyPleasures ⚡`,
+#LiveWireEntertainment #LiveWireBar #Music #Banter #Nostalgia ⚡`,
+    `⚡ HELLO LIVE WIRE CREW ❤️⚡
+
+Just dropping by to say we're still here, still playing the tunes and still causing a bit of trouble when the opportunity presents itself! 😂🎶
+
+Not every day needs a big announcement. Sometimes it's just nice to have a little chat, share a memory and keep the community going.
+
+So whatever you're doing today, have a good one — and keep that music playing. 🍹🎶
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #Community #Music #Banter ⚡`,
   ];
 
   const showExtras = [
-    'Get yourself settled in — the music and banter are about to start! 🎶😂',
-    'Another night at the Live Wire Bar… you know how this usually ends! 😂🍹',
-    'The tunes are lined up, the banter is ready and we are good to go! ⚡🎶',
-    'Grab yourself a drink, turn the volume up and join us! 🍹🎶',
-    'Right then… let the music do the talking tonight! 😂🎶',
-    'You know the drill — music, memories and a bit of Live Wire madness! ⚡🤣',
-    'Another Live Wire night incoming. Let’s have it! ⚡🎶',
+    `Right then… another Live Wire night is here! Get yourself settled in because we're ready for the music and the banter. 🎶😂`,
+    `It's nearly time! Grab a drink, get comfortable and let's see where tonight's music takes us. 🍹🎶`,
+    `You know the drill — good music, plenty of banter and the Live Wire Bar doing what it does best. 😂⚡`,
+    `Another night, another playlist and probably a few surprises along the way! Let's have it. 🎶⚡`,
+    `Right, who's ready then? The tunes are lined up and we're getting ourselves sorted for another Live Wire night. 😂🎶`,
+    `Time to turn the music up and forget about the rest of the world for a while. Live Wire style. ⚡🎶`,
+    `Here we go again! Another Live Wire night incoming, with the music doing most of the talking… hopefully. 😂🎶`,
   ];
 
   if (!shows.length) return noShowPosts[dayNumber % noShowPosts.length];
