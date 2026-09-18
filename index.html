@@ -85,19 +85,12 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     const day=now.getDay();
     const fridayOvernight=day===6 && mins<30;
     const today=showForDate(now);
-    const activeShow=day===5 && mins>=1170
-      ? today
-      : fridayOvernight
-        ? ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,30]
-        : today;
-    const activeWindow=fridayOvernight
-      ? [0,30]
-      : activeShow ? [activeShow[2],activeShow[3]] : null;
+    const fridayLive=(day===5 && mins>=1170) || fridayOvernight;
+    const activeShow=fridayLive
+      ? ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,30]
+      : today;
 
-    if(activeShow && activeWindow && (
-      (day===5 && mins>=activeWindow[0] && mins<activeWindow[1]) ||
-      fridayOvernight
-    )){
+    if(fridayLive){
       set('homeLivePill','🔴 LIVE NOW');
       document.getElementById('homeLivePill')?.classList.add('live');
       set('homeLiveTitle',activeShow[0]);
