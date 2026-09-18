@@ -53,7 +53,7 @@ async function getShowsForDate(date = new Date(), schedule = null) {
   });
 }
 
-function getUpcomingShows(date = new Date(), days = 14) {
+async function getUpcomingShows(date = new Date(), days = 14) {
   const results = [];
   for (let i = 0; i < days; i++) {
     const d = new Date(date.getTime() + i * 86400000);
