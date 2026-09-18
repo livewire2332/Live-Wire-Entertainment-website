@@ -26,11 +26,112 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 @keyframes flagshipSweep{0%{background-position:120% 0}100%{background-position:-120% 0}}
 @media(max-width:600px){section:not(#shows)::before,section#shows::before{left:5%;right:5%}}
 @media(prefers-reduced-motion:reduce){section::before,.feature-grid .card::before,.card:not(.show-card)::before,.flagship::after{animation:none}}
+
+/* Compact homepage live-status */
+.home-live-status{max-width:760px;margin:18px auto 0;padding:12px 16px;border:1px solid rgba(0,234,255,.48);border-radius:14px;background:linear-gradient(135deg,rgba(8,12,25,.94),rgba(24,8,28,.92));box-shadow:0 0 14px rgba(0,234,255,.14),0 0 26px rgba(255,43,214,.08);text-align:center}
+.home-live-status .home-live-pill{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1px;padding:4px 10px;border-radius:999px;border:1px solid rgba(0,234,255,.6);color:#58eaff}
+.home-live-status .home-live-pill.live{color:#fff;border-color:#ff2b55;box-shadow:0 0 10px rgba(255,43,85,.45)}
+.home-live-status .home-live-title{margin:5px 0 1px;font-size:18px;font-weight:900}
+.home-live-status .home-live-time{margin:0;color:#58eaff;font-weight:800;font-size:13px}
+.home-live-status .home-live-note{margin:3px 0 0;font-size:12px;opacity:.82}
+@media(max-width:600px){.home-live-status{margin-left:10px;margin-right:10px;padding:10px 12px}.home-live-status .home-live-title{font-size:16px}}
 </style>
 </head>
 <body>
 <div class="hero"><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><div class="brand">Live Wire Entertainment</div><p class="tag">Music • Live Entertainment • Community</p><p>Welcome to Live Wire Entertainment — music, live shows, original videos, nostalgia, banter and a community that loves great tunes.</p>
 <a class="btn" href="https://linktr.ee/livewireentertainment23">Our Links</a><a class="btn" href="shows.html">⚡ Our Shows</a><a class="btn" href="live-wire-bar.html">🍹 Live Wire Bar</a><a class="btn" href="live-wire-extras.html">🎉 Fun &amp; Extras</a><a class="btn" href="about-live-wire.html">⚡ About Us</a></div></div>
+<div class="home-live-status" id="homeLiveStatus" aria-live="polite">
+  <div class="home-live-pill" id="homeLivePill">🟢 CHECKING LIVE STATUS…</div>
+  <div class="home-live-title" id="homeLiveTitle">Checking Live Wire</div>
+  <p class="home-live-time" id="homeLiveTime">Please wait…</p>
+  <p class="home-live-note" id="homeLiveNote">Live Wire stream status is being checked.</p>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
+  const MOUNT='/6W6zw';
+
+  const showForDate = date => {
+    const day=date.getDay();
+    const iso=date.toISOString().slice(0,10);
+    if(day===3)return ['The Wednesday Wire with DJ Disco Dan','8:00pm',1200,1320];
+    if(day===5)return ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,1380];
+    if(day===6)return iso<'2026-10-03'
+      ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm',1170,1380]
+      : ['The Music Train with Mr Phoenix','7:30pm',1170,1380];
+    return null;
+  };
+
+  const nextShow = now => {
+    for(let i=1;i<=14;i++){
+      const d=new Date(now);
+      d.setDate(now.getDate()+i);
+      const s=showForDate(d);
+      if(s)return {show:s,days:i};
+    }
+    return null;
+  };
+
+  const set=(id,value)=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=value;
+  };
+
+  const refresh = async () => {
+    const now=new Date();
+    const today=showForDate(now);
+    const mins=now.getHours()*60+now.getMinutes();
+    let mount=null;
+
+    try{
+      const r=await fetch(STATUS_URL+'?t='+Date.now(),{cache:'no-store'});
+      if(!r.ok)throw new Error('status '+r.status);
+      const data=await r.json();
+      mount=data?.[0]?.source?.[MOUNT]||null;
+    }catch(e){ mount=null; }
+
+    const within=!!today && mins>=today[2] && mins<today[3];
+
+    if(within && mount){
+      set('homeLivePill','🔴 LIVE NOW');
+      document.getElementById('homeLivePill')?.classList.add('live');
+      set('homeLiveTitle',today[0]);
+      set('homeLiveTime','ON AIR NOW • '+today[1]);
+      set('homeLiveNote','🎧 Streaming live from the Live Wire Bar');
+    }else if(within && !mount){
+      set('homeLivePill','🟠 SCHEDULED');
+      document.getElementById('homeLivePill')?.classList.remove('live');
+      set('homeLiveTitle',today[0]);
+      set('homeLiveTime','Scheduled from '+today[1]);
+      set('homeLiveNote','Show time is here — stream not currently detected');
+    }else if(mount){
+      set('homeLivePill','🔵 LIVE RADIO');
+      document.getElementById('homeLivePill')?.classList.remove('live');
+      set('homeLiveTitle','Live Wire Random Music Shuffle');
+      set('homeLiveTime','STREAMING NOW • WEBSITE RADIO');
+      set('homeLiveNote','🎧 The Live Wire Bar radio is playing');
+    }else{
+      set('homeLivePill','🟢 NEXT UP');
+      document.getElementById('homeLivePill')?.classList.remove('live');
+      const n=nextShow(now);
+      if(n){
+        set('homeLiveTitle',n.show[0]);
+        set('homeLiveTime',(n.days===1?'Tomorrow':'In '+n.days+' days')+' • '+n.show[1]);
+      }else{
+        set('homeLiveTitle','Live Wire Entertainment');
+        set('homeLiveTime','No show currently scheduled');
+      }
+      set('homeLiveNote','⚡ Check back here when the Live Wire action starts');
+    }
+  };
+
+  refresh();
+  setInterval(refresh,30000);
+})();
+</script>
+
 <section id="shows"><div class="wrap"><h1>⚡ Live Wire Flagship Shows</h1>
 <p>Our two flagship weekend shows — bringing music, nostalgia, banter and the Live Wire community together week after week.</p>
 <div class="card show-card flagship"><div class="show-kicker">🎧 Friday nights</div><h2>Feel Good Friday with DJ Disco Dan</h2><p class="show-time">🕢 Fridays from 7:30pm</p><p><strong>Your weekend starts here!</strong> Feel Good Friday is one of Live Wire Entertainment's flagship regular shows, hosted by DJ Disco Dan from the Live Wire Bar.</p><p>Expect music spanning the decades, big singalong favourites, forgotten gems, nostalgia, banter and plenty of feel-good energy. It's a proper Friday-night mix designed to get the weekend started.</p><ul><li>🎶 Music spanning the decades</li><li>💿 Forgotten gems and music nostalgia</li><li>🍹 Live Wire Bar atmosphere</li><li>🔥 Regular Friday features and plenty of banter</li></ul></div>
