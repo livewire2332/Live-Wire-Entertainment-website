@@ -256,15 +256,16 @@ let streamOnline=false;
 async function readCasterStatus(){try{const r=await fetch(CASTER_STATUS_URL+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Caster status '+r.status);const data=await r.json();const source=data?.[0]?.source||{};const mount=source[CASTER_MOUNT];streamOnline=!!mount;return mount||null;}catch(e){streamOnline=false;return null;}}
 function nextScheduled(now){for(let i=1;i<=14;i++){const date=new Date(now);date.setDate(now.getDate()+i);const shows=getShowsForDate(date);if(shows.length)return {show:shows[0],days:i};}return null;}
 function status(){
-const now=new Date(),mins=now.getHours()*60+now.getMinutes(),todayShows=getShowsForDate(now),show=todayShows[0],window=getScheduleWindow(now);
+const now=new Date(),mins=now.getHours()*60+now.getMinutes(),day=now.getDay(),todayShows=getShowsForDate(now),show=todayShows[0];
 const pill=document.getElementById('statusPill'),title=document.getElementById('statusTitle'),time=document.getElementById('statusTime'),note=document.getElementById('statusNote');
 if(!pill||!title||!time)return;
-const withinSchedule=!!show&&!!window&&mins>=window[0]&&mins<window[1];
-if(withinSchedule){
+const fridayLive=(day===5&&mins>=1170)||(day===6&&mins<30);
+const activeShow=fridayLive?['Feel Good Friday with DJ Disco Dan','7:30pm']:show;
+if(fridayLive){
 pill.textContent='🔴 LIVE NOW';
 pill.classList.add('live');
-title.textContent=show[0];
-time.textContent='ON AIR NOW • '+show[1];
+title.textContent=activeShow[0];
+time.textContent='ON AIR NOW • '+activeShow[1];
 if(note)note.textContent='⚡ Live Wire show is active on the schedule.';
 }else if(show){
 pill.textContent='🟡 TONIGHT';
