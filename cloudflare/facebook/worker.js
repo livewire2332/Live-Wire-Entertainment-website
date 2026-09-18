@@ -170,7 +170,62 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
 }
 
+function buildDailySchedulePost(shows) {
+  if (!shows.length) return null;
+  const lines = shows.map(show => `⚡ ${show.name} — ${show.time}`);
+  return `⚡ LIVE WIRE TONIGHT ⚡
+
+${lines.join('\n')}
+
+Get ready for another night of music, banter and Live Wire Bar vibes! 🎶🍹
+
+🔗 https://linktr.ee/livewireentertainment23
+
+#LiveWireEntertainment #LiveWireBar #TikTokLive #Music #Banter ⚡`;
+}
+
+async function scheduled(event, env) {
+  if (env.FACEBOOK_AUTOMATION_ENABLED !== 'true') return;
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/London',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(new Date(event.scheduledTime));
+  const hour = Number(parts.find(p => p.type === 'hour')?.value);
+  const minute = Number(parts.find(p => p.type === 'minute')?.value);
+  if (hour !== 10 || minute !== 0) return;
+
+  const dateKey = isoDateInLondon(new Date(event.scheduledTime));
+  const sentKey = `facebook_daily_post:${dateKey}`;
+  if (await env.FACEBOOK_TOKENS.get(sentKey)) return;
+
+  const message = buildDailySchedulePost(getShowsForDate(new Date(event.scheduledTime)));
+  if (!message) return;
+
+  const saved = await connection(env);
+  if (!saved?.page_access_token || !saved?.page_id) return;
+
+  const publishUrl = new URL(`${META_GRAPH_URL}/${saved.page_id}/feed`);
+  const response = await fetch(publishUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ message, access_token: saved.page_access_token }),
+  });
+  const result = await response.json().catch(() => null);
+  if (!response.ok || result?.error) throw new Error(result?.error?.message || 'Facebook scheduled post failed.');
+
+  await env.FACEBOOK_TOKENS.put(sentKey, JSON.stringify({
+    post_id: result?.id || null,
+    posted_at: Date.now(),
+  }), { expirationTtl: 60 * 60 * 24 * 8 });
+}
+
 export default {
+  async scheduled(event, env) {
+    await scheduled(event, env);
+  },
+
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return json({ ok: true });
     if (!env.FACEBOOK_APP_SECRET || !env.FACEBOOK_TOKENS) return json({ ok: false, error: 'Facebook Worker is not configured yet.' }, 500);
