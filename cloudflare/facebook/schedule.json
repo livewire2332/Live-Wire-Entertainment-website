@@ -1,0 +1,7 @@
+[
+  { "day": 3, "name": "The Wednesday Wire with DJ Disco Dan", "time": "around 8pm", "active": true },
+  { "day": 4, "name": "Surprise Package Thursdays with Mr Phoenix", "time": "around 8pm", "active": false },
+  { "day": 5, "name": "Feel Good Friday with DJ Disco Dan", "time": "7:30pm", "active": true },
+  { "day": 6, "name": "Saturday Floor Fillers with DJ Disco Dan", "time": "7:30pm", "active": true, "until": "2026-10-02" },
+  { "day": 6, "name": "The Music Train with Mr Phoenix", "time": "7:30pm", "active": true, "from": "2026-10-03" }
+]
