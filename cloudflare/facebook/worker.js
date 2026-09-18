@@ -351,6 +351,47 @@ export default {
       if (path === '/facebook-callback') return callback(request, env);
       if (path === '/facebook-status') return status(request, env);
       if (path === '/facebook-schedule') return json({ ok: true, timezone: 'Europe/London', today: isoDateInLondon(), today_shows: getShowsForDate(), upcoming: getUpcomingShows() });
+      if (path === '/facebook-schedule-dry-run') {
+        const testTime = new URL(request.url).searchParams.get('time') || new Date().toISOString();
+        const testDate = new Date(testTime);
+        if (Number.isNaN(testDate.getTime())) return json({ ok: false, error: 'Invalid test time.' }, 400);
+
+        const londonParts = new Intl.DateTimeFormat('en-GB', {
+          timeZone: 'Europe/London',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        }).formatToParts(testDate);
+        const hour = Number(londonParts.find(p => p.type === 'hour')?.value);
+        const minute = Number(londonParts.find(p => p.type === 'minute')?.value);
+        const dateKey = isoDateInLondon(testDate);
+        const shows = getShowsForDate(testDate);
+        const message = buildDailySchedulePost(shows, testDate);
+        const sentKey = `facebook_daily_post:${dateKey}`;
+        const alreadySent = Boolean(await env.FACEBOOK_TOKENS.get(sentKey));
+        const saved = await connection(env);
+        const timeMatch = hour === 10 && minute === 0;
+        const wouldPublish = env.FACEBOOK_AUTOMATION_ENABLED === 'true'
+          && timeMatch
+          && !alreadySent
+          && Boolean(saved?.page_access_token && saved?.page_id)
+          && Boolean(message);
+
+        return json({
+          ok: true,
+          dry_run: true,
+          scheduled_time: testDate.toISOString(),
+          london_date: dateKey,
+          london_time: `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`,
+          automation_enabled: env.FACEBOOK_AUTOMATION_ENABLED === 'true',
+          already_sent: alreadySent,
+          facebook_connected: Boolean(saved?.page_access_token && saved?.page_id),
+          time_matches_10am: timeMatch,
+          shows,
+          would_publish: wouldPublish,
+          message,
+        });
+      }
       if (path === '/facebook-preview') {
         const shows = getShowsForDate();
         return json({ ok: true, date: isoDateInLondon(), shows, message: buildDailySchedulePost(shows) });
