@@ -166,6 +166,22 @@ async function publish(request, env) {
   return json({ ok: true, post_id: result?.id || null });
 }
 
+
+async function publishTest(request, env) {
+  const saved = await connection(env);
+  if (!saved?.page_access_token || !saved?.page_id) return html('<p>❌ Facebook Page is not connected.</p>', 401);
+  const message = '⚡ LIVE WIRE FACEBOOK AUTOMATION TEST ⚡\n\nThis is a test post from the Live Wire Entertainment Facebook automation system. Automatic posting is still OFF.\n\n🔗 https://linktr.ee/livewireentertainment23';
+  const publishUrl = new URL(`${META_GRAPH_URL}/${saved.page_id}/feed`);
+  const response = await fetch(publishUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ message, access_token: saved.page_access_token }),
+  });
+  const result = await response.json().catch(() => null);
+  if (!response.ok || result?.error) return html(`<p>❌ Test post failed.</p><pre>${JSON.stringify(result || {}, null, 2)}</pre>`, response.status >= 400 ? response.status : 502);
+  return html(`<p>✅ Test post published successfully.</p><p>Facebook post ID: ${escapeHtml(result?.id || 'unknown')}</p>`);
+}
+
 function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
 }
@@ -239,6 +255,8 @@ export default {
         const shows = getShowsForDate();
         return json({ ok: true, date: isoDateInLondon(), shows, message: buildDailySchedulePost(shows) });
       }
+      if (path === '/facebook-test') return html('<h2>Facebook Test</h2><p>This will publish one clearly labelled test post to the connected Live Wire Entertainment Facebook Page. Automatic posting remains OFF.</p><form method="post"><button type="submit" style="font-size:18px;padding:12px 18px">Publish Test Post</button></form>');
+      if (path === '/facebook-test' && request.method === 'POST') return publishTest(request, env);
       if (path === '/facebook-publish') return publish(request, env);
       return json({ ok: true, service: 'Live Wire Entertainment Facebook Worker' });
     } catch (error) {
