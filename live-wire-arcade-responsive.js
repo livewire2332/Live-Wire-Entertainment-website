@@ -12,9 +12,6 @@
     .lw-arcade-toggle{display:block!important;width:calc(100% - 32px)!important;max-width:760px!important;min-height:64px!important;margin:22px auto!important;padding:16px 22px!important;border:2px solid #00eaff!important;border-radius:34px!important;background:linear-gradient(90deg,#11152a,#25102d)!important;color:#fff!important;font-weight:900!important;font-size:clamp(17px,4.5vw,22px)!important;line-height:1.2!important;cursor:pointer!important;box-shadow:0 0 18px rgba(0,234,255,.28)!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important;appearance:none!important;-webkit-appearance:none!important}
     .lw-arcade-toggle:hover{transform:translateY(-1px)}
     .lw-bingo-instructions{margin:10px 0 16px;padding:12px 14px;border-left:3px solid #ffd43b;border-radius:10px;background:rgba(255,212,59,.06);color:#ddd;font-size:14px;line-height:1.5}
-    .lw-next-up{margin:26px auto 0;padding:18px 16px;border:1px solid rgba(0,234,255,.55);border-radius:18px;background:rgba(0,234,255,.045);text-align:center;box-shadow:0 0 14px rgba(0,234,255,.1)}
-    .lw-next-label{font-weight:900;color:#ffd43b;font-size:15px;letter-spacing:1px;margin-bottom:8px}
-    .lw-next-title{font-size:21px;font-weight:900;color:#fff}.lw-next-time{margin-top:6px;color:#58eaff;font-weight:800}
     @media(max-width:600px){
       .lwmore{grid-template-columns:minmax(0,1fr);gap:16px}
       .lwgame{padding:16px!important}
@@ -64,9 +61,4 @@
   };
   const bingoTimer=setInterval(()=>{if(addBingoInstructions())clearInterval(bingoTimer)},150);
 
-  const loadStatusEnhancer=()=>{
-    if(document.querySelector('script[data-live-wire-status-enhancer]'))return;
-    const s=document.createElement('script');s.src='live-wire-status-enhancer.js';s.dataset.liveWireStatusEnhancer='true';s.defer=false;document.body.appendChild(s);
-  };
-  loadStatusEnhancer();
 })();
