@@ -5,6 +5,45 @@ const META_GRAPH_URL = `https://graph.facebook.com/${META_GRAPH_VERSION}`;
 const APP_ID = '1855203898976920';
 const ALLOWED_ORIGIN = 'https://livewire2332.github.io';
 const TOKEN_KEY = 'facebook_page_connection';
+const SHOW_SCHEDULE = [
+  { day: 3, name: 'The Wednesday Wire with DJ Disco Dan', time: 'around 8pm', active: true },
+  { day: 4, name: 'Surprise Package Thursdays with Mr Phoenix', time: 'around 8pm', active: false },
+  { day: 5, name: 'Feel Good Friday with DJ Disco Dan', time: '7:30pm', active: true },
+  { day: 6, name: 'Saturday Floor Fillers with DJ Disco Dan', time: '7:30pm', active: true, until: '2026-10-02' },
+  { day: 6, name: 'The Music Train with Mr Phoenix', time: '7:30pm', active: true, from: '2026-10-03' },
+];
+
+function isoDateInLondon(date = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
+}
+
+function londonParts(date = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/London', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false,
+  }).formatToParts(date);
+  return Object.fromEntries(parts.filter(p => p.type !== 'literal').map(p => [p.type, p.value]));
+}
+
+function getShowsForDate(date = new Date()) {
+  const dateKey = isoDateInLondon(date);
+  const weekday = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/London', weekday: 'numeric' }).format(date));
+  return SHOW_SCHEDULE.filter(show => {
+    if (show.day !== weekday || !show.active) return false;
+    if (show.from && dateKey < show.from) return false;
+    if (show.until && dateKey > show.until) return false;
+    return true;
+  });
+}
+
+function getUpcomingShows(date = new Date(), days = 14) {
+  const results = [];
+  for (let i = 0; i < days; i++) {
+    const d = new Date(date.getTime() + i * 86400000);
+    for (const show of getShowsForDate(d)) results.push({ date: isoDateInLondon(d), ...show });
+  }
+  return results;
+}
+
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -134,7 +173,7 @@ export default {
     try {
       if (path === '/facebook-login') return login(request, env);
       if (path === '/facebook-callback') return callback(request, env);
-      if (path === '/facebook-status') return status(request, env);
+      if (path === '/facebook-status') return status(request, env);\n      if (path === '/facebook-schedule') return json({ ok: true, timezone: 'Europe/London', today: isoDateInLondon(), today_shows: getShowsForDate(), upcoming: getUpcomingShows() });
       if (path === '/facebook-publish') return publish(request, env);
       return json({ ok: true, service: 'Live Wire Entertainment Facebook Worker' });
     } catch (error) {
