@@ -63,21 +63,28 @@ function getScheduledShow(){
   const iso=now.toISOString().slice(0,10);
   const mins=now.getHours()*60+now.getMinutes();
 
-  // Active scheduled show windows. Once a show has started, its
-  // name remains while the stream is live, including an overrun.
-  if(day===3&&mins>=1200)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
-  if(day===5&&mins>=1170)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
-  if(day===6){
-    // A Friday show can carry into Saturday morning if it is still live.
-    if(mins<450)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
-    if(mins>=1170){
-      return iso<'2026-10-03'
-        ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
-        : ['The Music Train with Mr Phoenix','7:30pm'];
-    }
+  // These are the actual scheduled show windows.
+  // Outside these windows, a newly-connected stream is Live Wire Radio.
+  if(day===3&&mins>=1200&&mins<1320){
+    return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
   }
+  if(day===5&&mins>=1170&&mins<1380){
+    return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+  }
+  if(day===6&&mins>=1170&&mins<1380){
+    return iso<'2026-10-03'
+      ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
+      : ['The Music Train with Mr Phoenix','7:30pm'];
+  }
+
+  // Friday's show may continue into Saturday morning.
+  if(day===6&&mins<450){
+    return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+  }
+
   return null;
 }
+
 
 function getNextScheduledShow(){
   const now=new Date();
@@ -95,17 +102,30 @@ function getNextScheduledShow(){
   return null;
 }
 
+let currentLiveShow=null;
+
 function setBarLiveStatus(online){
   const el=document.getElementById('barLiveStatus');
   const showEl=document.getElementById('barLiveShow');
   if(!el)return;
   const scheduled=getScheduledShow();
   const nextScheduled=getNextScheduledShow();
+
+  // A scheduled show becomes the live programme only when the stream
+  // is detected during its scheduled window. If it overruns, keep that
+  // programme name until the stream actually goes offline.
+  if(online && scheduled){
+    currentLiveShow=scheduled;
+  }else if(!online){
+    currentLiveShow=null;
+  }
+
   el.textContent=online ? '🔴 LIVE NOW — LISTEN LIVE' : '⚫ OFF AIR — CHECK SCHEDULE';
   el.classList.toggle('live',online);
+
   if(showEl){
-    if(online && scheduled){
-      showEl.textContent='🎧 '+scheduled[0]+' • '+scheduled[1];
+    if(online && currentLiveShow){
+      showEl.textContent='🎧 '+currentLiveShow[0]+' • '+currentLiveShow[1];
     }else if(online){
       showEl.textContent='📻 Live Wire Radio • Random music & Live Wire vibes';
     }else if(nextScheduled){
