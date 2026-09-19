@@ -62,13 +62,20 @@ function getScheduledShow(){
   const day=now.getDay();
   const iso=now.toISOString().slice(0,10);
   const mins=now.getHours()*60+now.getMinutes();
-  const inWindow=(start,end)=>mins>=start&&mins<end;
-  if(day===3&&inWindow(1200,1320))return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
-  if(day===5&&inWindow(1170,1380))return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
-  if(day===6&&inWindow(1170,1380)){
-    return iso<'2026-10-03'
-      ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
-      : ['The Music Train with Mr Phoenix','7:30pm'];
+
+  // Once a scheduled show has started, keep its name while the
+  // stream remains live — even if the show runs past its planned end time.
+  if(day===3&&mins>=1200)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
+  if(day===5&&mins>=1170)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+  if(day===6){
+    if(mins>=1170){
+      return iso<'2026-10-03'
+        ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
+        : ['The Music Train with Mr Phoenix','7:30pm'];
+    }
+    // Friday's show can continue into Saturday until the next
+    // scheduled Saturday show starts.
+    return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
   }
   return null;
 }
