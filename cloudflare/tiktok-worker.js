@@ -182,7 +182,7 @@ export default {
       if (path === '/tiktok-creator') return creator(request, env);
       if (path === '/tiktok-publish') return publish(request, env);
       if (path === '/tiktok-status') return status(request, env);
-      if (path === '/stream-status') return casterStreamStatus(request);
+      if (path === '/stream-status') return casterStreamStatus(request, env);
       return json({ ok: true, service: 'Live Wire Entertainment TikTok Worker' });
     } catch (error) { return json({ ok: false, error: 'Unexpected Worker error.' }, 500); }
   },
