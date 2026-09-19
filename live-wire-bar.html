@@ -21,7 +21,7 @@ section:not(.back)::after{content:"";position:absolute;inset:18px 2% 18px;backgr
 section h1{text-shadow:0 0 8px rgba(0,234,255,.65),0 0 18px rgba(255,43,214,.3)}
 .player{position:relative;border:1px solid rgba(0,234,255,.85);border-radius:22px;padding:36px;text-align:center;background:linear-gradient(145deg,rgba(13,16,32,.96),rgba(18,8,28,.92));box-shadow:0 0 12px rgba(0,234,255,.35),0 0 30px rgba(255,43,214,.18),inset 0 0 28px rgba(0,234,255,.045);margin:25px 0;overflow:hidden}
 .player::before{content:"";position:absolute;inset:0;border-radius:22px;padding:1px;background:linear-gradient(115deg,transparent 10%,rgba(0,234,255,.9) 35%,transparent 50%,rgba(255,43,214,.9) 72%,transparent 90%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.7;animation:edgeFlow 5s linear infinite;pointer-events:none}
-.live-status{display:inline-block;border:1px solid #ff2bd6;border-radius:22px;padding:7px 16px;font-weight:800;box-shadow:0 0 10px rgba(255,43,214,.5),0 0 24px rgba(255,43,214,.22);margin-bottom:18px;animation:statusGlow 2.5s ease-in-out infinite}
+.live-status{display:inline-block;border:1px solid #ff2bd6;border-radius:22px;padding:7px 16px;font-weight:800;box-shadow:0 0 10px rgba(255,43,214,.5),0 0 24px rgba(255,43,214,.22);margin-bottom:18px;animation:statusGlow 2.5s ease-in-out infinite}.bar-live-show{margin:-6px auto 18px;font-size:18px;font-weight:900;color:#58eaff;text-shadow:0 0 8px rgba(0,234,255,.45)}
 .listen-btn{font-size:20px;padding:16px 30px}
 .coming{color:#ffd43b;font-weight:800;text-shadow:0 0 8px rgba(255,212,59,.45)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;margin-top:25px}
@@ -52,50 +52,42 @@ section h1{text-shadow:0 0 8px rgba(0,234,255,.65),0 0 18px rgba(255,43,214,.3)}
 </head>
 <body>
 <div class="bar-hero"><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🍹 The Live Wire Bar</h1><p class="bar-intro"><strong>Welcome to the Live Wire Bar — a fun place where everyone can enjoy the company, music, laughs and vibes from TikTok, all from the comfort of their own home.</strong></p><p class="bar-intro">It's like one big community bar without needing to be in the same room. People come together through music and banter, share the moment, have a laugh and enjoy the Live Wire experience wherever they are.</p></div></div>
-<section><div class="wrap"><div class="player"><div id="barLiveStatus" class="live-status">⚪ CHECKING LIVE STATUS…</div><h2>📻 Listen Live</h2><p>When a Live Wire show is live, listen along directly from the website — including if you're not on TikTok.</p><div data-type="newStreamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="light" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div><script src="//cdn.cloud.caster.fm//widgets/embed.js"></script><script>
+<section><div class="wrap"><div class="player"><div id="barLiveStatus" class="live-status">⚪ CHECKING LIVE STATUS…</div><div id="barLiveShow" class="bar-live-show">Checking Live Wire schedule…</div><h2>📻 Listen Live</h2><p>When a Live Wire show is live, listen along directly from the website — including if you're not on TikTok.</p><div data-type="newStreamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="light" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div><script src="//cdn.cloud.caster.fm//widgets/embed.js"></script><script>
 const CASTER_STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
 const CASTER_MOUNT='/6W6zw';
 const BAR_WORKER_STATUS='https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status';
 
+function getScheduledShow(){
+  const now=new Date();
+  const day=now.getDay();
+  const iso=now.toISOString().slice(0,10);
+  const mins=now.getHours()*60+now.getMinutes();
+  if(day===3)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
+  if(day===5)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+  if(day===6){
+    if(mins<450)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+    return iso<'2026-10-03'
+      ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
+      : ['The Music Train with Mr Phoenix','7:30pm'];
+  }
+  return null;
+}
+
 function setBarLiveStatus(online){
   const el=document.getElementById('barLiveStatus');
+  const showEl=document.getElementById('barLiveShow');
   if(!el)return;
+  const scheduled=getScheduledShow();
   el.textContent=online ? '🔴 LIVE NOW — LISTEN LIVE' : '⚫ OFF AIR — CHECK SCHEDULE';
   el.classList.toggle('live',online);
-}
-
-async function readBarDirectCasterStatus(){
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),5000);
-  try{
-    const r=await fetch(CASTER_STATUS_URL,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
-    if(!r.ok)throw new Error('caster '+r.status);
-    const data=await r.json();
-    const source=Array.isArray(data)
-      ? (data.find(item=>item?.source)?.source||{})
-      : (data?.source||{});
-    const online=Object.keys(source).some(mount=>String(mount).replace(/^\//,'')===CASTER_MOUNT.replace(/^\//,''));
-    return {ok:true,online};
-  }catch(e){
-    return {ok:false,online:false};
-  }finally{
-    clearTimeout(timer);
-  }
-}
-
-async function refreshBarLiveStatus(){
-  const direct=await readBarDirectCasterStatus();
-  if(direct.ok){
-    setBarLiveStatus(direct.online);
-    return;
-  }
-  try{
-    const r=await fetch(BAR_WORKER_STATUS+'?t='+Date.now(),{cache:'no-store'});
-    if(!r.ok)throw new Error('status '+r.status);
-    const data=await r.json();
-    setBarLiveStatus(!!data?.online);
-  }catch(e){
-    setBarLiveStatus(false);
+  if(showEl){
+    if(online && scheduled){
+      showEl.textContent='🎧 '+scheduled[0]+' • '+scheduled[1];
+    }else if(scheduled){
+      showEl.textContent='📅 Next scheduled: '+scheduled[0]+' • '+scheduled[1];
+    }else{
+      showEl.textContent='⚡ No Live Wire show scheduled right now';
+    }
   }
 }
 
