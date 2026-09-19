@@ -115,26 +115,31 @@ async function readSocketText(socket, timeoutMs = 8000) {
   return text;
 }
 
-async function casterStreamStatus(request) {
+async function casterStreamStatus(request, env) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
+  if (!env.CASTER_PRIVATE_TOKEN) return json({ ok: false, online: false, error: 'Caster private token is not configured.' }, 500);
 
-  const target = 'https://sapircast.caster.fm:12036/admin/publicstats.json';
-  const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(target + '?t=' + Date.now());
+  const target = 'https://sapircast.caster.fm:12036/admin/stats.json';
+  const auth = btoa('admin:' + env.CASTER_PRIVATE_TOKEN);
 
   try {
-    const response = await fetch(proxyUrl, {
-      headers: { 'Accept': 'application/json', 'Cache-Control': 'no-cache' },
+    const response = await fetch(target + '?t=' + Date.now(), {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Basic ' + auth,
+        'Cache-Control': 'no-cache'
+      },
       cf: { cacheTtl: 0, cacheEverything: false }
     });
 
     const text = await response.text();
     if (!response.ok) {
-      return json({ ok: false, online: false, error: 'Caster proxy returned HTTP ' + response.status }, 502);
+      return json({ ok: false, online: false, error: 'Caster status returned HTTP ' + response.status }, 502);
     }
 
     let data;
     try { data = JSON.parse(text); } catch {
-      throw new Error('Caster proxy returned invalid JSON.');
+      throw new Error('Caster returned invalid JSON.');
     }
 
     const source = Array.isArray(data)
@@ -153,7 +158,6 @@ async function casterStreamStatus(request) {
     return json({ ok: false, online: false, error: error.message }, 502);
   }
 }
-
 async function status(request, env) {
   if (!requireMethod(request, 'POST')) return json({ ok: false, error: 'Method not allowed.' }, 405);
   try {
