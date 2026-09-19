@@ -23,10 +23,10 @@ jobs:
           KV_ID=$(curl -fsS "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces" \
             -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
             -H "Content-Type: application/json" |
-            jq -r '.result[] | select(.title | test("TIKTOK_TOKENS"; "i")) | .id' | head -n 1)
+            jq -r '.result[] | select(.title | test("tiktok-tokens"; "i")) | .id' | head -n 1)
 
           if [ -z "$KV_ID" ] || [ "$KV_ID" = "null" ]; then
-            echo "Could not find the existing TIKTOK_TOKENS KV namespace."
+            echo "Could not find the existing TikTok KV namespace."
             exit 1
           fi
 
