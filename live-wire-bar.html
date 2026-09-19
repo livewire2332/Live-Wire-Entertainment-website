@@ -52,7 +52,56 @@ section h1{text-shadow:0 0 8px rgba(0,234,255,.65),0 0 18px rgba(255,43,214,.3)}
 </head>
 <body>
 <div class="bar-hero"><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🍹 The Live Wire Bar</h1><p class="bar-intro"><strong>Welcome to the Live Wire Bar — a fun place where everyone can enjoy the company, music, laughs and vibes from TikTok, all from the comfort of their own home.</strong></p><p class="bar-intro">It's like one big community bar without needing to be in the same room. People come together through music and banter, share the moment, have a laugh and enjoy the Live Wire experience wherever they are.</p></div></div>
-<section><div class="wrap"><div class="player"><div class="live-status">🔴 LIVE NOW — LISTEN LIVE</div><h2>📻 Listen Live</h2><p>When a Live Wire show is live, listen along directly from the website — including if you're not on TikTok.</p><div data-type="newStreamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="light" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div><script src="//cdn.cloud.caster.fm//widgets/embed.js"></script><p class="coming">⚡ Live Wire audio — straight from the Live Wire Bar.</p></div></div></section>
+<section><div class="wrap"><div class="player"><div id="barLiveStatus" class="live-status">⚪ CHECKING LIVE STATUS…</div><h2>📻 Listen Live</h2><p>When a Live Wire show is live, listen along directly from the website — including if you're not on TikTok.</p><div data-type="newStreamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="light" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div><script src="//cdn.cloud.caster.fm//widgets/embed.js"></script><script>
+const CASTER_STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
+const CASTER_MOUNT='/6W6zw';
+const BAR_WORKER_STATUS='https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status';
+
+function setBarLiveStatus(online){
+  const el=document.getElementById('barLiveStatus');
+  if(!el)return;
+  el.textContent=online ? '🔴 LIVE NOW — LISTEN LIVE' : '⚫ OFF AIR — CHECK SCHEDULE';
+  el.classList.toggle('live',online);
+}
+
+async function readBarDirectCasterStatus(){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),5000);
+  try{
+    const r=await fetch(CASTER_STATUS_URL,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
+    if(!r.ok)throw new Error('caster '+r.status);
+    const data=await r.json();
+    const source=Array.isArray(data)
+      ? (data.find(item=>item?.source)?.source||{})
+      : (data?.source||{});
+    const online=Object.keys(source).some(mount=>String(mount).replace(/^\//,'')===CASTER_MOUNT.replace(/^\//,''));
+    return {ok:true,online};
+  }catch(e){
+    return {ok:false,online:false};
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+async function refreshBarLiveStatus(){
+  const direct=await readBarDirectCasterStatus();
+  if(direct.ok){
+    setBarLiveStatus(direct.online);
+    return;
+  }
+  try{
+    const r=await fetch(BAR_WORKER_STATUS+'?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok)throw new Error('status '+r.status);
+    const data=await r.json();
+    setBarLiveStatus(!!data?.online);
+  }catch(e){
+    setBarLiveStatus(false);
+  }
+}
+
+refreshBarLiveStatus();
+setInterval(refreshBarLiveStatus,15000);
+</script><p class="coming">⚡ Live Wire audio — straight from the Live Wire Bar.</p></div></div></section>
 <section><div class="wrap"><div class="request-zone"><div class="bolt">⚡</div><h2>🎵 Request A Song</h2><p class="request-intro"><strong>Fancy hearing your favourite tune in the Live Wire Bar?</strong><br>Choose your DJ below and send your request directly to them. 🎧🍹</p><div class="request-grid"><div class="request-card"><div class="mini-label">📻 DJ Disco Dan</div><h3>⚡ Ask DJ Disco Dan</h3><p>Got a classic, forgotten gem or absolute belter in mind? Send Dan your request!</p><a class="btn request-btn" href="https://virtualdj.com/ask/discodan184" target="_blank" rel="noopener noreferrer">🎶 REQUEST A SONG</a></div><div class="request-card"><div class="mini-label">🚂 Mr Phoenix</div><h3>🔥 Ask Mr Phoenix</h3><p>Fancy something for the Music Train? Send Phoenix your request and see where the train takes it!</p><a class="btn request-btn" href="https://virtualdj.com/ask/djphoenix1021" target="_blank" rel="noopener noreferrer">🚂 REQUEST A SONG</a></div></div><p class="request-note">🎶 Pick your DJ • Send your request • Then get ready to hear it in the Live Wire Bar! ⚡</p></div></div></section>
 <section><div class="wrap"><h1>⚡ What Makes The Bar</h1><div class="grid"><div class="card"><h2>🎶 Music</h2><p>From classic favourites to forgotten gems, the music is at the heart of every Live Wire gathering.</p></div><div class="card"><h2>😂 Banter</h2><p>Plenty of laughs, personalities, guest-box moments and the kind of banter that makes everyone feel part of the night.</p></div><div class="card"><h2>🤝 Community</h2><p>Everyone joins from their own home, but the music and conversation bring people together as one big community.</p></div><div class="card"><h2>🏠 Your Home, Our Bar</h2><p>You don't need to go anywhere. Get comfortable, turn the music up and enjoy the Live Wire Bar from home.</p></div></div></div></section>
 <section><div class="wrap"><h1>🎧 When The Shows Are Live</h1><p>Four nights, four very different flavours of Live Wire. Pick your night, pull up a bar stool and come and join the fun. 🍹⚡</p><div class="grid"><div class="card show-card"><div class="show-kicker">📡 Wednesday nights</div><h2>⚡ The Wednesday Wire with DJ Disco Dan</h2><p class="show-time">🕗 Live from 8pm</p><p>A proper midweek Live Wire catch-up packed with plenty of chat, great tunes and the perfect excuse to forget it's only Wednesday! 🎶😂</p><p>And who's behind the mic? The <strong>perfect chatty man on air</strong>, DJ Disco Dan, bringing the conversation, the music and a whole load of midweek energy into the Live Wire Bar.</p></div><div class="card show-card"><div class="show-kicker">🎁 Thursday nights</div><h2>🎁 Surprise Package Thursdays with Mr Phoenix</h2><p class="show-time">🕗 Live from 8pm</p><p>Thursday comes with a musical mystery! Tune in with Mr Phoenix and find out exactly what surprise he's got packed into this week's <strong>Surprise Package</strong>. 🎶🔥</p><p>You never quite know what's coming next — but you can guarantee tunes, banter, a few surprises and probably a bit of Phoenix mischief along the way. 😂</p></div><div class="card show-card"><div class="show-kicker">🎧 Friday nights</div><h2>🎧 Feel Good Friday with DJ Disco Dan</h2><p class="show-time">🕢 Live from 7:30pm</p><p>Your weekend starts here! DJ Disco Dan takes over the Live Wire Bar with music spanning the decades, forgotten gems, big singalong moments and enough feel-good energy to get Friday properly underway.</p><p>Pull up a seat, grab your favourite drink and settle in — there's nostalgia, laughs, banter and plenty of tunes waiting for you. 🍹🎶</p></div><div class="card show-card"><div class="show-kicker">🚂 Saturday nights</div><h2>🚂 The Music Train with Mr Phoenix</h2><p class="show-time">🕢 Live from 7:30pm</p><p>All aboard! Mr Phoenix drives the Saturday night Music Train through the decades with big tunes, nostalgia, surprises and plenty of Live Wire banter. 🚂🎵</p><p>Expect a few guest-box antics, plenty of laughs and that unmistakable Phoenix personality. One thing's for sure — you never quite know what station this train is stopping at next! 😂🔥</p></div></div></div></section>
