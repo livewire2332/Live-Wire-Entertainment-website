@@ -15,15 +15,28 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Find existing TikTok KV namespace
-        run: npx wrangler kv:namespace list
+      - name: Resolve existing TikTok KV namespace
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          KV_ID=$(curl -fsS "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" |
+            jq -r '.result[] | select(.title | test("TIKTOK_TOKENS"; "i")) | .id' | head -n 1)
+
+          if [ -z "$KV_ID" ] || [ "$KV_ID" = "null" ]; then
+            echo "Could not find the existing TIKTOK_TOKENS KV namespace."
+            exit 1
+          fi
+
+          echo "Found existing TikTok KV namespace."
+          jq --arg id "$KV_ID" '.kv_namespaces[0].id = $id' \
+            cloudflare/wrangler.jsonc > cloudflare/deploy-wrangler.jsonc
 
       - name: Deploy Worker to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy ./cloudflare/tiktok-worker.js --config ./cloudflare/wrangler.jsonc
+          command: deploy ./cloudflare/tiktok-worker.js --config ./cloudflare/deploy-wrangler.jsonc
