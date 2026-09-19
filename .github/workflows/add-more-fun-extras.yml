@@ -1,8 +1,7 @@
 name: Add More Fun Extras
 on:
-  push:
-    paths:
-      - '.github/workflows/add-more-fun-extras.yml'
+  workflow_dispatch:
+
 permissions:
   contents: write
 jobs:
