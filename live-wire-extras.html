@@ -346,6 +346,7 @@ function nextScheduled(now){for(let i=1;i<=14;i++){const date=new Date(now);date
 const CASTER_STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
 const CASTER_MOUNT='/6W6zw';
 let streamOnline=false;
+let currentLiveShow=null;
 async function readDirectCasterStatus(){
 const controller=new AbortController();
 const timer=setTimeout(()=>controller.abort(),5000);
@@ -374,21 +375,36 @@ function status(){
 const now=new Date(),mins=now.getHours()*60+now.getMinutes(),day=now.getDay(),todayShows=getShowsForDate(now),show=todayShows[0];
 const pill=document.getElementById('statusPill'),title=document.getElementById('statusTitle'),time=document.getElementById('statusTime'),note=document.getElementById('statusNote');
 if(!pill||!title||!time)return;
-const fridayLive=(day===5&&mins>=1170)||(day===6&&mins<30);
-const activeShow=fridayLive?['Feel Good Friday with DJ Disco Dan','7:30pm']:show;
-const streamShow=(day===6&&mins<450)?['Feel Good Friday with DJ Disco Dan','7:30pm']:activeShow;
+
+let scheduledNow=null;
+if(day===3&&mins>=1200&&mins<1320)scheduledNow=['The Wednesday Wire with DJ Disco Dan','8:00pm'];
+if(day===5&&mins>=1170&&mins<1380)scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
+if(day===6&&mins>=1170&&mins<1380){
+scheduledNow=now.toISOString().slice(0,10)<'2026-10-03'
+  ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
+  : ['The Music Train with Mr Phoenix','7:30pm'];
+}
+// Friday can continue into Saturday morning while the stream remains live.
+if(day===6&&mins<450)scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
+
+if(streamOnline&&scheduledNow){
+currentLiveShow=scheduledNow;
+}else if(!streamOnline){
+currentLiveShow=null;
+}
+
 if(streamOnline){
 pill.textContent='🔴 LIVE NOW';
 pill.classList.add('live');
-title.textContent=streamShow?.[0]||'Live Wire Entertainment';
-time.textContent='ON AIR NOW • '+(streamShow?.[1]||'Live');
+if(currentLiveShow){
+title.textContent=currentLiveShow[0];
+time.textContent='ON AIR NOW • '+currentLiveShow[1];
 if(note)note.textContent='📡 Live stream detected • schedule also checked.';
-}else if(fridayLive){
-pill.textContent='🔴 LIVE NOW';
-pill.classList.add('live');
-title.textContent=activeShow[0];
-time.textContent='ON AIR NOW • '+activeShow[1];
-if(note)note.textContent='⚡ Live Wire show is active on the schedule.';
+}else{
+title.textContent='Live Wire Radio';
+time.textContent='ON AIR NOW • Live';
+if(note)note.textContent='📻 Live Wire Radio • Random music & Live Wire vibes';
+}
 }else if(show){
 pill.textContent='🟡 TONIGHT';
 pill.classList.remove('live');
