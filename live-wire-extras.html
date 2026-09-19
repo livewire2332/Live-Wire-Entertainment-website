@@ -335,8 +335,25 @@ const fridayMoods=[['FEEL-GOOD MODE: ACTIVATED 🎧','You’re ready for big tun
 const getShowsForDate=(date)=>{const d=date.getDay();const iso=date.toISOString().slice(0,10);if(d===3)return [['The Wednesday Wire with DJ Disco Dan','8:00pm']];if(d===5)return [['Feel Good Friday with DJ Disco Dan','7:30pm']];if(d===6)return [iso<'2026-10-03'?['Saturday Floor Fillers with DJ Disco Dan','7:30pm']:['The Music Train with Mr Phoenix','7:30pm']];return [];};
 const getScheduleWindow=(date)=>{const d=date.getDay();if(d===3)return [1200,1320];if(d===5||d===6)return [1170,1380];return null;};
 function nextScheduled(now){for(let i=1;i<=14;i++){const date=new Date(now);date.setDate(now.getDate()+i);const shows=getShowsForDate(date);if(shows.length)return {show:shows[0],days:i};}return null;}
+const CASTER_STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
+const CASTER_MOUNT='/6W6zw';
 let streamOnline=false;
+async function readDirectCasterStatus(){
+const controller=new AbortController();
+const timer=setTimeout(()=>controller.abort(),5000);
+try{
+const r=await fetch(CASTER_STATUS_URL,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
+if(!r.ok)throw new Error('caster '+r.status);
+const data=await r.json();
+const source=Array.isArray(data)?(data.find(item=>item?.source)?.source||{}):(data?.source||{});
+const online=Object.keys(source).some(mount=>String(mount).replace(/^\//,'')===CASTER_MOUNT.replace(/^\//,''));
+return {ok:true,online};
+}catch(e){return {ok:false,online:false};}
+finally{clearTimeout(timer);}
+}
 async function readStreamStatus(){
+const direct=await readDirectCasterStatus();
+if(direct.ok){streamOnline=direct.online;status();return;}
 try{
 const r=await fetch('https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status?t='+Date.now(),{cache:'no-store'});
 if(!r.ok)throw new Error('status '+r.status);
