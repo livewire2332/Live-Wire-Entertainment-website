@@ -4,6 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    paths:
+      - 'live-wire-extras.html'
+      - 'live-wire-extras.js'
+      - 'live-wire-more-games.js'
 
 permissions:
   contents: write
