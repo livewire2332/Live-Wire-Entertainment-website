@@ -347,7 +347,7 @@ const pill=document.getElementById('statusPill'),title=document.getElementById('
 if(!pill||!title||!time)return;
 const fridayLive=(day===5&&mins>=1170)||(day===6&&mins<30);
 const activeShow=fridayLive?['Feel Good Friday with DJ Disco Dan','7:30pm']:show;
-const streamShow=(day===6&&mins<30)?['Feel Good Friday with DJ Disco Dan','7:30pm']:activeShow;
+const streamShow=(day===6&&mins<450)?['Feel Good Friday with DJ Disco Dan','7:30pm']:activeShow;
 if(streamOnline){
 pill.textContent='🔴 LIVE NOW';
 pill.classList.add('live');
