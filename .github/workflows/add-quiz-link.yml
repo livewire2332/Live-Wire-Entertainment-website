@@ -1,8 +1,7 @@
 name: Add Live Wire Quiz Link
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
