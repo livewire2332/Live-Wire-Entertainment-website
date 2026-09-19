@@ -1,5 +1,3 @@
-import { connect } from 'cloudflare:sockets';
-
 const TIKTOK_AUTHORIZE_URL = 'https://www.tiktok.com/v2/auth/authorize/';
 const TIKTOK_TOKEN_URL = 'https://open.tiktokapis.com/v2/oauth/token/';
 const TIKTOK_CREATOR_INFO_URL = 'https://open.tiktokapis.com/v2/post/publish/creator_info/query/';
@@ -94,183 +92,60 @@ async function publish(request, env) {
   } catch (error) { return json({ ok: false, error: error.message }, 400); }
 }
 
-async function readSocketText(socket, timeoutMs = 8000) {
-  const reader = socket.readable.getReader();
-  const decoder = new TextDecoder();
-  let text = '';
+function validCasterWebhookAuth(request, env) {
+  const header = request.headers.get('Authorization') || '';
+  if (!header.startsWith('Basic ')) return false;
   try {
-    while (text.length < 256 * 1024) {
-      const result = await Promise.race([
-        reader.read(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Caster socket timed out.')), timeoutMs))
-      ]);
-      if (result.done) break;
-      text += decoder.decode(result.value, { stream: true });
-      if (text.includes('\r\n\r\n') && text.length > 1024 && /\r\n0\r\n\r\n$/.test(text)) break;
-    }
-  } finally {
-    reader.releaseLock();
-    try { await socket.close(); } catch {}
+    const decoded = atob(header.slice(6));
+    return decoded === 'admin:' + env.CASTER_PRIVATE_TOKEN;
+  } catch {
+    return false;
   }
-  return text;
 }
 
-async function readCasterHttpResponse(socket, timeoutMs = 8000) {
-  const reader = socket.readable.getReader();
-  const decoder = new TextDecoder();
-  let raw = '';
-  const deadline = Date.now() + timeoutMs;
-
-  try {
-    while (Date.now() < deadline && raw.length < 1024 * 1024) {
-      const remaining = Math.max(1, deadline - Date.now());
-      const result = await Promise.race([
-        reader.read(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Caster socket timed out.')), remaining))
-      ]);
-
-      if (result.done) break;
-      raw += decoder.decode(result.value, { stream: true });
-
-      const headerEnd = raw.indexOf('\r\n\r\n');
-      if (headerEnd >= 0) {
-        const headers = raw.slice(0, headerEnd).split('\r\n');
-        const statusLine = headers.shift() || '';
-        const statusMatch = statusLine.match(/^HTTP\/\d(?:\.\d)?\s+(\d{3})/i);
-        const status = statusMatch ? Number(statusMatch[1]) : 0;
-        const headerMap = {};
-        for (const line of headers) {
-          const i = line.indexOf(':');
-          if (i > 0) headerMap[line.slice(0, i).trim().toLowerCase()] = line.slice(i + 1).trim();
-        }
-
-        const body = raw.slice(headerEnd + 4);
-        const contentLength = Number(headerMap['content-length'] || 0);
-        const chunked = /chunked/i.test(headerMap['transfer-encoding'] || '');
-
-        if (chunked) {
-          if (body.endsWith('\r\n0\r\n\r\n') || body.includes('\r\n0\r\n\r\n')) {
-            return { status, headers: headerMap, body: decodeChunkedBody(body) };
-          }
-        } else if (contentLength > 0) {
-          if (new TextEncoder().encode(body).byteLength >= contentLength) {
-            return { status, headers: headerMap, body: body.slice(0, contentLength) };
-          }
-        } else {
-          try {
-            JSON.parse(body);
-            return { status, headers: headerMap, body };
-          } catch {}
-        }
+async function casterWebhook(request, env, online) {
+  if (request.method !== 'POST') return json({ ok: false, error: 'Method not allowed.' }, 405);
+  if (!env.CASTER_PRIVATE_TOKEN) return json({ ok: false, error: 'Caster private token is not configured.' }, 500);
+  if (!validCasterWebhookAuth(request, env)) {
+    return new Response(JSON.stringify({ ok: false, error: 'Unauthorized.' }), {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'WWW-Authenticate': 'Basic realm="Live Wire Caster webhook"'
       }
-    }
-    throw new Error('Caster HTTP response timed out.');
-  } finally {
-    reader.releaseLock();
-    try { await socket.close(); } catch {}
+    });
   }
-}
 
-function decodeChunkedBody(body) {
-  let pos = 0;
-  let output = '';
-  while (pos < body.length) {
-    const lineEnd = body.indexOf('\r\n', pos);
-    if (lineEnd < 0) break;
-    const size = parseInt(body.slice(pos, lineEnd).trim(), 16);
-    if (!Number.isFinite(size)) break;
-    pos = lineEnd + 2;
-    if (size === 0) break;
-    output += body.slice(pos, pos + size);
-    pos += size + 2;
-  }
-  return output;
+  await request.text().catch(() => '');
+  const state = {
+    online: Boolean(online),
+    updated_at: new Date().toISOString()
+  };
+  await env.TIKTOK_TOKENS.put('caster_stream_status', JSON.stringify(state));
+  return json({ ok: true, ...state });
 }
 
 async function casterStreamStatus(request, env) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
-  if (!env.CASTER_PRIVATE_TOKEN) return json({ ok: false, online: false, error: 'Caster private token is not configured.' }, 500);
+  if (!env.TIKTOK_TOKENS) return json({ ok: false, online: false, error: 'Status storage is not configured.' }, 500);
 
   try {
-    // Ask Caster for the account's current streaming server details.
-    // This avoids hard-coding an IP that could change.
-    const infoResponse = await fetch('https://hub.cloud.caster.fm/private/accountInfo', {
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + env.CASTER_PRIVATE_TOKEN,
-        'Cache-Control': 'no-cache'
-      },
-      cf: { cacheTtl: 0, cacheEverything: false }
-    });
-
-    const info = await infoResponse.json().catch(() => null);
-    if (!infoResponse.ok || !info?.streaming_server?.ip_address) {
-      return json({
-        ok: false,
-        online: false,
-        error: 'Could not get the current Caster streaming server details.',
-        caster_status: infoResponse.status
-      }, 502);
+    const saved = await env.TIKTOK_TOKENS.get('caster_stream_status', 'json');
+    if (!saved) {
+      return json({ ok: true, online: false, updated_at: null, source: 'caster-webhook' });
     }
-
-    const host = info.streaming_server.ip_address;
-    const port = Number(info.streaming_server_port);
-    const hostHeader = info.streaming_server.domain || 'sapircast.caster.fm';
-    const channel = Array.isArray(info.channels)
-      ? info.channels.find(c => c.id === 'a2c674bd-afe5-498d-8ecc-022a659c47fb') || info.channels[0]
-      : null;
-    const mount = channel?.streaming_server_mountpoint
-      ? '/' + String(channel.streaming_server_mountpoint).replace(/^\//, '')
-      : '/6W6zw';
-
-    if (!Number.isInteger(port) || port <= 0) {
-      throw new Error('Caster returned an invalid streaming server port.');
-    }
-
-    const socket = connect({ hostname: host, port }, { secureTransport: 'off' });
-    await socket.opened;
-
-    const auth = btoa('admin:' + env.CASTER_PRIVATE_TOKEN);
-    const requestText = [
-      'GET /admin/stats.json?t=' + Date.now() + ' HTTP/1.1',
-      'Host: ' + hostHeader + ':' + port,
-      'Authorization: Basic ' + auth,
-      'Accept: application/json',
-      'Connection: close',
-      '',
-      ''
-    ].join('\r\n');
-
-    const writer = socket.writable.getWriter();
-    await writer.write(new TextEncoder().encode(requestText));
-    writer.releaseLock();
-
-    const response = await readCasterHttpResponse(socket);
-    if (response.status < 200 || response.status >= 300) {
-      return json({ ok: false, online: false, error: 'Caster status returned HTTP ' + response.status }, 502);
-    }
-
-    let data;
-    try { data = JSON.parse(response.body); } catch {
-      throw new Error('Caster returned invalid JSON.');
-    }
-
-    const source = Array.isArray(data)
-      ? (data.find(item => item?.source)?.source || {})
-      : (data?.source || {});
-    const liveMount = source[mount] || null;
-
     return json({
       ok: true,
-      online: !!liveMount,
-      mount: liveMount ? mount : null,
-      stream_start: liveMount?.stream_start_iso8601 || null,
-      content_type: liveMount?.['content-type'] || null
+      online: Boolean(saved.online),
+      updated_at: saved.updated_at || null,
+      source: 'caster-webhook'
     });
   } catch (error) {
     return json({ ok: false, online: false, error: error.message }, 502);
   }
 }
+
 async function status(request, env) {
   if (!requireMethod(request, 'POST')) return json({ ok: false, error: 'Method not allowed.' }, 405);
   try {
@@ -296,6 +171,8 @@ export default {
       if (path === '/tiktok-publish') return publish(request, env);
       if (path === '/tiktok-status') return status(request, env);
       if (path === '/stream-status') return casterStreamStatus(request, env);
+      if (path === '/caster-webhook/live') return casterWebhook(request, env, true);
+      if (path === '/caster-webhook/off') return casterWebhook(request, env, false);
       return json({ ok: true, service: 'Live Wire Entertainment TikTok Worker' });
     } catch (error) { return json({ ok: false, error: 'Unexpected Worker error.' }, 500); }
   },
