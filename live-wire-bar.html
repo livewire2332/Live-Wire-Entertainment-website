@@ -62,10 +62,10 @@ function getScheduledShow(){
   const day=now.getDay();
   const iso=now.toISOString().slice(0,10);
   const mins=now.getHours()*60+now.getMinutes();
-  if(day===3)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
-  if(day===5)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
-  if(day===6){
-    if(mins<450)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+  const inWindow=(start,end)=>mins>=start&&mins<end;
+  if(day===3&&inWindow(1200,1320))return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
+  if(day===5&&inWindow(1170,1380))return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+  if(day===6&&inWindow(1170,1380)){
     return iso<'2026-10-03'
       ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
       : ['The Music Train with Mr Phoenix','7:30pm'];
@@ -85,6 +85,8 @@ function setBarLiveStatus(online){
       showEl.textContent='🎧 '+scheduled[0]+' • '+scheduled[1];
     }else if(scheduled){
       showEl.textContent='📅 Next scheduled: '+scheduled[0]+' • '+scheduled[1];
+    }else if(online){
+      showEl.textContent='📻 Live Wire Radio • Random music & Live Wire vibes';
     }else{
       showEl.textContent='⚡ No Live Wire show scheduled right now';
     }
