@@ -115,30 +115,111 @@ async function readSocketText(socket, timeoutMs = 8000) {
   return text;
 }
 
+async function readCasterHttpResponse(socket, timeoutMs = 8000) {
+  const reader = socket.readable.getReader();
+  const decoder = new TextDecoder();
+  let raw = '';
+  const deadline = Date.now() + timeoutMs;
+
+  try {
+    while (Date.now() < deadline && raw.length < 1024 * 1024) {
+      const remaining = Math.max(1, deadline - Date.now());
+      const result = await Promise.race([
+        reader.read(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Caster socket timed out.')), remaining))
+      ]);
+
+      if (result.done) break;
+      raw += decoder.decode(result.value, { stream: true });
+
+      const headerEnd = raw.indexOf('\\r\\n\\r\\n');
+      if (headerEnd >= 0) {
+        const headers = raw.slice(0, headerEnd).split('\\r\\n');
+        const statusLine = headers.shift() || '';
+        const statusMatch = statusLine.match(/^HTTP\\/\\d(?:\\.\\d)?\\s+(\\d{3})/i);
+        const status = statusMatch ? Number(statusMatch[1]) : 0;
+        const headerMap = {};
+        for (const line of headers) {
+          const i = line.indexOf(':');
+          if (i > 0) headerMap[line.slice(0, i).trim().toLowerCase()] = line.slice(i + 1).trim();
+        }
+
+        const body = raw.slice(headerEnd + 4);
+        const contentLength = Number(headerMap['content-length'] || 0);
+        const chunked = /chunked/i.test(headerMap['transfer-encoding'] || '');
+
+        if (chunked) {
+          if (body.endsWith('\\r\\n0\\r\\n\\r\\n') || body.includes('\\r\\n0\\r\\n\\r\\n')) {
+            return { status, headers: headerMap, body: decodeChunkedBody(body) };
+          }
+        } else if (contentLength > 0) {
+          if (new TextEncoder().encode(body).byteLength >= contentLength) {
+            return { status, headers: headerMap, body: body.slice(0, contentLength) };
+          }
+        } else {
+          try {
+            JSON.parse(body);
+            return { status, headers: headerMap, body };
+          } catch {}
+        }
+      }
+    }
+    throw new Error('Caster HTTP response timed out.');
+  } finally {
+    reader.releaseLock();
+    try { await socket.close(); } catch {}
+  }
+}
+
+function decodeChunkedBody(body) {
+  let pos = 0;
+  let output = '';
+  while (pos < body.length) {
+    const lineEnd = body.indexOf('\\r\\n', pos);
+    if (lineEnd < 0) break;
+    const size = parseInt(body.slice(pos, lineEnd).trim(), 16);
+    if (!Number.isFinite(size)) break;
+    pos = lineEnd + 2;
+    if (size === 0) break;
+    output += body.slice(pos, pos + size);
+    pos += size + 2;
+  }
+  return output;
+}
+
 async function casterStreamStatus(request, env) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
   if (!env.CASTER_PRIVATE_TOKEN) return json({ ok: false, online: false, error: 'Caster private token is not configured.' }, 500);
 
-  const target = 'https://sapircast.caster.fm:12036/admin/stats.json';
+  const host = 'sapircast.caster.fm';
+  const port = 12036;
   const auth = btoa('admin:' + env.CASTER_PRIVATE_TOKEN);
 
   try {
-    const response = await fetch(target + '?t=' + Date.now(), {
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Basic ' + auth,
-        'Cache-Control': 'no-cache'
-      },
-      cf: { cacheTtl: 0, cacheEverything: false }
-    });
+    const socket = connect({ hostname: host, port }, { secureTransport: 'on' });
+    await socket.opened;
 
-    const text = await response.text();
-    if (!response.ok) {
+    const writer = socket.writable.getWriter();
+    const requestText = [
+      'GET /admin/stats.json?t=' + Date.now() + ' HTTP/1.1',
+      'Host: ' + host + ':' + port,
+      'Authorization: Basic ' + auth,
+      'Accept: application/json',
+      'Connection: close',
+      '',
+      ''
+    ].join('\\r\\n');
+
+    await writer.write(new TextEncoder().encode(requestText));
+    writer.releaseLock();
+
+    const response = await readCasterHttpResponse(socket);
+    if (response.status < 200 || response.status >= 300) {
       return json({ ok: false, online: false, error: 'Caster status returned HTTP ' + response.status }, 502);
     }
 
     let data;
-    try { data = JSON.parse(text); } catch {
+    try { data = JSON.parse(response.body); } catch {
       throw new Error('Caster returned invalid JSON.');
     }
 
