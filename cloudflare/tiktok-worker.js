@@ -119,7 +119,7 @@ async function casterStreamStatus(request) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
   let socket;
   try {
-    socket = connect({ hostname: 'sapircast.caster.fm', port: 12036 }, { secureTransport: 'on' });
+    socket = connect({ hostname: 'sapircast.caster.fm', port: 12036 }, { secureTransport: 'off' });
     await socket.opened;
 
     const writer = socket.writable.getWriter();
