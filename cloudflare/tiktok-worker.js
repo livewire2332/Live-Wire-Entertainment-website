@@ -115,36 +115,44 @@ async function readSocketText(socket, timeoutMs = 8000) {
   return text;
 }
 
+async function resolveCasterIPv4() {
+  const response = await fetch('https://dns.google/resolve?name=sapircast.caster.fm&type=A', {
+    headers: { 'Accept': 'application/dns-json', 'Cache-Control': 'no-cache' }
+  });
+  if (!response.ok) throw new Error('DNS lookup failed.');
+  const data = await response.json();
+  const ip = data?.Answer?.find(record => record?.type === 1)?.data;
+  if (!ip) throw new Error('Could not resolve Caster server address.');
+  return ip;
+}
+
 async function casterStreamStatus(request) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
-  let socket;
   try {
-    socket = connect({ hostname: 'sapircast.caster.fm', port: 12036 }, { secureTransport: 'off' });
-    await socket.opened;
+    const ip = await resolveCasterIPv4();
+    const response = await fetch('http://' + ip + ':12036/admin/publicstats.json', {
+      headers: {
+        'Host': 'sapircast.caster.fm',
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache'
+      },
+      cf: { cacheTtl: 0, cacheEverything: false }
+    });
 
-    const writer = socket.writable.getWriter();
-    const requestText = [
-      'GET /admin/publicstats.json HTTP/1.0',
-      'Host: sapircast.caster.fm',
-      'Accept: application/json',
-      'Connection: close',
-      '',
-      ''
-    ].join('\r\n');
-    await writer.write(new TextEncoder().encode(requestText));
-    await writer.close();
-
-    const raw = await readSocketText(socket);
-    const headerEnd = raw.indexOf('\r\n\r\n');
-    if (headerEnd < 0) throw new Error('Invalid response from Caster.');
-    const headers = raw.slice(0, headerEnd);
-    const body = raw.slice(headerEnd + 4);
-    const statusMatch = headers.match(/^HTTP\/\d(?:\.\d)?\s+(\d+)/i);
-    const httpStatus = Number(statusMatch?.[1] || 0);
-    if (httpStatus !== 200) return json({ ok: false, online: false, error: 'Caster status returned HTTP ' + httpStatus }, 502);
+    const text = await response.text();
+    if (!response.ok) {
+      return json({
+        ok: false,
+        online: false,
+        error: 'Caster status returned HTTP ' + response.status,
+        resolved_ip: ip
+      }, 502);
+    }
 
     let data;
-    try { data = JSON.parse(body); } catch { throw new Error('Caster returned invalid JSON.'); }
+    try { data = JSON.parse(text); } catch {
+      throw new Error('Caster returned invalid JSON.');
+    }
 
     const source = Array.isArray(data)
       ? (data.find(item => item?.source)?.source || {})
@@ -159,7 +167,6 @@ async function casterStreamStatus(request) {
       content_type: mount?.['content-type'] || null
     });
   } catch (error) {
-    try { if (socket) await socket.close(); } catch {}
     return json({ ok: false, online: false, error: error.message }, 502);
   }
 }
