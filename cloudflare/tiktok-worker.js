@@ -95,11 +95,13 @@ async function publish(request, env) {
 async function casterStreamStatus(request) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
   try {
-    const url = 'https://sapircast.caster.fm:12036/admin/publicstats.json?t=' + Date.now();
-    const response = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json', 'Cache-Control': 'no-cache' }, cf: { cacheTtl: 0, cacheEverything: false } });
+    const url = 'http://sapircast.caster.fm:12036/admin/publicstats.json?t=' + Date.now();
+    const response = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json', 'Cache-Control': 'no-cache' } });
     if (!response.ok) return json({ ok: false, online: false, error: 'Caster status returned HTTP ' + response.status }, 502);
     const data = await response.json();
-    const source = data?.find?.(item => item?.source)?.source || {};
+    const source = Array.isArray(data)
+      ? (data.find(item => item?.source)?.source || {})
+      : (data?.source || {});
     const mount = source['/6W6zw'] || null;
     return json({
       ok: true,
