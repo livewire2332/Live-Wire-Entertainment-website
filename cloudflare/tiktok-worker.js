@@ -167,23 +167,24 @@ async function casterStreamStatus(request, env) {
         .filter(Boolean)
     );
 
-    const target = `https://${domain}:${port}/admin/publicstats.json`;
-    const bridgeUrls = [
-      `https://cors.bridged.cc/${target}`,
-      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}`,
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`
+    // Cloudflare Workers production fetches use the standard HTTPS port.
+    // Caster's documented status path is on the streaming server, so first try
+    // the same status endpoint over the server's standard HTTPS listener.
+    const statusUrls = [
+      `https://${domain}/admin/publicstats.json`,
+      `https://${domain}:${port}/admin/publicstats.json`
     ];
-
     let readerResponse = null;
     let readerText = '';
     let lastBridgeError = '';
-    for (const bridgeUrl of bridgeUrls) {
+    for (const statusUrl of statusUrls) {
       try {
-        const response = await fetch(bridgeUrl, {
+        const response = await fetch(statusUrl, {
           headers: {
             Accept: 'application/json',
             'Cache-Control': 'no-cache'
-          }
+          },
+          redirect: 'follow'
         });
         const text = await response.text();
         if (response.ok && text.trim()) {
@@ -201,7 +202,7 @@ async function casterStreamStatus(request, env) {
       return json({
         ok: false,
         online: false,
-        error: `Caster status bridges unavailable (${lastBridgeError || 'no response'}).`
+        error: `Caster status endpoint unavailable (${lastBridgeError || 'no response'}).`
       }, 502);
     }
 
