@@ -132,9 +132,9 @@ async function readCasterHttpResponse(socket, timeoutMs = 8000) {
       if (result.done) break;
       raw += decoder.decode(result.value, { stream: true });
 
-      const headerEnd = raw.indexOf('\\r\\n\\r\\n');
+      const headerEnd = raw.indexOf('\r\n\r\n');
       if (headerEnd >= 0) {
-        const headers = raw.slice(0, headerEnd).split('\\r\\n');
+        const headers = raw.slice(0, headerEnd).split('\r\n');
         const statusLine = headers.shift() || '';
         const statusMatch = statusLine.match(/^HTTP\/\d(?:\.\d)?\s+(\d{3})/i);
         const status = statusMatch ? Number(statusMatch[1]) : 0;
@@ -149,7 +149,7 @@ async function readCasterHttpResponse(socket, timeoutMs = 8000) {
         const chunked = /chunked/i.test(headerMap['transfer-encoding'] || '');
 
         if (chunked) {
-          if (body.endsWith('\\r\\n0\\r\\n\\r\\n') || body.includes('\\r\\n0\\r\\n\\r\\n')) {
+          if (body.endsWith('\r\n0\r\n\r\n') || body.includes('\r\n0\r\n\r\n')) {
             return { status, headers: headerMap, body: decodeChunkedBody(body) };
           }
         } else if (contentLength > 0) {
@@ -175,7 +175,7 @@ function decodeChunkedBody(body) {
   let pos = 0;
   let output = '';
   while (pos < body.length) {
-    const lineEnd = body.indexOf('\\r\\n', pos);
+    const lineEnd = body.indexOf('\r\n', pos);
     if (lineEnd < 0) break;
     const size = parseInt(body.slice(pos, lineEnd).trim(), 16);
     if (!Number.isFinite(size)) break;
@@ -191,16 +191,46 @@ async function casterStreamStatus(request, env) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
   if (!env.CASTER_PRIVATE_TOKEN) return json({ ok: false, online: false, error: 'Caster private token is not configured.' }, 500);
 
-  const host = '173.244.216.28';
-  const port = 12036;
-  const hostHeader = 'sapircast.caster.fm';
-  const auth = btoa('admin:' + env.CASTER_PRIVATE_TOKEN);
-
   try {
+    // Ask Caster for the account's current streaming server details.
+    // This avoids hard-coding an IP that could change.
+    const infoResponse = await fetch('https://hub.cloud.caster.fm/private/accountInfo', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + env.CASTER_PRIVATE_TOKEN,
+        'Cache-Control': 'no-cache'
+      },
+      cf: { cacheTtl: 0, cacheEverything: false }
+    });
+
+    const info = await infoResponse.json().catch(() => null);
+    if (!infoResponse.ok || !info?.streaming_server?.ip_address) {
+      return json({
+        ok: false,
+        online: false,
+        error: 'Could not get the current Caster streaming server details.',
+        caster_status: infoResponse.status
+      }, 502);
+    }
+
+    const host = info.streaming_server.ip_address;
+    const port = Number(info.streaming_server_port);
+    const hostHeader = info.streaming_server.domain || 'sapircast.caster.fm';
+    const channel = Array.isArray(info.channels)
+      ? info.channels.find(c => c.id === 'a2c674bd-afe5-498d-8ecc-022a659c47fb') || info.channels[0]
+      : null;
+    const mount = channel?.streaming_server_mountpoint
+      ? '/' + String(channel.streaming_server_mountpoint).replace(/^\//, '')
+      : '/6W6zw';
+
+    if (!Number.isInteger(port) || port <= 0) {
+      throw new Error('Caster returned an invalid streaming server port.');
+    }
+
     const socket = connect({ hostname: host, port }, { secureTransport: 'off' });
     await socket.opened;
 
-    const writer = socket.writable.getWriter();
+    const auth = btoa('admin:' + env.CASTER_PRIVATE_TOKEN);
     const requestText = [
       'GET /admin/stats.json?t=' + Date.now() + ' HTTP/1.1',
       'Host: ' + hostHeader + ':' + port,
@@ -209,8 +239,9 @@ async function casterStreamStatus(request, env) {
       'Connection: close',
       '',
       ''
-    ].join('\\r\\n');
+    ].join('\r\n');
 
+    const writer = socket.writable.getWriter();
     await writer.write(new TextEncoder().encode(requestText));
     writer.releaseLock();
 
@@ -227,14 +258,14 @@ async function casterStreamStatus(request, env) {
     const source = Array.isArray(data)
       ? (data.find(item => item?.source)?.source || {})
       : (data?.source || {});
-    const mount = source['/6W6zw'] || null;
+    const liveMount = source[mount] || null;
 
     return json({
       ok: true,
-      online: !!mount,
-      mount: mount ? '/6W6zw' : null,
-      stream_start: mount?.stream_start_iso8601 || null,
-      content_type: mount?.['content-type'] || null
+      online: !!liveMount,
+      mount: liveMount ? mount : null,
+      stream_start: liveMount?.stream_start_iso8601 || null,
+      content_type: liveMount?.['content-type'] || null
     });
   } catch (error) {
     return json({ ok: false, online: false, error: error.message }, 502);
