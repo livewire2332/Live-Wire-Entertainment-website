@@ -115,43 +115,26 @@ async function readSocketText(socket, timeoutMs = 8000) {
   return text;
 }
 
-async function resolveCasterIPv4() {
-  const response = await fetch('https://dns.google/resolve?name=sapircast.caster.fm&type=A', {
-    headers: { 'Accept': 'application/dns-json', 'Cache-Control': 'no-cache' }
-  });
-  if (!response.ok) throw new Error('DNS lookup failed.');
-  const data = await response.json();
-  const ip = data?.Answer?.find(record => record?.type === 1)?.data;
-  if (!ip) throw new Error('Could not resolve Caster server address.');
-  return ip;
-}
-
 async function casterStreamStatus(request) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
+
+  const target = 'https://sapircast.caster.fm:12036/admin/publicstats.json';
+  const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(target + '?t=' + Date.now());
+
   try {
-    const ip = await resolveCasterIPv4();
-    const response = await fetch('http://' + ip + ':12036/admin/publicstats.json', {
-      headers: {
-        'Host': 'sapircast.caster.fm',
-        'Accept': 'application/json',
-        'Cache-Control': 'no-cache'
-      },
+    const response = await fetch(proxyUrl, {
+      headers: { 'Accept': 'application/json', 'Cache-Control': 'no-cache' },
       cf: { cacheTtl: 0, cacheEverything: false }
     });
 
     const text = await response.text();
     if (!response.ok) {
-      return json({
-        ok: false,
-        online: false,
-        error: 'Caster status returned HTTP ' + response.status,
-        resolved_ip: ip
-      }, 502);
+      return json({ ok: false, online: false, error: 'Caster proxy returned HTTP ' + response.status }, 502);
     }
 
     let data;
     try { data = JSON.parse(text); } catch {
-      throw new Error('Caster returned invalid JSON.');
+      throw new Error('Caster proxy returned invalid JSON.');
     }
 
     const source = Array.isArray(data)
