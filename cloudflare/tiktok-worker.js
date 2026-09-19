@@ -1,3 +1,5 @@
+import { connect } from 'cloudflare:sockets';
+
 const TIKTOK_AUTHORIZE_URL = 'https://www.tiktok.com/v2/auth/authorize/';
 const TIKTOK_TOKEN_URL = 'https://open.tiktokapis.com/v2/oauth/token/';
 const TIKTOK_CREATOR_INFO_URL = 'https://open.tiktokapis.com/v2/post/publish/creator_info/query/';
@@ -92,17 +94,63 @@ async function publish(request, env) {
   } catch (error) { return json({ ok: false, error: error.message }, 400); }
 }
 
+async function readSocketText(socket, timeoutMs = 8000) {
+  const reader = socket.readable.getReader();
+  const decoder = new TextDecoder();
+  let text = '';
+  try {
+    while (text.length < 256 * 1024) {
+      const result = await Promise.race([
+        reader.read(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Caster socket timed out.')), timeoutMs))
+      ]);
+      if (result.done) break;
+      text += decoder.decode(result.value, { stream: true });
+      if (text.includes('\r\n\r\n') && text.length > 1024 && /\r\n0\r\n\r\n$/.test(text)) break;
+    }
+  } finally {
+    reader.releaseLock();
+    try { await socket.close(); } catch {}
+  }
+  return text;
+}
+
 async function casterStreamStatus(request) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
+  let socket;
   try {
-    const url = 'http://sapircast.caster.fm:12036/admin/publicstats.json?t=' + Date.now();
-    const response = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json', 'Cache-Control': 'no-cache' } });
-    if (!response.ok) return json({ ok: false, online: false, error: 'Caster status returned HTTP ' + response.status }, 502);
-    const data = await response.json();
+    socket = connect({ hostname: 'sapircast.caster.fm', port: 12036 }, { secureTransport: 'on' });
+    await socket.opened;
+
+    const writer = socket.writable.getWriter();
+    const requestText = [
+      'GET /admin/publicstats.json HTTP/1.0',
+      'Host: sapircast.caster.fm',
+      'Accept: application/json',
+      'Connection: close',
+      '',
+      ''
+    ].join('\r\n');
+    await writer.write(new TextEncoder().encode(requestText));
+    await writer.close();
+
+    const raw = await readSocketText(socket);
+    const headerEnd = raw.indexOf('\r\n\r\n');
+    if (headerEnd < 0) throw new Error('Invalid response from Caster.');
+    const headers = raw.slice(0, headerEnd);
+    const body = raw.slice(headerEnd + 4);
+    const statusMatch = headers.match(/^HTTP\/\d(?:\.\d)?\s+(\d+)/i);
+    const httpStatus = Number(statusMatch?.[1] || 0);
+    if (httpStatus !== 200) return json({ ok: false, online: false, error: 'Caster status returned HTTP ' + httpStatus }, 502);
+
+    let data;
+    try { data = JSON.parse(body); } catch { throw new Error('Caster returned invalid JSON.'); }
+
     const source = Array.isArray(data)
       ? (data.find(item => item?.source)?.source || {})
       : (data?.source || {});
     const mount = source['/6W6zw'] || null;
+
     return json({
       ok: true,
       online: !!mount,
@@ -111,6 +159,7 @@ async function casterStreamStatus(request) {
       content_type: mount?.['content-type'] || null
     });
   } catch (error) {
+    try { if (socket) await socket.close(); } catch {}
     return json({ ok: false, online: false, error: error.message }, 502);
   }
 }
