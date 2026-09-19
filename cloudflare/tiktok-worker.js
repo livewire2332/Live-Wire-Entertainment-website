@@ -129,17 +129,91 @@ async function casterWebhook(request, env, online) {
 async function casterStreamStatus(request, env) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
   if (!env.TIKTOK_TOKENS) return json({ ok: false, online: false, error: 'Status storage is not configured.' }, 500);
+  if (!env.CASTER_PRIVATE_TOKEN) return json({ ok: false, online: false, error: 'Caster private token is not configured.' }, 500);
 
   try {
-    const saved = await env.TIKTOK_TOKENS.get('caster_stream_status', 'json');
-    if (!saved) {
-      return json({ ok: true, online: false, updated_at: null, source: 'caster-webhook' });
+    // Caster Cloud's documented API exposes the current streaming server details,
+    // while the actual on-air/source state is exposed by the Icecast publicstats
+    // endpoint on that streaming server. Cloudflare Workers cannot reach that
+    // non-standard streaming port directly, so use Caster's HTTPS account API
+    // to discover the current server and a server-side HTTPS reader proxy to
+    // retrieve the public status JSON.
+    const accountResponse = await fetch('https://hub.cloud.caster.fm/private/accountInfo', {
+      headers: {
+        Authorization: `Bearer ${env.CASTER_PRIVATE_TOKEN}`,
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    });
+    const account = await accountResponse.json().catch(() => null);
+    if (!accountResponse.ok || !account?.streaming_server?.domain || !account?.streaming_server_port) {
+      return json({
+        ok: false,
+        online: false,
+        error: account?.error?.message || 'Could not read Caster account information.'
+      }, accountResponse.status || 502);
     }
+
+    const domain = account.streaming_server.domain;
+    const port = Number(account.streaming_server_port);
+    const channelMounts = new Set(
+      (account.channels || [])
+        .map(channel => String(channel?.streaming_server_mountpoint || '').replace(/^\//, ''))
+        .filter(Boolean)
+    );
+
+    const target = `https://${domain}:${port}/admin/publicstats.json`;
+    const readerUrl = `https://r.jina.ai/${target}?_=${Date.now()}`;
+    const readerResponse = await fetch(readerUrl, {
+      headers: {
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    });
+    const readerPayload = await readerResponse.json().catch(async () => ({
+      content: await readerResponse.text().catch(() => '')
+    }));
+
+    if (!readerResponse.ok) {
+      return json({
+        ok: false,
+        online: false,
+        error: `Caster status proxy returned HTTP ${readerResponse.status}.`
+      }, 502);
+    }
+
+    let stats = readerPayload?.content ?? readerPayload;
+    if (typeof stats === 'string') {
+      stats = stats.trim();
+      stats = stats.replace(/^\`\`\`(?:json)?\s*/i, '').replace(/\s*\`\`\`$/i, '').trim();
+      try {
+        stats = JSON.parse(stats);
+      } catch {
+        const jsonStart = stats.indexOf('[');
+        const jsonEnd = stats.lastIndexOf(']');
+        if (jsonStart >= 0 && jsonEnd > jsonStart) {
+          try { stats = JSON.parse(stats.slice(jsonStart, jsonEnd + 1)); } catch {}
+        }
+      }
+    }
+
+    const source = Array.isArray(stats)
+      ? (stats.find(item => item?.source)?.source || {})
+      : (stats?.source || {});
+    const mounts = Object.keys(source);
+    const online = mounts.some(mount => {
+      const clean = String(mount).replace(/^\//, '');
+      return channelMounts.size === 0 || channelMounts.has(clean);
+    });
+
     return json({
       ok: true,
-      online: Boolean(saved.online),
-      updated_at: saved.updated_at || null,
-      source: 'caster-webhook'
+      online,
+      updated_at: new Date().toISOString(),
+      source: 'caster-cloud-api+publicstats',
+      mount: online
+        ? mounts.find(mount => channelMounts.size === 0 || channelMounts.has(String(mount).replace(/^\//, ''))) || null
+        : null
     });
   } catch (error) {
     return json({ ok: false, online: false, error: error.message }, 502);
