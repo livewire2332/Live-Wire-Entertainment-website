@@ -132,6 +132,13 @@ async function casterStreamStatus(request, env) {
   if (!env.CASTER_PRIVATE_TOKEN) return json({ ok: false, online: false, error: 'Caster private token is not configured.' }, 500);
 
   try {
+    // The status boxes poll frequently, so cache the proxy result briefly.
+    // This prevents the HTTPS reader proxy from being rate-limited while
+    // keeping the on-air indicator responsive.
+    const cached = await env.TIKTOK_TOKENS.get('caster_stream_status_api_cache', 'json');
+    if (cached && typeof cached.online === 'boolean') {
+      return json({ ok: true, online: cached.online, updated_at: cached.updated_at || null, source: 'caster-cloud-api+publicstats-cache', mount: cached.mount || null });
+    }
     // Caster Cloud's documented API exposes the current streaming server details,
     // while the actual on-air/source state is exposed by the Icecast publicstats
     // endpoint on that streaming server. Cloudflare Workers cannot reach that
@@ -163,7 +170,7 @@ async function casterStreamStatus(request, env) {
     );
 
     const target = `https://${domain}:${port}/admin/publicstats.json`;
-    const readerUrl = `https://r.jina.ai/${target}?_=${Date.now()}`;
+    const readerUrl = `https://r.jina.ai/${target}`;
     const readerResponse = await fetch(readerUrl, {
       headers: {
         Accept: 'application/json',
@@ -206,15 +213,15 @@ async function casterStreamStatus(request, env) {
       return channelMounts.size === 0 || channelMounts.has(clean);
     });
 
-    return json({
-      ok: true,
+    const result = {
       online,
       updated_at: new Date().toISOString(),
-      source: 'caster-cloud-api+publicstats',
       mount: online
         ? mounts.find(mount => channelMounts.size === 0 || channelMounts.has(String(mount).replace(/^\//, ''))) || null
         : null
-    });
+    };
+    await env.TIKTOK_TOKENS.put('caster_stream_status_api_cache', JSON.stringify(result), { expirationTtl: 20 });
+    return json({ ok: true, ...result, source: 'caster-cloud-api+publicstats' });
   } catch (error) {
     return json({ ok: false, online: false, error: error.message }, 502);
   }
