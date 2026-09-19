@@ -191,18 +191,19 @@ async function casterStreamStatus(request, env) {
   if (request.method !== 'GET') return json({ ok: false, error: 'Method not allowed.' }, 405);
   if (!env.CASTER_PRIVATE_TOKEN) return json({ ok: false, online: false, error: 'Caster private token is not configured.' }, 500);
 
-  const host = 'sapircast.caster.fm';
+  const host = '173.244.216.28';
   const port = 12036;
+  const hostHeader = 'sapircast.caster.fm';
   const auth = btoa('admin:' + env.CASTER_PRIVATE_TOKEN);
 
   try {
-    const socket = connect({ hostname: host, port }, { secureTransport: 'on' });
+    const socket = connect({ hostname: host, port }, { secureTransport: 'off' });
     await socket.opened;
 
     const writer = socket.writable.getWriter();
     const requestText = [
       'GET /admin/stats.json?t=' + Date.now() + ' HTTP/1.1',
-      'Host: ' + host + ':' + port,
+      'Host: ' + hostHeader + ':' + port,
       'Authorization: Basic ' + auth,
       'Accept: application/json',
       'Connection: close',
