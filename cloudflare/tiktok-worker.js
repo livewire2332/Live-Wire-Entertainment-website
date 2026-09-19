@@ -139,12 +139,10 @@ async function casterStreamStatus(request, env) {
     if (cached && typeof cached.online === 'boolean') {
       return json({ ok: true, online: cached.online, updated_at: cached.updated_at || null, source: 'caster-cloud-api+publicstats-cache', mount: cached.mount || null });
     }
-    // Caster Cloud's documented API exposes the current streaming server details,
-    // while the actual on-air/source state is exposed by the Icecast publicstats
-    // endpoint on that streaming server. Cloudflare Workers cannot reach that
-    // non-standard streaming port directly, so use Caster's HTTPS account API
-    // to discover the current server and a server-side HTTPS reader proxy to
-    // retrieve the public status JSON.
+    // Caster Cloud's HTTPS API gives us the current streaming server details.
+    // The actual on-air/source state is Icecast publicstats.json on the
+    // streaming server's non-standard port. Cloudflare Workers cannot reach
+    // that port directly, so use a small fallback chain of HTTPS bridges.
     const accountResponse = await fetch('https://hub.cloud.caster.fm/private/accountInfo', {
       headers: {
         Authorization: `Bearer ${env.CASTER_PRIVATE_TOKEN}`,
@@ -170,26 +168,44 @@ async function casterStreamStatus(request, env) {
     );
 
     const target = `https://${domain}:${port}/admin/publicstats.json`;
-    const readerUrl = `https://r.jina.ai/${target}`;
-    const readerResponse = await fetch(readerUrl, {
-      headers: {
-        Accept: 'application/json',
-        'Cache-Control': 'no-cache'
-      }
-    });
-    const readerPayload = await readerResponse.json().catch(async () => ({
-      content: await readerResponse.text().catch(() => '')
-    }));
+    const bridgeUrls = [
+      `https://cors.bridged.cc/${target}`,
+      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`
+    ];
 
-    if (!readerResponse.ok) {
+    let readerResponse = null;
+    let readerText = '';
+    let lastBridgeError = '';
+    for (const bridgeUrl of bridgeUrls) {
+      try {
+        const response = await fetch(bridgeUrl, {
+          headers: {
+            Accept: 'application/json',
+            'Cache-Control': 'no-cache'
+          }
+        });
+        const text = await response.text();
+        if (response.ok && text.trim()) {
+          readerResponse = response;
+          readerText = text;
+          break;
+        }
+        lastBridgeError = `HTTP ${response.status}`;
+      } catch (error) {
+        lastBridgeError = error.message;
+      }
+    }
+
+    if (!readerResponse) {
       return json({
         ok: false,
         online: false,
-        error: `Caster status proxy returned HTTP ${readerResponse.status}.`
+        error: `Caster status bridges unavailable (${lastBridgeError || 'no response'}).`
       }, 502);
     }
 
-    let stats = readerPayload?.content ?? readerPayload;
+    let stats = readerText;
     if (typeof stats === 'string') {
       stats = stats.trim();
       stats = stats.replace(/^\`\`\`(?:json)?\s*/i, '').replace(/\s*\`\`\`$/i, '').trim();
