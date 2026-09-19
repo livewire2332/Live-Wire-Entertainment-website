@@ -136,7 +136,7 @@ async function readCasterHttpResponse(socket, timeoutMs = 8000) {
       if (headerEnd >= 0) {
         const headers = raw.slice(0, headerEnd).split('\\r\\n');
         const statusLine = headers.shift() || '';
-        const statusMatch = statusLine.match(/^HTTP\\/\\d(?:\\.\\d)?\\s+(\\d{3})/i);
+        const statusMatch = statusLine.match(/^HTTP\/\d(?:\.\d)?\s+(\d{3})/i);
         const status = statusMatch ? Number(statusMatch[1]) : 0;
         const headerMap = {};
         for (const line of headers) {
