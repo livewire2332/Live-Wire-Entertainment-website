@@ -129,10 +129,13 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     const now=new Date();
     const mins=now.getHours()*60+now.getMinutes();
     const day=now.getDay();
+    const iso=now.toISOString().slice(0,10);
+    const pauseActive=iso>='2026-09-21'&&iso<='2026-09-27';
     const today=showForDate(now);
 
     // Only treat a scheduled programme as LIVE when its actual window has started.
-    // If it overruns, keep its name while the stream remains connected.
+    // During the temporary pause week, no scheduled show is considered active.
+    // If a show overruns outside the pause, keep its name while the stream remains connected.
     let scheduledNow=null;
     if(day===3&&mins>=1200&&mins<1320) scheduledNow=['The Wednesday Wire with DJ Disco Dan','8:00pm'];
     if(day===5&&mins>=1170&&mins<1380) scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
@@ -144,13 +147,19 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     // Friday can run into Saturday morning if it is still connected.
     if(day===6&&mins<450) scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
 
-    if(streamOnline&&scheduledNow){
+    if(streamOnline&&scheduledNow&&!pauseActive){
       currentLiveShow=scheduledNow;
-    }else if(!streamOnline){
+    }else if(!streamOnline||pauseActive){
       currentLiveShow=null;
     }
 
-    if(streamOnline){
+    if(pauseActive){
+      set('homeLivePill','⏸️ SHOWS PAUSED');
+      document.getElementById('homeLivePill')?.classList.remove('live');
+      set('homeLiveTitle','Live Wire Shows Temporarily Paused');
+      set('homeLiveTime','21–27 September 2026');
+      set('homeLiveNote','⚡ No live shows this week • schedule will return when Daniel confirms');
+    }else if(streamOnline){
       set('homeLivePill','🔴 LIVE NOW');
       document.getElementById('homeLivePill')?.classList.add('live');
       if(currentLiveShow){
