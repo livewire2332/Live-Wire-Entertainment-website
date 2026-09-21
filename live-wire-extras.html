@@ -376,9 +376,21 @@ streamOnline=!!data?.online;
 status();
 }
 function status(){
-const now=new Date(),mins=now.getHours()*60+now.getMinutes(),day=now.getDay(),todayShows=getShowsForDate(now),show=todayShows[0];
+const now=new Date(),mins=now.getHours()*60+now.getMinutes(),day=now.getDay(),iso=now.toISOString().slice(0,10);
+const pauseActive=iso>='2026-09-21'&&iso<='2026-09-27';
+const todayShows=pauseActive?[]:getShowsForDate(now),show=todayShows[0];
 const pill=document.getElementById('statusPill'),title=document.getElementById('statusTitle'),time=document.getElementById('statusTime'),note=document.getElementById('statusNote');
 if(!pill||!title||!time)return;
+
+if(pauseActive){
+currentLiveShow=null;
+pill.textContent='⏸️ SHOWS PAUSED';
+pill.classList.remove('live');
+title.textContent='Live Wire Shows Temporarily Paused';
+time.textContent='21–27 September 2026';
+if(note)note.textContent='⚡ No live shows this week • schedule will return when Daniel confirms.';
+return;
+}
 
 let scheduledNow=null;
 if(day===3&&mins>=1200&&mins<1320)scheduledNow=['The Wednesday Wire with DJ Disco Dan','8:00pm'];
