@@ -41,3 +41,46 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy ./cloudflare/tiktok-worker.js --config ./cloudflare/deploy-wrangler.jsonc
+
+  deploy-facebook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Resolve existing Facebook KV namespace
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          KV_ID=$(curl -fsS "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces"             -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN"             -H "Content-Type: application/json" |
+            jq -r '.result[] | select(.title | test("facebook"; "i")) | .id' | head -n 1)
+
+          if [ -z "$KV_ID" ] || [ "$KV_ID" = "null" ]; then
+            echo "No existing Facebook KV namespace found; refusing to create a new one automatically so an existing Facebook token store cannot be replaced."
+            exit 1
+          fi
+
+          cat > cloudflare/facebook-deploy-wrangler.jsonc <<EOF
+          {
+            "$schema": "node_modules/wrangler/config-schema.json",
+            "name": "live-wire-facebook-automation",
+            "main": "./facebook-worker.js",
+            "compatibility_date": "2026-09-16",
+            "workers_dev": true,
+            "keep_vars": true,
+            "kv_namespaces": [
+              {
+                "binding": "FACEBOOK_KV",
+                "id": "$KV_ID"
+              }
+            ]
+          }
+          EOF
+
+      - name: Deploy Facebook Worker to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy ./cloudflare/facebook-worker.js --config ./cloudflare/facebook-deploy-wrangler.jsonc
