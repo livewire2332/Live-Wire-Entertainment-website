@@ -31,11 +31,17 @@ function redirectUri(env) {
 }
 
 function requireConfigured(env) {
-  const missing = ['FACEBOOK_APP_ID','FACEBOOK_APP_SECRET','FACEBOOK_CONFIG_ID','FACEBOOK_REDIRECT_URI','FACEBOOK_KV','PUBLISH_SECRET'].filter((key) => !env[key]);
+  const missing = ['FACEBOOK_KV','PUBLISH_SECRET'].filter((key) => !env[key]);
   if (missing.length) throw new Error(`Missing Facebook Worker configuration: ${missing.join(', ')}`);
 }
 
+function requireOAuthConfigured(env) {
+  const missing = ['FACEBOOK_APP_ID','FACEBOOK_APP_SECRET','FACEBOOK_CONFIG_ID','FACEBOOK_REDIRECT_URI'].filter((key) => !env[key]);
+  if (missing.length) throw new Error(`Missing Facebook OAuth configuration: ${missing.join(', ')}`);
+}
+
 async function login(request, env) {
+  requireOAuthConfigured(env);
   const state = crypto.randomUUID();
   await env.FACEBOOK_KV.put(`${STATE_PREFIX}${state}`, '1', { expirationTtl: 600 });
   const params = new URLSearchParams({
@@ -49,6 +55,7 @@ async function login(request, env) {
 }
 
 async function callback(request, env) {
+  requireOAuthConfigured(env);
   const url = new URL(request.url);
   const state = url.searchParams.get('state');
   if (!state) return html('<p>❌ Missing OAuth state. Please start the Facebook connection again.</p>', 400);
