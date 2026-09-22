@@ -13,7 +13,7 @@ function json(data, status = 200) {
       'Cache-Control': 'no-store',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, X-Publish-Secret',
     },
   });
 }
@@ -31,17 +31,13 @@ function redirectUri(env) {
 }
 
 function requireConfigured(env) {
-  const missing = ['FACEBOOK_APP_ID', 'FACEBOOK_APP_SECRET', 'FACEBOOK_CONFIG_ID', 'FACEBOOK_REDIRECT_URI', 'FACEBOOK_KV']
-    .filter((key) => !env[key]);
+  const missing = ['FACEBOOK_APP_ID','FACEBOOK_APP_SECRET','FACEBOOK_CONFIG_ID','FACEBOOK_REDIRECT_URI','FACEBOOK_KV','PUBLISH_SECRET'].filter((key) => !env[key]);
   if (missing.length) throw new Error(`Missing Facebook Worker configuration: ${missing.join(', ')}`);
 }
 
 async function login(request, env) {
   const state = crypto.randomUUID();
   await env.FACEBOOK_KV.put(`${STATE_PREFIX}${state}`, '1', { expirationTtl: 600 });
-
-  // Permissions are intentionally NOT supplied here. Facebook Login for Business
-  // takes the requested permissions from the Meta configuration (config_id).
   const params = new URLSearchParams({
     client_id: env.FACEBOOK_APP_ID,
     config_id: env.FACEBOOK_CONFIG_ID,
@@ -49,29 +45,19 @@ async function login(request, env) {
     response_type: 'code',
     state,
   });
-
-  return new Response(null, {
-    status: 302,
-    headers: { Location: `${FACEBOOK_AUTHORIZE_URL}?${params}`, 'Cache-Control': 'no-store' },
-  });
+  return new Response(null, { status: 302, headers: { Location: `${FACEBOOK_AUTHORIZE_URL}?${params}`, 'Cache-Control': 'no-store' } });
 }
 
 async function callback(request, env) {
   const url = new URL(request.url);
   const state = url.searchParams.get('state');
   if (!state) return html('<p>❌ Missing OAuth state. Please start the Facebook connection again.</p>', 400);
-
   const stateKey = `${STATE_PREFIX}${state}`;
   const validState = await env.FACEBOOK_KV.get(stateKey);
   if (validState !== '1') return html('<p>❌ This Facebook sign-in link could not be verified. Please start again.</p>', 400);
   await env.FACEBOOK_KV.delete(stateKey);
-
   const error = url.searchParams.get('error');
-  if (error) {
-    const description = url.searchParams.get('error_description') || 'Facebook did not grant access.';
-    return html(`<p>❌ ${escapeHtml(description)}</p>`, 400);
-  }
-
+  if (error) return html(`<p>❌ ${escapeHtml(url.searchParams.get('error_description') || 'Facebook did not grant access.')}</p>`, 400);
   const code = url.searchParams.get('code');
   if (!code) return html('<p>❌ Facebook did not return an authorisation code.</p>', 400);
 
@@ -89,7 +75,6 @@ async function callback(request, env) {
     return html(`<p>❌ Facebook would not issue an access token.</p><pre>${escapeHtml(JSON.stringify(tokenData || {}, null, 2))}</pre>`, 502);
   }
 
-  // Convert the returned user token into the Page access token(s) available to it.
   const accountsUrl = new URL(FACEBOOK_ME_ACCOUNTS_URL);
   accountsUrl.search = new URLSearchParams({
     fields: 'id,name,access_token,tasks',
@@ -102,10 +87,8 @@ async function callback(request, env) {
     return html(`<p>❌ Facebook login succeeded, but the Page could not be retrieved.</p><pre>${escapeHtml(JSON.stringify(accountsData || {}, null, 2))}</pre>`, 502);
   }
 
-  const page = accountsData.data[0];
-  if (!page?.id || !page?.access_token) {
-    return html('<p>❌ Facebook login succeeded, but no accessible Page was returned. Make sure the Live Wire Entertainment Page is selected/authorised.</p>', 403);
-  }
+  const page = accountsData.data.find((item) => item?.id === '1309243555604210') || accountsData.data[0];
+  if (!page?.id || !page?.access_token) return html('<p>❌ Facebook login succeeded, but no accessible Page was returned.</p>', 403);
 
   await env.FACEBOOK_KV.put(TOKEN_KEY, JSON.stringify({
     page_id: page.id,
@@ -116,7 +99,7 @@ async function callback(request, env) {
     saved_at: Date.now(),
   }));
 
-  return html(`<p>✅ Facebook is connected to Live Wire Entertainment.</p><p>Page: <strong>${escapeHtml(page.name || page.id)}</strong></p><p>The access credentials are stored in Cloudflare KV and are not placed in the public website.</p>`);
+  return html(`<p>✅ Facebook is connected to Live Wire Entertainment.</p><p>Page: <strong>${escapeHtml(page.name || page.id)}</strong></p><p>The access credentials are stored securely in Cloudflare KV.</p>`);
 }
 
 async function status(env) {
@@ -136,8 +119,46 @@ async function pageInfo(env) {
   return json({ ok: true, ...data });
 }
 
+async function publish(request, env) {
+  const suppliedSecret = request.headers.get('X-Publish-Secret');
+  if (!suppliedSecret || suppliedSecret !== env.PUBLISH_SECRET) return json({ ok: false, error: 'Unauthorised.' }, 401);
+
+  let body;
+  try { body = await request.json(); }
+  catch { return json({ ok: false, error: 'Request body must be valid JSON.' }, 400); }
+
+  const message = typeof body?.message === 'string' ? body.message.trim() : '';
+  if (!message) return json({ ok: false, error: 'A non-empty "message" is required.' }, 400);
+  if (message.length > 63206) return json({ ok: false, error: 'Facebook post is too long.' }, 400);
+
+  const stored = await env.FACEBOOK_KV.get(TOKEN_KEY, 'json');
+  if (!stored?.page_id || !stored?.page_access_token) {
+    return json({ ok: false, error: 'Facebook Page is not connected in Cloudflare KV.' }, 401);
+  }
+
+  const publishUrl = new URL(`https://graph.facebook.com/${FACEBOOK_GRAPH_VERSION}/${stored.page_id}/feed`);
+  const publishBody = new URLSearchParams({ message, access_token: stored.page_access_token });
+
+  const response = await fetch(publishUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: publishBody,
+  });
+
+  const data = await response.json().catch(() => null);
+  if (!response.ok || data?.error) {
+    return json({
+      ok: false,
+      error: data?.error?.message || 'Facebook rejected the post.',
+      meta_error: data?.error || null,
+    }, response.status || 502);
+  }
+
+  return json({ ok: true, published: true, page_id: stored.page_id, post_id: data?.id || null });
+}
+
 function escapeHtml(value) {
-  return String(value).replace(/[&<>\"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;' }[char]));
+  return String(value).replace(/[&<>"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
 }
 
 export default {
@@ -145,11 +166,13 @@ export default {
     if (request.method === 'OPTIONS') return json({ ok: true });
     try {
       requireConfigured(env);
-      const path = new URL(request.url).pathname.replace(/\/$/, '');
+      const url = new URL(request.url);
+      const path = url.pathname.replace(/\/$/, '');
       if (path === '/facebook-login') return login(request, env);
       if (path === '/facebook-callback') return callback(request, env);
       if (path === '/facebook-status') return status(env);
       if (path === '/facebook-page') return pageInfo(env);
+      if (path === '/publish' && request.method === 'POST') return publish(request, env);
       return json({ ok: true, service: 'Live Wire Entertainment Facebook Worker' });
     } catch (error) {
       return json({ ok: false, error: error.message || 'Unexpected Worker error.' }, 500);
