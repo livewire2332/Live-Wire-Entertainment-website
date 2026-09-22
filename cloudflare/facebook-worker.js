@@ -4,6 +4,7 @@ const FACEBOOK_TOKEN_URL = `https://graph.facebook.com/${FACEBOOK_GRAPH_VERSION}
 const FACEBOOK_ME_ACCOUNTS_URL = `https://graph.facebook.com/${FACEBOOK_GRAPH_VERSION}/me/accounts`;
 const TOKEN_KEY = 'facebook_tokens';
 const STATE_PREFIX = 'facebook_oauth_state:';
+const FACEBOOK_REDIRECT_URI = 'https://live-wire-facebook-automation.dlyons184.workers.dev/facebook-callback';
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -25,9 +26,8 @@ function html(body, status = 200) {
   });
 }
 
-function redirectUri(env) {
-  if (!env.FACEBOOK_REDIRECT_URI) throw new Error('FACEBOOK_REDIRECT_URI is not configured.');
-  return env.FACEBOOK_REDIRECT_URI;
+function redirectUri() {
+  return FACEBOOK_REDIRECT_URI;
 }
 
 function requireConfigured(env) {
@@ -36,7 +36,7 @@ function requireConfigured(env) {
 }
 
 function requireOAuthConfigured(env) {
-  const missing = ['FACEBOOK_APP_ID','FACEBOOK_APP_SECRET','FACEBOOK_CONFIG_ID','FACEBOOK_REDIRECT_URI'].filter((key) => !env[key]);
+  const missing = ['FACEBOOK_APP_ID','FACEBOOK_APP_SECRET','FACEBOOK_CONFIG_ID'].filter((key) => !env[key]);
   if (missing.length) throw new Error(`Missing Facebook OAuth configuration: ${missing.join(', ')}`);
 }
 
@@ -47,7 +47,7 @@ async function login(request, env) {
   const params = new URLSearchParams({
     client_id: env.FACEBOOK_APP_ID,
     config_id: env.FACEBOOK_CONFIG_ID,
-    redirect_uri: redirectUri(env),
+    redirect_uri: redirectUri(),
     response_type: 'code',
     state,
   });
