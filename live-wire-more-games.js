@@ -522,31 +522,17 @@ function playNew(i,type){
     setPuck(28,false);
   }
   else if(type==='tablefootball'){
-    let home=0,away=0,active=false;
-    o.innerHTML='<div class="lw-dart-score">⚽ <strong>0 - 0</strong> · First to 5</div><div class="lw-dart-msg">Drag your players up and down, then tap SHOOT!</div><div class="lw-football-table"><div class="lw-football-goal">🥅</div><div class="lw-football-pitch"><div class="lw-football-ball">⚽</div><div class="lw-football-row"><span>🔴</span><span>🔴</span><span>🔴</span></div><div class="lw-football-row"><span>🔵</span><span>🔵</span><span>🔵</span></div><div class="lw-football-row"><span>🔴</span><span>🔴</span><span>🔴</span></div><div class="lw-football-row"><span>🔵</span><span>🔵</span><span>🔵</span></div></div><div class="lw-football-goal">🥅</div></div><div class="lw-football-controls"><button type="button" class="lw-football-move">↕️ MOVE PLAYERS</button><button type="button" class="lw-football-shoot">⚽ SHOOT!</button><button type="button" class="lw-football-reset">↻ NEW MATCH</button></div>';
+    let you=0,cpu=0,active=false;
+    o.innerHTML='<div class="lw-dart-score">⚽ <strong>YOU 0 — CPU 0</strong> · First to 5</div><div class="lw-dart-msg">Drag the player rows into position, then shoot. The computer can counter-attack!</div><div class="lw-football-scoreboard"><span>⚡ YOU <b class="lw-fb-you">0</b></span><span>🤖 CPU <b class="lw-fb-cpu">0</b></span></div><div class="lw-football-table"><div class="lw-football-goal">🥅</div><div class="lw-football-pitch"><div class="lw-football-ball">⚽</div><div class="lw-football-row"><span>🔴</span><span>🔴</span><span>🔴</span></div><div class="lw-football-row"><span>🔵</span><span>🔵</span><span>🔵</span></div><div class="lw-football-row"><span>🔴</span><span>🔴</span><span>🔴</span></div><div class="lw-football-row"><span>🔵</span><span>🔵</span><span>🔵</span></div></div><div class="lw-football-goal">🥅</div></div><div class="lw-football-controls"><button type="button" class="lw-football-move">↕️ MOVE PLAYERS</button><button type="button" class="lw-football-shoot">⚽ SHOOT!</button><button type="button" class="lw-football-reset">↻ NEW MATCH</button></div>';
     c.innerHTML='';
-    const scoreBox=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),ball=o.querySelector('.lw-football-ball'),rows=[...o.querySelectorAll('.lw-football-row')],move=o.querySelector('.lw-football-move'),shoot=o.querySelector('.lw-football-shoot'),reset=o.querySelector('.lw-football-reset');
-    const update=()=>{scoreBox.innerHTML='⚽ <strong>'+home+' - '+away+'</strong> · First to 5';};
-    const kick=()=>{
-      if(active||home>=5||away>=5)return;
-      active=true;ball.classList.remove('kick');void ball.offsetWidth;ball.classList.add('kick');
-      setTimeout(()=>{
-        if(Math.random()<.5)home++;else away++;update();
-        msg.textContent=home>=5||away>=5?'🏆 FULL TIME! ⚽':'⚽ GOAL! Keep playing!';
-        active=false;if(home>=5||away>=5){shoot.disabled=true;move.disabled=true;}
-      },450);
-    };
-    rows.forEach((row,i)=>{
-      row.dataset.pos=i%2?'60':'40';row.style.top=row.dataset.pos+'%';
-      let dragging=false,startY=0,startTop=0;
-      row.addEventListener('pointerdown',e=>{if(active||home>=5||away>=5)return;dragging=true;startY=e.clientY;startTop=parseFloat(row.dataset.pos);row.setPointerCapture?.(e.pointerId);row.classList.add('dragging');});
-      row.addEventListener('pointermove',e=>{if(!dragging)return;const pos=Math.max(15,Math.min(85,startTop+(e.clientY-startY)/3));row.dataset.pos=pos;row.style.top=pos+'%';});
-      row.addEventListener('pointerup',()=>{dragging=false;row.classList.remove('dragging');});
-      row.addEventListener('pointercancel',()=>{dragging=false;row.classList.remove('dragging');});
-    });
-    move.addEventListener('click',()=>{rows.forEach(row=>{const pos=35+Math.random()*30;row.dataset.pos=pos;row.style.top=pos+'%';});msg.textContent='↕️ Players moved — line up your attack!';});
+    const scoreBox=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),ball=o.querySelector('.lw-football-ball'),rows=[...o.querySelectorAll('.lw-football-row')],move=o.querySelector('.lw-football-move'),shoot=o.querySelector('.lw-football-shoot'),reset=o.querySelector('.lw-football-reset'),youEl=o.querySelector('.lw-fb-you'),cpuEl=o.querySelector('.lw-fb-cpu');
+    const update=()=>{scoreBox.innerHTML='⚽ <strong>YOU '+you+' — CPU '+cpu+'</strong> · First to 5';youEl.textContent=you;cpuEl.textContent=cpu};
+    rows.forEach((row,i)=>{row.dataset.pos=i%2?'60':'40';row.style.top=row.dataset.pos+'%';});
+    const kick=()=>{if(active||you>=5||cpu>=5)return;active=true;ball.classList.remove('kick');void ball.offsetWidth;ball.classList.add('kick');setTimeout(()=>{const attack=Math.abs(parseFloat(rows[0].style.top)-parseFloat(rows[1].style.top));const chance=Math.min(.82,.42+attack/180);if(Math.random()<chance){you++;msg.textContent='⚽ GOAL! Your formation found the gap!'}else{msg.textContent='🧤 CPU BLOCK! The computer read your attack.';if(Math.random()<.4){cpu++;msg.textContent='🤖 COUNTER-ATTACK! CPU SCORES!'}}update();active=false;if(you>=5||cpu>=5){shoot.disabled=true;move.disabled=true;msg.textContent=you>=5?'🏆 YOU WIN THE TABLE FOOTBALL MATCH!':'🤖 CPU WINS THE MATCH!'}},500)};
+    rows.forEach(row=>{let drag=false,start=0,base=0;row.addEventListener('pointerdown',e=>{if(active||you>=5||cpu>=5)return;drag=true;start=e.clientY;base=parseFloat(row.dataset.pos);row.setPointerCapture?.(e.pointerId);row.classList.add('dragging')});row.addEventListener('pointermove',e=>{if(!drag)return;const p=Math.max(15,Math.min(85,base+(e.clientY-start)/3));row.dataset.pos=p;row.style.top=p+'%'});row.addEventListener('pointerup',()=>{drag=false;row.classList.remove('dragging')});row.addEventListener('pointercancel',()=>{drag=false;row.classList.remove('dragging')})});
+    move.addEventListener('click',()=>{if(active)return;rows.forEach(row=>{const p=30+Math.random()*40;row.dataset.pos=p;row.style.top=p+'%'});msg.textContent='↕️ Formation shifted — line up your next attack!'});
     shoot.addEventListener('click',kick);
-    reset.addEventListener('click',()=>{home=0;away=0;active=false;shoot.disabled=false;move.disabled=false;rows.forEach((row,i)=>{row.dataset.pos=i%2?'60':'40';row.style.top=row.dataset.pos+'%';});ball.classList.remove('kick');update();msg.textContent='Kick-off! Drag your players and shoot!';});
+    reset.addEventListener('click',()=>{you=0;cpu=0;active=false;shoot.disabled=false;move.disabled=false;rows.forEach((row,i)=>{row.dataset.pos=i%2?'60':'40';row.style.top=row.dataset.pos+'%'});ball.classList.remove('kick');update();msg.textContent='Kick-off! First to 5 — beat the computer!'});
     update();
   }
   else if(type==='bowling'){
