@@ -484,45 +484,16 @@ function playNew(i,type){
     draw();
   }
   else if(type==='shuffleboard'){
-    let shots=0,total=0,active=false;
-    o.innerHTML='<div class="lw-dart-score">🟠 <strong>Shuffleboard</strong> · 3 pucks</div><div class="lw-dart-msg">Drag the puck along the table, then release to shoot.</div><div class="lw-shuffle-lane"><div class="lw-shuffle-zones"><div class="lw-shuffle-zone z10">10</div><div class="lw-shuffle-zone z20">20</div><div class="lw-shuffle-zone z30">30</div><div class="lw-shuffle-zone z50">50</div></div><div class="lw-shuffle-puck" role="button" aria-label="Shuffleboard puck" tabindex="0">🟠</div><div class="lw-shuffle-end">🏁</div></div><div class="lw-shuffle-actions"><button type="button" class="lw-shuffle-reset">↻ NEW GAME</button></div>';
-    c.innerHTML='';
-    const lane=o.querySelector('.lw-shuffle-lane'),puck=o.querySelector('.lw-shuffle-puck'),msg=o.querySelector('.lw-dart-msg'),scoreBox=o.querySelector('.lw-dart-score'),reset=o.querySelector('.lw-shuffle-reset');
-    const laneRect=()=>lane.getBoundingClientRect();
-    const setPuck=(x,animate)=>{
-      puck.style.transition=animate?'left .55s cubic-bezier(.2,.8,.2,1)':'none';
-      const w=lane.clientWidth,clamp=Math.max(12,Math.min(w-12,x));puck.style.left=clamp+'px';
-    };
-    const scoreFor=(x)=>{
-      const pct=x/Math.max(1,lane.clientWidth);
-      if(pct>.88)return 50;if(pct>.72)return 30;if(pct>.55)return 20;if(pct>.38)return 10;return 0;
-    };
-    const shoot=(clientX)=>{
-      if(active||shots>=3)return;
-      active=true;shots++;
-      const r=laneRect(),x=Math.max(12,Math.min(r.width-12,clientX-r.left));
-      setPuck(x,true);
-      const points=scoreFor(x);total+=points;
-      setTimeout(()=>{
-        active=false;
-        scoreBox.innerHTML='🟠 <strong>'+total+'</strong> points · Puck '+shots+'/3';
-        msg.textContent=points?'🔥 '+points+' points! Total: '+total+' — '+(shots<3?'Shoot again!':'Final score!'):'😂 Bit short — 0 points! '+(shots<3?'Have another go.':'Final score: '+total);
-        if(shots>=3){msg.textContent='🏆 FINAL SCORE: '+total+' points from 3 pucks!';}
-      },580);
-    };
-    let dragging=false;
-    const pointerStart=e=>{if(active||shots>=3)return;dragging=true;puck.setPointerCapture?.(e.pointerId);puck.classList.add('dragging');};
-    const pointerMove=e=>{if(!dragging)return;const r=laneRect();setPuck(Math.max(12,Math.min(r.width-12,e.clientX-r.left)),false);};
-    const pointerEnd=e=>{if(!dragging)return;dragging=false;puck.classList.remove('dragging');shoot(e.clientX);};
-    puck.addEventListener('pointerdown',pointerStart);
-    puck.addEventListener('pointermove',pointerMove);
-    puck.addEventListener('pointerup',pointerEnd);
-    puck.addEventListener('pointercancel',()=>{dragging=false;puck.classList.remove('dragging');});
-    puck.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();shoot(laneRect().left+lane.clientWidth*.7);}});
-    reset.addEventListener('click',()=>{
-      shots=0;total=0;active=false;setPuck(28,false);scoreBox.innerHTML='🟠 <strong>Shuffleboard</strong> · 3 pucks';msg.textContent='Drag the puck along the table, then release to shoot!';
-    });
-    setPuck(28,false);
+    let shots=0,you=0,cpu=0,active=false,dragging=false;
+    o.innerHTML='<div class="lw-dart-score">🟠 <strong>SHUFFLEBOARD</strong> · YOU 0 — CPU 0 · Puck 0/3</div><div class="lw-dart-msg">Drag the puck, build momentum and release. Three pucks each — highest score wins!</div><div class="lw-shuffle-lane"><div class="lw-shuffle-zones"><div class="lw-shuffle-zone z10">10</div><div class="lw-shuffle-zone z20">20</div><div class="lw-shuffle-zone z30">30</div><div class="lw-shuffle-zone z50">50</div></div><div class="lw-shuffle-puck" role="button" tabindex="0">🟠</div><div class="lw-shuffle-end">🏁</div></div><button type="button" class="lw-shuffle-reset">↻ NEW MATCH</button>';
+    c.innerHTML='';const lane=o.querySelector('.lw-shuffle-lane'),puck=o.querySelector('.lw-shuffle-puck'),box=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),reset=o.querySelector('.lw-shuffle-reset');
+    const setPuck=(x,a)=>{puck.style.transition=a?'left .55s cubic-bezier(.2,.8,.2,1)':'none';puck.style.left=Math.max(12,Math.min(lane.clientWidth-12,x))+'px';};
+    const score=x=>{const p=x/Math.max(1,lane.clientWidth);return p>.88?50:p>.72?30:p>.55?20:p>.38?10:0;};
+    const finish=points=>{you+=points;const cpuPts=[10,20,30,50][Math.floor(Math.random()*4)];cpu+=cpuPts;shots++;box.innerHTML='🟠 <strong>SHUFFLEBOARD</strong> · YOU '+you+' — CPU '+cpu+' · Puck '+shots+'/3';msg.textContent='🔥 You scored '+points+'! CPU scored '+cpuPts+'.';if(shots>=3){msg.textContent=you>cpu?'🏆 YOU WIN THE SHUFFLEBOARD MATCH!':you<cpu?'😂 CPU WINS — REMATCH!':'🤝 DEAD HEAT!';}active=false;};
+    const shoot=x=>{if(active||shots>=3)return;active=true;const pts=score(x);setPuck(x,true);setTimeout(()=>finish(pts),580);};
+    const startDrag=e=>{if(active||shots>=3)return;dragging=true;puck.setPointerCapture?.(e.pointerId);puck.classList.add('dragging');};
+    puck.addEventListener('pointerdown',startDrag);puck.addEventListener('pointermove',e=>{if(dragging){const r=lane.getBoundingClientRect();setPuck(e.clientX-r.left,false);}});puck.addEventListener('pointerup',e=>{if(dragging){dragging=false;puck.classList.remove('dragging');const r=lane.getBoundingClientRect();shoot(e.clientX-r.left);}});
+    reset.addEventListener('click',()=>{shots=0;you=0;cpu=0;active=false;dragging=false;setPuck(28,false);box.innerHTML='🟠 <strong>SHUFFLEBOARD</strong> · YOU 0 — CPU 0 · Puck 0/3';msg.textContent='Drag the puck, build momentum and release.';});setPuck(28,false);
   }
   else if(type==='tablefootball'){
     let you=0,cpu=0,active=false;
