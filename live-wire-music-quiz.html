@@ -6,34 +6,140 @@
 <title>Live Wire Music Quiz | Live Wire Entertainment</title>
 <link rel="stylesheet" href="style.css">
 <style>
-.quiz-wrap{max-width:900px;margin:auto;padding:36px 20px 60px}.quiz-hero{text-align:center;padding:45px 20px 25px}.quiz-hero h1{font-size:clamp(36px,8vw,62px);text-shadow:0 0 10px #ff2bd6,0 0 24px #00eaff}.quiz-card{background:linear-gradient(145deg,rgba(12,14,27,.96),rgba(22,8,28,.94));border:1px solid rgba(0,234,255,.5);border-radius:20px;padding:26px;box-shadow:0 0 18px rgba(0,234,255,.16),0 0 30px rgba(255,43,214,.1)}.progress{color:#58eaff;font-weight:800;text-align:center}.question{font-size:25px;font-weight:900;margin:20px 0}.answers{display:grid;gap:12px}.answer{width:100%;text-align:left;padding:15px 18px;border:1px solid rgba(0,234,255,.45);border-radius:14px;background:#11152a;color:#fff;font-size:16px;cursor:pointer}.answer:hover{border-color:#ff2bd6;transform:translateY(-1px)}.answer:disabled{cursor:default;opacity:.85}.answer.correct{border-color:#58eaff;box-shadow:0 0 14px rgba(0,234,255,.35)}.answer.wrong{border-color:#ff2bd6;box-shadow:0 0 14px rgba(255,43,214,.3)}.feedback{margin-top:16px;padding:14px;border-radius:12px;background:rgba(255,255,255,.04);min-height:24px}.quiz-actions{text-align:center;margin-top:20px}.quiz-btn{border:1px solid #00eaff;border-radius:25px;background:#11152a;color:#fff;padding:12px 22px;font-size:16px;cursor:pointer;box-shadow:0 0 10px rgba(0,234,255,.35)}.result{text-align:center}.score{font-size:48px;font-weight:900;color:#ffd43b}.result h2{font-size:30px}.back{text-align:center;margin-top:25px}
+.quiz-wrap{max-width:900px;margin:auto;padding:36px 20px 60px}.quiz-hero{text-align:center;padding:45px 20px 25px}.quiz-hero h1{font-size:clamp(36px,8vw,62px);text-shadow:0 0 10px #ff2bd6,0 0 24px #00eaff}.quiz-card{background:linear-gradient(145deg,rgba(12,14,27,.96),rgba(22,8,28,.94));border:1px solid rgba(0,234,255,.5);border-radius:20px;padding:26px;box-shadow:0 0 18px rgba(0,234,255,.16),0 0 30px rgba(255,43,214,.1)}.progress{color:#58eaff;font-weight:800;text-align:center}.question{font-size:25px;font-weight:900;margin:20px 0}.answers{display:grid;gap:12px}.answer{width:100%;text-align:left;padding:15px 18px;border:1px solid rgba(0,234,255,.45);border-radius:14px;background:#11152a;color:#fff;font-size:16px;cursor:pointer}.answer:hover{border-color:#ff2bd6;transform:translateY(-1px)}.answer:disabled{cursor:default;opacity:.85}.answer.correct{border-color:#58eaff;box-shadow:0 0 14px rgba(0,234,255,.35)}.answer.wrong{border-color:#ff2bd6;box-shadow:0 0 14px rgba(255,43,214,.3)}.feedback{margin-top:16px;padding:14px;border-radius:12px;background:rgba(255,255,255,.04);min-height:24px}.quiz-actions{text-align:center;margin-top:20px}.quiz-btn{border:1px solid #00eaff;border-radius:25px;background:#11152a;color:#fff;padding:12px 22px;font-size:16px;cursor:pointer;box-shadow:0 0 10px rgba(0,234,255,.35)}.result{text-align:center}.score{font-size:48px;font-weight:900;color:#ffd43b}.result h2{font-size:30px}.back{text-align:center;margin-top:25px}.fresh-note{text-align:center;color:#aaa;max-width:720px;margin:12px auto}.quiz-streak{text-align:center;color:#ffd43b;font-weight:800;margin-top:8px}
 </style>
 </head>
 <body>
-<div class="quiz-hero"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🎵 Live Wire Music Quiz</h1><p>10 questions. Music across the decades. How well do you know your tunes?</p></div>
-<main class="quiz-wrap"><div class="quiz-card" id="quiz"><div class="progress" id="progress"></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="quiz-actions"><button class="quiz-btn" id="next" type="button" hidden>Next Question ⚡</button></div></div><div class="back"><a class="btn" href="live-wire-extras.html">🎉 Back To Fun & Extras</a></div></main>
+<div class="quiz-hero"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🎵 Live Wire Music Quiz</h1><p>10 questions from a much bigger music pool — fresh questions and shuffled answers each time.</p><p class="fresh-note">Questions are kept fresh so you don't keep getting the same set over and over. ⚡</p></div>
+<main class="quiz-wrap"><div class="quiz-card" id="quiz"><div class="progress" id="progress"></div><div class="quiz-streak" id="streak"></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="quiz-actions"><button class="quiz-btn" id="next" type="button" hidden>Next Question ⚡</button></div></div><div class="back"><a class="btn" href="live-wire-extras.html">🎉 Back To Fun & Extras</a></div></main>
 <footer><p>© 2026 Live Wire Entertainment</p><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></p></footer>
 <script>
 (function(){
+'use strict';
+const STORE='lwMusicQuizFreshV3:questions';
 const questions=[
-['Which band released the song “Dancing Queen” in 1976?',['ABBA','Queen','The Bee Gees','Blondie'],0],
-['Which group had the 1980s hit “Everybody Wants to Rule the World”?',['Tears for Fears','Duran Duran','a-ha','Wham!'],0],
-['Which artist released “Like a Prayer” in 1989?',['Madonna','Cher','Cyndi Lauper','Belinda Carlisle'],0],
-['Which Britpop band released “Don’t Look Back in Anger”?',['Oasis','Blur','Pulp','Suede'],0],
-['Which singer recorded “I Wanna Dance with Somebody” in 1987?',['Whitney Houston','Tina Turner','Diana Ross','Gloria Estefan'],0],
-['Which band released “Mr. Brightside” in 2003?',['The Killers','Keane','Snow Patrol','Franz Ferdinand'],0],
-['Which group recorded “Stayin’ Alive”?',['Bee Gees','ABBA','Earth, Wind & Fire','KC and the Sunshine Band'],0],
+['Which band released “Dancing Queen”?',['ABBA','Queen','Blondie','Boney M.'],0],
+['Which band released “Everybody Wants to Rule the World”?',['Tears for Fears','Duran Duran','Wham!','a-ha'],0],
+['Who recorded “Like a Prayer”?',['Madonna','Cher','Cyndi Lauper','Bonnie Tyler'],0],
+['Which band released “Don’t Look Back in Anger”?',['Oasis','Blur','Pulp','Suede'],0],
+['Who sang “I Wanna Dance with Somebody”?',['Whitney Houston','Tina Turner','Diana Ross','Gloria Estefan'],0],
+['Which band released “Mr. Brightside”?',['The Killers','Keane','Snow Patrol','Franz Ferdinand'],0],
+['Who recorded “Stayin’ Alive”?',['Bee Gees','ABBA','KC and the Sunshine Band','Earth, Wind & Fire'],0],
 ['Which band is associated with “Livin’ on a Prayer”?',['Bon Jovi','Europe','Def Leppard','Poison'],0],
-['Which artist released “Uptown Funk” with Mark Ronson?',['Bruno Mars','Justin Timberlake','Usher','Pharrell Williams'],0],
-['Which band had the 1965 hit “You Really Got Me”?',['The Kinks','The Who','The Animals','The Hollies'],0]
+['Who performed “Uptown Funk” with Mark Ronson?',['Bruno Mars','Justin Timberlake','Usher','Pharrell Williams'],0],
+['Which band had the 1965 hit “You Really Got Me”?',['The Kinks','The Who','The Animals','The Hollies'],0],
+['Which artist recorded “Faith”?',['George Michael','Prince','Elton John','Rick Astley'],0],
+['Which group released “Wannabe”?',['Spice Girls','All Saints','Sugababes','Atomic Kitten'],0],
+['Which band recorded “Song 2”?',['Blur','Oasis','Pulp','The Verve'],0],
+['Who released “Take on Me”?',['a-ha','Duran Duran','Tears for Fears','OMD'],0],
+['Which group recorded “Rhythm Is a Dancer”?',['Snap!','2 Unlimited','Corona','Cappella'],0],
+['Who released “Hips Don’t Lie”?',['Shakira','Rihanna','Jennifer Lopez','Beyoncé'],0],
+['Which band recorded “Sex on Fire”?',['Kings of Leon','The Killers','Snow Patrol','The Fratellis'],0],
+['Who released “Firestarter”?',['The Prodigy','The Chemical Brothers','Fatboy Slim','Underworld'],0],
+['Which band had the hit “Ruby”?',['Kaiser Chiefs','Kasabian','Franz Ferdinand','The Libertines'],0],
+['Who recorded “Walking on Sunshine”?',['Katrina and the Waves','Belinda Carlisle','The Bangles','Kim Wilde'],0],
+['Which artist released “Toxic”?',['Britney Spears','Christina Aguilera','Pink','Kylie Minogue'],0],
+['Which band recorded “Chelsea Dagger”?',['The Fratellis','The Libertines','The Hives','The Strokes'],0],
+['Who released “September”?',['Earth, Wind & Fire','Chic','Kool & The Gang','The Jacksons'],0],
+['Which band released “Go Your Own Way”?',['Fleetwood Mac','Eagles','The Doobie Brothers','Heart'],0],
+['Who recorded “My Girl”?',['The Temptations','The Four Tops','The Supremes','Marvin Gaye'],0],
+['Which artist released “Superstition”?',['Stevie Wonder','Marvin Gaye','James Brown','Curtis Mayfield'],0],
+['Which band recorded “Don’t Speak”?',['No Doubt','Garbage','The Cranberries','Sixpence None the Richer'],0],
+['Who released “Hey Ya!”?',['OutKast','Black Eyed Peas','N.E.R.D.','Gorillaz'],0],
+['Which artist recorded “Umbrella”?',['Rihanna','Beyoncé','Pink','Katy Perry'],0],
+['Who released “Wake Me Up”?',['Avicii','Calvin Harris','David Guetta','Swedish House Mafia'],0],
+['Which artist released “Shape of You”?',['Ed Sheeran','Sam Smith','Bruno Mars','Shawn Mendes'],0],
+['Who recorded “Get Lucky” with Pharrell Williams?',['Daft Punk','The Weeknd','Maroon 5','Calvin Harris'],0],
+['Which artist released “Flowers”?',['Miley Cyrus','Dua Lipa','Taylor Swift','Selena Gomez'],0],
+['Who released “Good Luck, Babe!”?',['Chappell Roan','Sabrina Carpenter','Olivia Rodrigo','Billie Eilish'],0],
+['Which artist recorded “Too Sweet”?',['Hozier','Benson Boone','Harry Styles','Lewis Capaldi'],0],
+['Who released “As It Was”?',['Harry Styles','The Weeknd','Ed Sheeran','Shawn Mendes'],0],
+['Which band recorded “Mr. Blue Sky”?',['Electric Light Orchestra','Supertramp','10cc','Roxy Music'],0],
+['Who sang “Total Eclipse of the Heart”?',['Bonnie Tyler','Belinda Carlisle','Pat Benatar','Kim Wilde'],0],
+['Which band released “The Boys Are Back in Town”?',['Thin Lizzy','Status Quo','Slade','T. Rex'],0],
+['Who recorded “Perfect”?',['Fairground Attraction','The Beautiful South','The Pretenders','The Corrs'],0],
+['Which group released “Mamma Mia”?',['ABBA','Boney M.','Blondie','The Carpenters'],0],
+['Who sang “Nothing’s Gonna Stop Us Now”?',['Starship','Heart','Roxette','Berlin'],0],
+['Which band recorded “There She Goes”?',['The La’s','The Stone Roses','The Charlatans','The Farm'],0],
+['Who released “Man! I Feel Like a Woman!”?',['Shania Twain','Faith Hill','Alanis Morissette','Dixie Chicks'],0],
+['Which band recorded “Tubthumping”?',['Chumbawamba','The Prodigy','Republica','Echobelly'],0],
+['Who sang “You Spin Me Round”?',['Dead or Alive','Soft Cell','Erasure','Bronski Beat'],0],
+['Which group released “Macarena”?',['Los del Río','Vengaboys','Las Ketchup','Lou Bega'],0],
+['Who recorded “Believe”?',['Cher','Madonna','Kylie Minogue','Annie Lennox'],0],
+['Which band released “The One and Only”?',['Chesney Hawkes','Wet Wet Wet','Simply Red','Deacon Blue'],0],
+['Who sang “Don’t You Want Me”?',['The Human League','Soft Cell','Heaven 17','OMD'],0],
+['Which group recorded “What Is Love”?',['Haddaway','Snap!','2 Unlimited','Culture Beat'],0],
+['Who released “Teenage Dirtbag”?',['Wheatus','Sum 41','Blink-182','The Offspring'],0],
+['Which artist recorded “Valerie” with Mark Ronson?',['Amy Winehouse','Duffy','Adele','Lily Allen'],0],
+['Which band released “Use Somebody”?',['Kings of Leon','The Killers','Coldplay','Snow Patrol'],0],
+['Who recorded “Chasing Cars”?',['Snow Patrol','Keane','Travis','Coldplay'],0],
+['Which artist released “Rehab”?',['Amy Winehouse','Adele','Duffy','Paloma Faith'],0],
+['Who recorded “Crazy”?',['Gnarls Barkley','OutKast','Gorillaz','Scissor Sisters'],0],
+['Which band released “Naive”?',['The Kooks','The Fratellis','Kaiser Chiefs','Arctic Monkeys'],0],
+['Who released “Rather Be”?',['Clean Bandit','Rudimental','Disclosure','Years & Years'],0],
+['Which artist recorded “Happy”?',['Pharrell Williams','Bruno Mars','Justin Timberlake','Jason Mraz'],0],
+['Who released “Shut Up and Dance”?',['Walk the Moon','Imagine Dragons','The 1975','OneRepublic'],0],
+['Which artist released “Don’t Start Now”?',['Dua Lipa','Ariana Grande','Lady Gaga','Katy Perry'],0],
+['Who recorded “Blinding Lights”?',['The Weeknd','Post Malone','Bruno Mars','Harry Styles'],0]
 ];
+
+function shuffle(a){
+  const x=a.slice();
+  for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}
+  return x;
+}
+function loadUsed(){
+  try{const v=JSON.parse(localStorage.getItem(STORE)||'[]');return Array.isArray(v)?v.filter(i=>Number.isInteger(i)&&i>=0&&i<questions.length):[];}catch(_){return []}
+}
+function saveUsed(v){try{localStorage.setItem(STORE,JSON.stringify(v));}catch(_){}}
+function nextQuestionSet(){
+  let used=loadUsed();
+  let available=questions.map((_,i)=>i).filter(i=>!used.includes(i));
+  if(available.length<10){used=[];available=questions.map((_,i)=>i);}
+  const chosen=shuffle(available).slice(0,10);
+  saveUsed(used.concat(chosen));
+  return chosen.map(i=>questions[i]);
+}
+
+let round=nextQuestionSet();
 let index=0,score=0,answered=false;
-const q=document.getElementById('question'),a=document.getElementById('answers'),f=document.getElementById('feedback'),p=document.getElementById('progress'),n=document.getElementById('next'),box=document.getElementById('quiz');
-function render(){answered=false;n.hidden=true;f.textContent='';const item=questions[index];p.textContent='Question '+(index+1)+' of '+questions.length;q.textContent=item[0];a.innerHTML='';item[1].forEach((label,i)=>{const b=document.createElement('button');b.type='button';b.className='answer';b.textContent=label;b.addEventListener('click',()=>choose(i,b));a.appendChild(b);});}
-function choose(i,b){if(answered)return;answered=true;const correct=questions[index][2];document.querySelectorAll('.answer').forEach(x=>x.disabled=true);if(i===correct){score++;b.classList.add('correct');f.textContent='⚡ Correct! That one belongs in the Live Wire memory bank.';}else{b.classList.add('wrong');document.querySelectorAll('.answer')[correct].classList.add('correct');f.textContent='Not quite! The correct answer is '+questions[index][1][correct]+'. Keep the tunes coming!';}n.hidden=false;n.textContent=index===questions.length-1?'See My Score 🏆':'Next Question ⚡';}
-n.addEventListener('click',()=>{if(index<questions.length-1){index++;render();}else{showResult();}});
-function showResult(){box.innerHTML='<div class="result"><div class="progress">QUIZ COMPLETE ⚡</div><div class="score">'+score+'/10</div><h2>'+resultText()+'</h2><p>You’ve just taken the Live Wire Music Quiz. Fancy another go?</p><button class="quiz-btn" type="button" id="again">🔄 Play Again</button></div>';document.getElementById('again').addEventListener('click',()=>location.reload());}
-function resultText(){if(score===10)return'ABSOLUTE LIVE WIRE LEGEND! 🎵';if(score>=8)return'LIVE WIRE QUIZ MASTER! 🔥';if(score>=6)return'PROPER TUNE SPOTTER! ⚡';if(score>=4)return'NOT BAD, BUT THE JUKEBOX WANTS MORE! 😂';return'BACK TO THE LIVE WIRE BAR FOR SOME REVISION! 🍹😂';}
+const q=document.getElementById('question'),a=document.getElementById('answers'),f=document.getElementById('feedback');
+const p=document.getElementById('progress'),n=document.getElementById('next'),box=document.getElementById('quiz'),streak=document.getElementById('streak');
+
+function render(){
+  answered=false;n.hidden=true;f.textContent='';
+  const item=round[index];
+  p.textContent='Question '+(index+1)+' of '+round.length;
+  streak.textContent='Fresh round • '+(questions.length)+' questions in the master pool';
+  q.textContent=item[0];a.innerHTML='';
+  const correctText=item[1][item[2]];
+  const options=shuffle(item[1]);
+  options.forEach(label=>{
+    const b=document.createElement('button');b.type='button';b.className='answer';b.textContent=label;
+    b.addEventListener('click',()=>choose(label,b,correctText));a.appendChild(b);
+  });
+}
+function choose(label,b,correctText){
+  if(answered)return;answered=true;
+  document.querySelectorAll('.answer').forEach(x=>x.disabled=true);
+  if(label===correctText){score++;b.classList.add('correct');f.textContent='⚡ Correct! That one belongs in the Live Wire memory bank.';}
+  else{b.classList.add('wrong');document.querySelectorAll('.answer').forEach(x=>{if(x.textContent===correctText)x.classList.add('correct');});f.textContent='Not quite! The correct answer is '+correctText+'. Keep the tunes coming!';}
+  n.hidden=false;n.textContent=index===round.length-1?'See My Score 🏆':'Next Question ⚡';
+}
+n.addEventListener('click',()=>{
+  if(index<round.length-1){index++;render();}else{showResult();}
+});
+function showResult(){
+  box.innerHTML='<div class="result"><div class="progress">QUIZ COMPLETE ⚡</div><div class="score">'+score+'/10</div><h2>'+resultText()+'</h2><p>Fancy another go? The next round is pulled from the wider question pool, so it will not simply repeat this set.</p><button class="quiz-btn" type="button" id="again">🔄 Fresh Quiz</button></div>';
+  document.getElementById('again').addEventListener('click',()=>location.reload());
+}
+function resultText(){
+  if(score===10)return'ABSOLUTE LIVE WIRE LEGEND! 🎵';
+  if(score>=8)return'LIVE WIRE QUIZ MASTER! 🔥';
+  if(score>=6)return'PROPER TUNE SPOTTER! ⚡';
+  if(score>=4)return'NOT BAD, BUT THE JUKEBOX WANTS MORE! 😂';
+  return'BACK TO THE LIVE WIRE BAR FOR SOME REVISION! 🍹😂';
+}
 render();
 })();
 </script>
