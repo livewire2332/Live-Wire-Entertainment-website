@@ -270,7 +270,8 @@ style.textContent=`
 @media(max-width:600px){.lw-arcade-panel{padding:0}.lw-arcade-panel .lwmore{grid-template-columns:minmax(0,1fr);gap:16px}.lw-arcade-panel .lwgame{padding:16px}.lw-arcade-panel .lwgame h2{font-size:23px}.lw-arcade-panel .lwgame p{font-size:15px;line-height:1.45}.lw-arcade-panel .lwb{gap:4px}.lw-arcade-panel .lwb button{font-size:clamp(7px,2.4vw,9px);padding:3px 1px}.lw-arcade-panel .lwc button,.lw-arcade-panel .lwgo{font-size:15px;padding:11px 12px}}
 `;
 style.textContent+=`
-.lw-arcade-panel .lw-visual-stage,.lw-arcade-panel .lw-quiz-machine,.lw-arcade-panel .lw-card-game,.lw-arcade-panel .lw-dice-game,.lw-arcade-panel .lw-lucky-game,.lw-arcade-panel .lw-jackpot-game,.lw-arcade-panel .lw-bull-game{max-width:390px;margin:12px auto;padding:16px;border:3px solid #00eaff;border-radius:20px;background:radial-gradient(circle at 50% 35%,#202a50,#080b18 72%);box-shadow:inset 0 0 28px rgba(0,234,255,.12),0 0 16px rgba(0,234,255,.1);box-sizing:border-box;overflow:hidden}
+.lw-arcade-panel .lw-visual-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.lw-visual-controls button{min-height:44px}.lw-visual-meter{height:12px;border-radius:999px;background:#151a2d;overflow:hidden;margin:10px 0;border:1px solid rgba(0,234,255,.35)}.lw-visual-meter span{display:block;height:100%;width:50%;background:linear-gradient(90deg,#ff2bd6,#ffd21f,#00eaff);transition:width .08s linear}.lw-visual-suspects{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.lw-visual-suspects button{font-size:28px;padding:10px 4px}.lw-visual-stage.lw-result-win{border-color:#ffd21f;box-shadow:0 0 25px rgba(255,212,59,.45),inset 0 0 28px rgba(0,234,255,.12)}.lw-visual-stage.lw-result-lose{border-color:#ff2bd6;box-shadow:0 0 22px rgba(255,43,214,.35),inset 0 0 28px rgba(0,234,255,.12)}@media(max-width:600px){.lw-visual-controls{grid-template-columns:1fr}.lw-visual-suspects button{min-height:52px}}
+.lw-visual-stage,.lw-arcade-panel .lw-quiz-machine,.lw-arcade-panel .lw-card-game,.lw-arcade-panel .lw-dice-game,.lw-arcade-panel .lw-lucky-game,.lw-arcade-panel .lw-jackpot-game,.lw-arcade-panel .lw-bull-game{max-width:390px;margin:12px auto;padding:16px;border:3px solid #00eaff;border-radius:20px;background:radial-gradient(circle at 50% 35%,#202a50,#080b18 72%);box-shadow:inset 0 0 28px rgba(0,234,255,.12),0 0 16px rgba(0,234,255,.1);box-sizing:border-box;overflow:hidden}
 .lw-visual-neon,.lw-quiz-lights,.lw-card-neon,.lw-dice-neon,.lw-jackpot-neon,.lw-bull-neon{text-align:center;font-weight:1000;letter-spacing:2px;color:#ffd21f;text-shadow:0 0 10px rgba(255,210,31,.7)}
 .lw-visual-screen,.lw-quiz-screen,.lw-dice-screen,.lw-lucky-screen,.lw-jackpot-screen,.lw-bull-screen{margin:12px auto;padding:14px;border:2px solid #00eaff;border-radius:12px;background:#050914;color:#fff;text-align:center;box-shadow:inset 0 0 18px rgba(0,234,255,.08)}
 .lw-visual-icon,.lw-lucky-wheel{font-size:58px;text-align:center;margin:8px}.lw-visual-label{font-weight:900;color:#58eaff;text-align:center}.lw-visual-output{margin-top:10px;min-height:42px;font-weight:900}.lw-visual-lights{display:flex;justify-content:center;gap:9px}.lw-visual-lights i{width:8px;height:8px;border-radius:50%;background:#ffd21f;box-shadow:0 0 9px #ffd21f;animation:lwArcadeBlink .7s infinite alternate}
@@ -312,9 +313,59 @@ function card(i,title,desc){
 function showSimple(i,text){
   const o=qs('lo'+i),c=qs('lc'+i);if(!o||!c)return;
   clear(c);
-  const visuals=[['🔀','DECADE SHUFFLE','Pick the next musical era.'],['🥁','DRUMROLL REVEAL','The drumroll is building...'],['🎸','ROCK OR POP?','The genre scanner is ready.'],['🚨','WHO WOULD DO IT?','The Live Wire suspects are on screen.'],['📢','DJ ANNOUNCEMENT','Broadcast console online.'],['🕺','DANCEFLOOR DECISION','Floor status awaiting your call.'],['🎫','TICKET CHECKER','Scan your virtual Live Wire ticket.'],['🚉','STATION MASTER','Platform board is live.'],['🎵','TRAIN PLAYLIST BUILDER','Three carriage slots are waiting.'],['🚦','SIGNAL BOX CHALLENGE','Rail signal is waiting for a decision.'],['🍹','LIVE WIRE COCKTAIL','The bar counter is open.'],['🪩','BAR JUKEBOX','Jukebox screen ready.'],['🎵','PLAY NEXT','The jukebox selector is spinning.'],['🪑','VIP TABLE','Your table is waiting.']];
-  const v=visuals[i-2]||['⚡','LIVE WIRE ARCADE','Interactive game ready.'];
-  o.innerHTML='<div class="lw-visual-stage"><div class="lw-visual-neon">'+v[0]+' '+v[1]+'</div><div class="lw-visual-screen"><div class="lw-visual-icon">'+v[0]+'</div><div class="lw-visual-label">'+v[2]+'</div><div class="lw-visual-output">'+text+'</div></div><div class="lw-visual-lights"><i></i><i></i><i></i><i></i><i></i></div></div>';
+  const data={
+    2:['🔀','DECADE SHUFFLE','Choose the decade the machine is hiding.'],
+    4:['🥁','DRUMROLL REVEAL','Stop the moving meter as close to the centre as you can.'],
+    5:['🎸','ROCK OR POP?','Pick a side before the genre scanner reveals the answer.'],
+    8:['🚨','WHO WOULD DO IT?','Pick the Live Wire suspect you think did it.'],
+    12:['📢','DJ ANNOUNCEMENT','Choose the mood and fire the studio mic.'],
+    13:['🕺','DANCEFLOOR DECISION','Choose the move that should fill the floor.'],
+    14:['🎫','TICKET CHECKER','Pick the gate and see if your ticket gets through.'],
+    15:['🚉','STATION MASTER','Choose the platform before the train arrives.'],
+    16:['🎵','TRAIN PLAYLIST BUILDER','Build a three-stop playlist for the Music Train.'],
+    17:['🚦','SIGNAL BOX CHALLENGE','Set the signal before the train reaches the junction.'],
+    18:['🍹','LIVE WIRE COCKTAIL','Build your cocktail from three bar ingredients.'],
+    19:['🪩','BAR JUKEBOX','Pick the tune the Live Wire crowd wants next.'],
+    20:['🎵','PLAY NEXT','Vote for the next track and reveal the crowd choice.'],
+    21:['🪑','VIP TABLE','Choose your table and see what VIP bonus is waiting.']
+  }[i]||['⚡','LIVE WIRE ARCADE','Interactive game ready.'];
+  o.innerHTML='<div class="lw-visual-stage"><div class="lw-visual-neon">'+data[0]+' '+data[1]+'</div><div class="lw-visual-screen"><div class="lw-visual-icon">'+data[0]+'</div><div class="lw-visual-label">'+data[2]+'</div><div class="lw-visual-output">READY?</div><div class="lw-visual-meter" style="display:none"><span></span></div></div><div class="lw-visual-controls"></div><div class="lw-visual-lights"><i></i><i></i><i></i><i></i><i></i></div></div>';
+  const stage=o.querySelector('.lw-visual-stage'),screen=o.querySelector('.lw-visual-screen'),out=o.querySelector('.lw-visual-output'),controls=o.querySelector('.lw-visual-controls'),meter=o.querySelector('.lw-visual-meter'),bar=meter.querySelector('span');
+  const add=(label,fn)=>{const b=document.createElement('button');b.type='button';b.className='lwgo';b.textContent=label;b.addEventListener('click',fn);controls.appendChild(b);return b};
+  const finish=(win,msg)=>{out.textContent=msg;stage.classList.remove('lw-result-win','lw-result-lose');stage.classList.add(win?'lw-result-win':'lw-result-lose');controls.querySelectorAll('button').forEach(b=>b.disabled=true);};
+  const rnd=n=>Math.floor(Math.random()*n);
+
+  if(i===2){
+    const choices=['70s','80s','90s','00s','10s'];const target=choices[rnd(choices.length)];
+    choices.forEach(x=>add('🎵 '+x,()=>finish(x===target,x===target?'🔥 BULLSEYE! '+target+' was hiding in the machine.':'😂 WRONG DECADE — it was '+target+'.')));
+  }else if(i===4){
+    meter.style.display='block';let pos=0,dir=1;const timer=setInterval(()=>{pos+=dir*3;if(pos>=100){pos=100;dir=-1}if(pos<=0){pos=0;dir=1}bar.style.width=pos+'%'},35);
+    add('🥁 STOP THE DRUMROLL',()=>{clearInterval(timer);const distance=Math.abs(pos-50);finish(distance<=10,'🏆 PERFECT DRUMROLL! '+Math.round(100-distance*2)+'/100');if(distance>10)out.textContent='😂 '+Math.round(100-distance*2)+'/100 — '+(distance<25?'SO CLOSE!':'THE DRUMMER PANICKED!');});
+  }else if(i===5){
+    const target=Math.random()<.5?'ROCK':'POP';['🎸 ROCK','🎤 POP'].forEach(x=>add(x,()=>finish(x.includes(target),'🎶 THE SCANNER SAYS '+target+'! '+(x.includes(target)?'You nailed it!':'Wrong side of the stage!'))));
+  }else if(i===8){
+    const suspects=[['😎','Dan'],['🚂','Phoenix'],['🍺','The Bar Stool']];const target=rnd(3);
+    const wrap=document.createElement('div');wrap.className='lw-visual-suspects';controls.appendChild(wrap);suspects.forEach((x,n)=>{const b=document.createElement('button');b.type='button';b.textContent=x[0]+' '+x[1];b.addEventListener('click',()=>finish(n===target,n===target?'🚨 CASE SOLVED! '+x[1]+' did it!':'😂 WRONG SUSPECT! It was '+suspects[target][1]+'.'));wrap.appendChild(b)});
+  }else if(i===12){
+    ['🔥 HYPE','😂 CHEEKY','🎉 PARTY'].forEach(x=>add(x,()=>{const lines={ '🔥 HYPE':'LIVE WIRE FAMILY, MAKE SOME NOISE!','😂 CHEEKY':'Right then, behave yourselves... or absolutely don’t.','🎉 PARTY':'THE LIVE WIRE PARTY HAS OFFICIALLY STARTED!' };finish(true,'🎙️ '+lines[x])}));
+  }else if(i===13){
+    ['🕺 MOONWALK','💃 DISCO','🪩 CHAOS','🕴️ DAD DANCE'].forEach(x=>add(x,()=>finish(true,x+' selected — '+['🔥 FLOOR PACKED!','😂 Someone has lost a shoe!','⚡ DJ TURN IT UP!'][rnd(3)])));
+  }else if(i===14){
+    const gate=rnd(3)+1;['🚪 GATE 1','🚪 GATE 2','🚪 GATE 3'].forEach((x,n)=>add(x,()=>finish(n+1===gate,n+1===gate?'🎟️ TICKET ACCEPTED — COME ON IN!':'🚫 DENIED — Try another gate!')));
+  }else if(i===15){
+    const platform=rnd(3)+1;['🚉 PLATFORM 1','🚉 PLATFORM 2','🚉 PLATFORM 3'].forEach((x,n)=>add(x,()=>finish(n+1===platform,n+1===platform?'🚂 TRAIN ARRIVING! ALL ABOARD!':'😂 WRONG PLATFORM — THE TRAIN LEFT WITHOUT YOU!')));
+  }else if(i===16){
+    const stops=[];['🎸 ROCK','🪩 DISCO','🎤 POP','🎧 90s','⚡ BANGERS'].forEach(x=>add(x,()=>{if(stops.length>=3)return;stops.push(x);out.textContent='🚂 '+stops.join(' → ');if(stops.length===3){finish(true,'🚂 PLAYLIST BUILT! '+stops.join(' → '));}}));
+  }else if(i===17){
+    const safe=Math.random()<.5?'GREEN':'RED';['🟢 GREEN','🔴 RED'].forEach(x=>add(x,()=>finish(x.includes(safe),x.includes(safe)?'🚂 SAFE SIGNAL! Train through.':'💥 WRONG SIGNAL! Emergency stop!')));
+  }else if(i===18){
+    const ingredients=[];['🍓 STRAWBERRY','🍋 LEMON','🍍 PINEAPPLE','🍊 ORANGE','🧊 ICE'].forEach(x=>add(x,()=>{if(ingredients.length>=3)return;ingredients.push(x);out.textContent=ingredients.join(' + ');if(ingredients.length===3)finish(true,'🍹 COCKTAIL SERVED! '+ingredients.join(' + '));}));
+  }else if(i===19||i===20){
+    const tracks=['🎵 80s BANGER','🎵 90s FLOOR FILLER','🎵 00s THROWBACK','🎵 FORGOTTEN GEM'];const target=tracks[rnd(tracks.length)];
+    tracks.forEach(x=>add(x,()=>finish(x===target,x===target?'🔥 CROWD CHOICE! '+x+' wins!':'😂 Not this one — the crowd picked '+target+'.')));
+  }else if(i===21){
+    const perks=['🍹 Free cocktail','🎧 DJ dedication','🍿 Snack mountain','⚡ VIP neon table'];['🪑 TABLE 1','🪑 TABLE 2','🪑 TABLE 3'].forEach((x,n)=>add(x,()=>finish(true,x+' booked — '+perks[rnd(perks.length)]+' unlocked!')));
+  }
 }
 function mc(i,data){
   const o=qs('lo'+i),c=qs('lc'+i);if(!o||!c)return;
