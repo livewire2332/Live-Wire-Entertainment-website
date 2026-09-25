@@ -60,17 +60,18 @@ section h1{text-shadow:0 0 8px rgba(0,234,255,.65),0 0 18px rgba(255,43,214,.3)}
 .jukebox-window h2{margin:3px 0 5px;font-size:clamp(23px,4vw,34px);text-shadow:0 0 9px #00eaff}
 .jukebox-window>p{max-width:650px;margin:0 auto 11px}
 .jukebox-window .cstrEmbed{width:100%;max-width:100%;overflow:hidden}
-.jukebox-speakers{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:11px auto 0;max-width:600px}
-.juke-speaker{height:43px;border-radius:13px;border:3px solid #00eaff;background:radial-gradient(circle,rgba(0,234,255,.3) 0 2px,transparent 3px) 0 0/9px 9px,linear-gradient(180deg,#05070c,#171022);box-shadow:0 0 10px rgba(0,234,255,.55),inset 0 0 18px rgba(255,43,214,.12)}
+.jukebox-eq{height:24px;display:flex;align-items:flex-end;justify-content:center;gap:4px;margin:7px auto 2px;max-width:230px;opacity:.78}.jukebox-eq span{width:6px;height:8px;border-radius:4px;background:#00eaff;box-shadow:0 0 7px #00eaff;animation:jukeEq .75s ease-in-out infinite alternate}.jukebox-eq span:nth-child(2){animation-delay:.12s;background:#ff2bd6;box-shadow:0 0 7px #ff2bd6}.jukebox-eq span:nth-child(3){animation-delay:.24s}.jukebox-eq span:nth-child(4){animation-delay:.08s;background:#ffd43b;box-shadow:0 0 7px #ffd43b}.jukebox-eq span:nth-child(5){animation-delay:.2s}.jukebox-eq span:nth-child(6){animation-delay:.34s;background:#ff2bd6;box-shadow:0 0 7px #ff2bd6}.jukebox-eq span:nth-child(7){animation-delay:.16s}.jukebox-speakers{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:8px auto 0;max-width:600px}
+.juke-speaker{height:43px;position:relative;overflow:hidden;border-radius:13px;border:3px solid #00eaff;background:radial-gradient(circle,rgba(0,234,255,.3) 0 2px,transparent 3px) 0 0/9px 9px,linear-gradient(180deg,#05070c,#171022);box-shadow:0 0 10px rgba(0,234,255,.55),inset 0 0 18px rgba(255,43,214,.12);animation:jukeSpeaker 1.15s ease-in-out infinite alternate}
 .jukebox-controls{display:flex;justify-content:center;gap:10px;margin-top:9px}
 .juke-light{width:14px;height:14px;border-radius:50%;background:#ffd43b;box-shadow:0 0 8px #ffd43b,0 0 20px #ffd43b;animation:jukeBlink 1.2s ease-in-out infinite}
 .juke-light:nth-child(2){background:#00eaff;box-shadow:0 0 8px #00eaff,0 0 20px #00eaff;animation-delay:.3s}
 .juke-light:nth-child(3){background:#ff2bd6;box-shadow:0 0 8px #ff2bd6,0 0 20px #ff2bd6;animation-delay:.6s}
-.jukebox-note{margin:6px 0 0;color:#aaa;font-size:12px;letter-spacing:.4px}
+.jukebox-note{margin:5px 0 0;color:#aaa;font-size:12px;letter-spacing:.4px}
+@keyframes jukeEq{0%{height:5px;opacity:.45}50%{height:19px;opacity:1}100%{height:11px;opacity:.7}}@keyframes jukeSpeaker{0%{transform:scale(.985);filter:brightness(.85)}100%{transform:scale(1.015);filter:brightness(1.2)}}
 @keyframes jukeNeon{0%,100%{filter:brightness(.9);opacity:.75}50%{filter:brightness(1.45);opacity:1}}
 @keyframes jukeBlink{0%,100%{opacity:.45;transform:scale(.82)}50%{opacity:1;transform:scale(1.12)}}
-@media(max-width:600px){.jukebox-wrap{width:calc(100% - 4px);padding:11px 8px 18px;border-width:6px;border-radius:35% 35% 20px 20px/9% 9% 20px 20px;box-shadow:0 0 0 2px #ff2bd6,0 0 0 5px #00eaff,0 0 0 8px #ffd43b,0 0 22px #ff2bd6,0 0 34px rgba(0,234,255,.45),inset 0 0 25px #000}.jukebox-wrap::before{inset:7px;border-width:3px}.jukebox-header{padding:9px 6px 12px}.jukebox-kicker{font-size:10px;letter-spacing:2px}.jukebox-title{font-size:clamp(24px,8vw,32px);line-height:1.02}.jukebox-arch{padding:8px 7px 11px;border-width:4px}.jukebox-window{padding:15px 8px 14px;border-width:3px}.jukebox-window h2{font-size:27px}.jukebox-window>p{font-size:16px;line-height:1.45}.jukebox-speakers{gap:7px;margin-top:13px}.juke-speaker{height:42px;border-width:2px}.juke-light{width:12px;height:12px}}
-@media(prefers-reduced-motion:reduce){.jukebox-wrap::after,.juke-light{animation:none}}
+@media(max-width:600px){.jukebox-wrap{width:calc(100% - 4px);padding:11px 8px 18px;border-width:6px;border-radius:35% 35% 20px 20px/9% 9% 20px 20px;box-shadow:0 0 0 2px #ff2bd6,0 0 0 5px #00eaff,0 0 0 8px #ffd43b,0 0 22px #ff2bd6,0 0 34px rgba(0,234,255,.45),inset 0 0 25px #000}.jukebox-wrap::before{inset:7px;border-width:3px}.jukebox-header{padding:9px 6px 12px}.jukebox-kicker{font-size:10px;letter-spacing:2px}.jukebox-title{font-size:clamp(24px,8vw,32px);line-height:1.02}.jukebox-arch{padding:8px 7px 11px;border-width:4px}.jukebox-window{padding:15px 8px 14px;border-width:3px}.jukebox-window h2{font-size:27px}.jukebox-window>p{font-size:16px;line-height:1.45}.jukebox-eq{height:20px;margin:5px auto 1px}.jukebox-eq span{width:5px}.jukebox-speakers{gap:7px;margin-top:13px}.juke-speaker{height:42px;border-width:2px}.juke-light{width:12px;height:12px}}
+@media(prefers-reduced-motion:reduce){.jukebox-wrap::after,.juke-light,.jukebox-eq span,.juke-speaker{animation:none}}
 
 @media(max-width:600px){.bar-hero{padding-top:45px}.player{padding:27px 18px}section{padding:32px 0}.grid{gap:17px}.request-zone{padding:25px 16px}.request-zone h2{font-size:26px}}
 @media(prefers-reduced-motion:reduce){.bar-hero::before,.bar-hero::after,.player::before,.live-status,.grid .card::before{animation:none}}
@@ -322,7 +323,7 @@ box-shadow:0 9px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,210,150,.08),0 0 14
 <div class="jukebox-arch"><div class="jukebox-window">
 <div id="barLiveStatus" class="live-status">⚪ CHECKING LIVE STATUS…</div>
 <div id="barLiveShow" class="bar-live-show">Checking Live Wire schedule…</div>
-<h2>📻 Listen Live</h2><p>When the Live Wire show is live, drop the needle and listen along directly from the website.</p>
+<div class="jukebox-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><h2>📻 Listen Live</h2><p>When the Live Wire show is live, drop the needle and listen along directly from the website.</p>
 <div data-type="newStreamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="light" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
 <div class="jukebox-speakers" aria-hidden="true"><div class="juke-speaker"></div><div class="juke-speaker"></div></div>
 <div class="jukebox-controls" aria-hidden="true"><span class="juke-light"></span><span class="juke-light"></span><span class="juke-light"></span></div>
