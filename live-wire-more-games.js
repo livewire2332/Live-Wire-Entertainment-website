@@ -550,41 +550,22 @@ function playNew(i,type){
     update();
   }
   else if(type==='bowling'){
-    let frame=1,roll=1,total=0,active=false,standing=new Set([...Array(10).keys()]);
-    o.innerHTML='<div class="lw-dart-score">🎳 <strong>Frame 1</strong> · Roll 1 · Score 0</div><div class="lw-dart-msg">Drag the ball sideways to aim, then roll!</div><div class="lw-bowling-lane"><div class="lw-bowling-arrow">⬆️</div><div class="lw-bowling-pins"></div><div class="lw-bowling-ball">🎳</div></div><div class="lw-bowling-controls"><button type="button" class="lw-bowling-roll">🎳 ROLL</button><button type="button" class="lw-bowling-reset">↻ NEW GAME</button></div>';
+    let frame=1,roll=1,you=0,cpu=0,active=false,pins=new Set([...Array(10).keys()]);
+    o.innerHTML='<div class="lw-dart-score">🎳 <strong>YOU 0 — CPU 0</strong> · Frame 1</div><div class="lw-dart-msg">Drag the ball sideways to aim. Beat the computer over 10 frames!</div><div class="lw-bowling-match"><div>⚡ YOU <b class="lw-bowl-you">0</b></div><div>VS</div><div>🤖 CPU <b class="lw-bowl-cpu">0</b></div></div><div class="lw-bowling-lane"><div class="lw-bowling-arrow">⬆️</div><div class="lw-bowling-pins"></div><div class="lw-bowling-ball">🎳</div></div><div class="lw-bowling-controls"><button type="button" class="lw-bowling-roll">🎳 ROLL</button><button type="button" class="lw-bowling-reset">↻ NEW MATCH</button></div>';
     c.innerHTML='';
-    const scoreBox=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),lane=o.querySelector('.lw-bowling-lane'),ball=o.querySelector('.lw-bowling-ball'),pins=o.querySelector('.lw-bowling-pins'),rollBtn=o.querySelector('.lw-bowling-roll'),reset=o.querySelector('.lw-bowling-reset');
+    const scoreBox=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),lane=o.querySelector('.lw-bowling-lane'),ball=o.querySelector('.lw-bowling-ball'),pinsEl=o.querySelector('.lw-bowling-pins'),rollBtn=o.querySelector('.lw-bowling-roll'),reset=o.querySelector('.lw-bowling-reset'),youEl=o.querySelector('.lw-bowl-you'),cpuEl=o.querySelector('.lw-bowl-cpu');
     const spots=[[50,12],[42,25],[58,25],[34,39],[50,39],[66,39],[26,55],[42,55],[58,55],[74,55]];
-    const drawPins=()=>{pins.innerHTML='';spots.forEach((p,i)=>{const b=document.createElement('span');b.className='lw-bowl-pin'+(standing.has(i)?'':' down');b.style.left=p[0]+'%';b.style.top=p[1]+'%';b.textContent='🎳';pins.appendChild(b);});};
-    const update=()=>{scoreBox.innerHTML='🎳 <strong>Frame '+frame+'</strong> · Roll '+roll+' · Score '+total;};
-    const finishGame=()=>{rollBtn.disabled=true;msg.textContent='🏆 GAME OVER! Final score: '+total+' — Live Wire bowling champion!';};
-    const nextFrame=()=>{
-      if(frame>=10){finishGame();return;}
-      frame++;roll=1;standing=new Set([...Array(10).keys()]);drawPins();update();msg.textContent='🎳 Frame '+frame+' — line up your next roll!';
-    };
-    let aim=50;
-    const setAim=x=>{aim=Math.max(18,Math.min(82,x));ball.style.left=aim+'%';};
-    ball.addEventListener('pointerdown',e=>{if(active||rollBtn.disabled)return;ball.setPointerCapture?.(e.pointerId);ball.classList.add('aiming');});
-    ball.addEventListener('pointermove',e=>{if(!ball.hasPointerCapture?.(e.pointerId))return;const r=lane.getBoundingClientRect();setAim((e.clientX-r.left)/r.width*100);});
-    ball.addEventListener('pointerup',()=>ball.classList.remove('aiming'));
-    ball.addEventListener('pointercancel',()=>ball.classList.remove('aiming'));
-    rollBtn.addEventListener('click',()=>{
-      if(active||rollBtn.disabled)return;
-      active=true;ball.classList.remove('rolling');void ball.offsetWidth;ball.classList.add('rolling');
-      setTimeout(()=>{
-        const remaining=[...standing],aimBonus=Math.abs(aim-50)<10?2:Math.abs(aim-50)<22?1:0;
-        const hitCount=Math.min(remaining.length,Math.max(0,Math.floor(Math.random()*5)+1+aimBonus));
-        shuffle(remaining).slice(0,hitCount).forEach(i=>standing.delete(i));
-        const knocked=hitCount;total+=knocked;drawPins();update();
-        if(knocked===10&&roll===1){msg.textContent='🔥 STRIKE! All 10 pins down!';nextFrame();}
-        else if(standing.size===0){msg.textContent='🔥 SPARE! All pins down!';if(frame<10){setTimeout(nextFrame,650);}else finishGame();}
-        else if(roll===2){msg.textContent='🎳 '+knocked+' pins down this frame — next frame!';setTimeout(nextFrame,650);}
-        else{roll=2;active=false;update();msg.textContent='🎳 '+knocked+' down! '+standing.size+' pins left — roll again!';return;}
-        active=false;
-      },650);
-    });
-    reset.addEventListener('click',()=>{frame=1;roll=1;total=0;active=false;standing=new Set([...Array(10).keys()]);rollBtn.disabled=false;setAim(50);ball.classList.remove('rolling');drawPins();update();msg.textContent='Drag the ball sideways to aim, then roll!';});
-    drawPins();setAim(50);update();
+    const draw=()=>{pinsEl.innerHTML='';spots.forEach((p,i)=>{const e=document.createElement('span');e.className='lw-bowl-pin'+(pins.has(i)?'':' down');e.style.left=p[0]+'%';e.style.top=p[1]+'%';e.textContent='🎳';pinsEl.appendChild(e)})};
+    let aim=50;const setAim=x=>{aim=Math.max(18,Math.min(82,x));ball.style.left=aim+'%'};
+    const update=()=>{scoreBox.innerHTML='🎳 <strong>YOU '+you+' — CPU '+cpu+'</strong> · Frame '+frame;youEl.textContent=you;cpuEl.textContent=cpu};
+    const cpuTurn=()=>{const hit=Math.max(1,Math.min(10,Math.floor(Math.random()*8)+2));cpu+=hit;update();msg.textContent='🤖 CPU knocked '+hit+' pins!';};
+    const endFrame=()=>{setTimeout(()=>{cpuTurn();if(frame>=10){rollBtn.disabled=true;msg.textContent='🏆 MATCH COMPLETE! YOU '+you+' — CPU '+cpu+(you>cpu?' — YOU WIN!':' — CPU TAKES IT!');return}frame++;roll=1;pins=new Set([...Array(10).keys()]);setAim(50);draw();active=false;update();msg.textContent='🎳 Frame '+frame+' — your turn.'},650)};
+    ball.addEventListener('pointerdown',e=>{if(active||rollBtn.disabled)return;ball.setPointerCapture?.(e.pointerId);ball.classList.add('aiming')});
+    ball.addEventListener('pointermove',e=>{if(!ball.hasPointerCapture?.(e.pointerId))return;const r=lane.getBoundingClientRect();setAim((e.clientX-r.left)/r.width*100)});
+    ball.addEventListener('pointerup',()=>ball.classList.remove('aiming'));ball.addEventListener('pointercancel',()=>ball.classList.remove('aiming'));
+    rollBtn.addEventListener('click',()=>{if(active||rollBtn.disabled)return;active=true;ball.classList.remove('rolling');void ball.offsetWidth;ball.classList.add('rolling');setTimeout(()=>{const remaining=[...pins],bonus=Math.abs(aim-50)<8?3:Math.abs(aim-50)<18?1:0,hit=Math.min(remaining.length,Math.max(1,Math.floor(Math.random()*5)+1+bonus));shuffle(remaining).slice(0,hit).forEach(i=>pins.delete(i));you+=hit;draw();update();if(pins.size===0){msg.textContent=roll===1?'🔥 STRIKE!':'🔥 SPARE!';if(roll===1)you+=2;endFrame()}else if(roll===2){msg.textContent='🎳 '+hit+' down — frame over.';endFrame()}else{roll=2;active=false;msg.textContent='🎳 '+hit+' down! '+pins.size+' left — roll again.';update()}},650)});
+    reset.addEventListener('click',()=>{frame=1;roll=1;you=0;cpu=0;active=false;pins=new Set([...Array(10).keys()]);rollBtn.disabled=false;setAim(50);ball.classList.remove('rolling');draw();update();msg.textContent='Match reset — beat the computer!'});
+    draw();setAim(50);update();
   }
   else if(type==='bagatelle'){
     let score=0,balls=5,active=false,aim=50;
