@@ -472,34 +472,16 @@ function playNew(i,type){
     drop.addEventListener('click',dropCoin);reset.addEventListener('click',()=>{credits=12;payout=0;coins=[];moving=false;msg.textContent='Machine refilled — find the sweet spot!';render();});render();
   }
   else if(type==='skittles'){
-    let knocked=new Set(),rolls=0,total=0;
-    o.innerHTML='<div class="lw-dart-score">🎳 <strong>10</strong> skittles standing</div><div class="lw-dart-msg">Roll the ball down the lane and knock them over!</div><div class="lw-skittle-lane"><div class="lw-skittle-stage"><div class="lw-skittle-pins"></div><div class="lw-skittle-ball">🎳</div></div></div><div class="lw-skittle-actions"><button type="button" class="lw-skittle-roll">🎳 ROLL BALL</button><button type="button" class="lw-skittle-reset">↻ NEW GAME</button></div>';
-    c.innerHTML='';
-    const pins=o.querySelector('.lw-skittle-pins'),ball=o.querySelector('.lw-skittle-ball'),scoreBox=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),roll=o.querySelector('.lw-skittle-roll'),reset=o.querySelector('.lw-skittle-reset');
-    const pinNames=['A','B','C','D','E','F','G','H','I','J'];
-    const drawPins=()=>{
-      pins.innerHTML='';
-      const spots=[[50,12],[39,28],[61,28],[28,45],[50,45],[72,45],[17,64],[39,64],[61,64],[83,64]];
-      spots.forEach((p,i)=>{
-        const el=document.createElement('button');el.type='button';el.className='lw-skittle-pin'+(knocked.has(i)?' down':'');el.style.left=p[0]+'%';el.style.top=p[1]+'%';el.textContent='🎳';el.title='Skittle '+pinNames[i];el.addEventListener('click',()=>{if(!knocked.has(i)){knocked.add(i);total=knocked.size;drawPins();update();}});
-        pins.appendChild(el);
-      });
-    };
-    const update=()=>{const left=10-knocked.size;scoreBox.innerHTML='🎳 <strong>'+left+'</strong> skittles standing · '+knocked.size+'/10 down';if(left===0){msg.textContent='🏆 PERFECT 10! ALL SKITTLES DOWN! 🔥';roll.disabled=true;}else msg.textContent=rolls?'Roll '+(rolls+1)+' — '+left+' still standing.':'Roll the ball down the lane!';};
-    const resetGame=()=>{knocked=new Set();rolls=0;total=0;roll.disabled=false;ball.classList.remove('rolling');drawPins();update();};
-    roll.addEventListener('click',()=>{
-      if(knocked.size===10)return;
-      rolls++;
-      ball.classList.remove('rolling');void ball.offsetWidth;ball.classList.add('rolling');
-      setTimeout(()=>{
-        const standing=[...Array(10).keys()].filter(i=>!knocked.has(i));
-        const hitCount=Math.min(standing.length,Math.max(1,Math.floor(Math.random()*5)+1));
-        shuffle(standing).slice(0,hitCount).forEach(i=>knocked.add(i));
-        total=knocked.size;drawPins();update();
-        if(knocked.size<10)msg.textContent='💥 '+hitCount+' skittle'+(hitCount===1?'':'s')+' down! '+(10-knocked.size)+' left.';
-      },420);
-    });
-    reset.addEventListener('click',resetGame);drawPins();update();
+    let you=0,cpu=0,round=0,rolling=false,aim=50;
+    o.innerHTML='<div class="lw-dart-score">🎳 <strong>SKITTLES</strong> · YOU 0 — CPU 0 · Round 1/5</div><div class="lw-dart-msg">Drag the ball sideways to aim at the pins, then roll. First to the best score wins!</div><div class="lw-skittle-lane"><div class="lw-skittle-stage"><div class="lw-skittle-pins"></div><div class="lw-skittle-ball">🎳</div></div></div><div class="lw-skittle-actions"><button type="button" class="lw-skittle-roll">🎳 ROLL BALL</button><button type="button" class="lw-skittle-reset">↻ NEW MATCH</button></div>';
+    c.innerHTML='';const stage=o.querySelector('.lw-skittle-stage'),pins=o.querySelector('.lw-skittle-pins'),ball=o.querySelector('.lw-skittle-ball'),box=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),roll=o.querySelector('.lw-skittle-roll'),reset=o.querySelector('.lw-skittle-reset');
+    const spots=[[50,12],[39,28],[61,28],[28,45],[50,45],[72,45],[17,64],[39,64],[61,64],[83,64]];
+    const draw=()=>{pins.innerHTML='';spots.forEach((p)=>{const el=document.createElement('span');el.className='lw-skittle-pin';el.style.left=p[0]+'%';el.style.top=p[1]+'%';el.textContent='🎳';pins.appendChild(el);});ball.style.left=aim+'%';};
+    stage.addEventListener('pointermove',e=>{if(rolling)return;const r=stage.getBoundingClientRect();aim=Math.max(12,Math.min(88,(e.clientX-r.left)/r.width*100));ball.style.left=aim+'%';});
+    stage.addEventListener('pointerdown',e=>{const r=stage.getBoundingClientRect();aim=Math.max(12,Math.min(88,(e.clientX-r.left)/r.width*100));ball.style.left=aim+'%';});
+    roll.addEventListener('click',()=>{if(rolling||round>=5)return;rolling=true;ball.classList.remove('rolling');void ball.offsetWidth;ball.classList.add('rolling');const hit=Math.max(1,Math.min(10,Math.round(5-Math.abs(aim-50)/11+Math.random()*3)));setTimeout(()=>{you+=hit;const cpuHit=Math.max(1,Math.min(10,Math.round(5+Math.random()*4)));cpu+=cpuHit;round++;box.innerHTML='🎳 <strong>SKITTLES</strong> · YOU '+you+' — CPU '+cpu+' · Round '+Math.min(round,5)+'/5';msg.textContent='💥 You knocked '+hit+' down! CPU knocked '+cpuHit+' down!';rolling=false;draw();if(round>=5){roll.disabled=true;msg.textContent=you>cpu?'🏆 YOU WIN THE SKITTLES MATCH!':you<cpu?'😂 CPU WINS — REMATCH!':'🤝 DEAD HEAT!';}},520);});
+    reset.addEventListener('click',()=>{you=0;cpu=0;round=0;rolling=false;roll.disabled=false;aim=50;draw();box.innerHTML='🎳 <strong>SKITTLES</strong> · YOU 0 — CPU 0 · Round 1/5';msg.textContent='Drag the ball sideways to aim at the pins, then roll.';});
+    draw();
   }
   else if(type==='shuffleboard'){
     let shots=0,total=0,active=false;
