@@ -50,7 +50,7 @@
 (function(){'use strict';
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-const savage=['MILD — YOU'RE SAFE. FOR NOW. 😂','CHEEKY — SOMEONE'S GETTING WOUND UP. ⚡','SAVAGE — HIDE THE COMMENT SECTION. 😂','ABSOLUTELY UNCALLED FOR — PHOENIX HAS BEEN WARNED. 🚨😂','MAXIMUM LIVE WIRE — THERE WILL BE NO SURVIVORS. ⚡😂'];
+const savage=['MILD — YOU’RE SAFE. FOR NOW. 😂','CHEEKY — SOMEONE’S GETTING WOUND UP. ⚡','SAVAGE — HIDE THE COMMENT SECTION. 😂','ABSOLUTELY UNCALLED FOR — PHOENIX HAS BEEN WARNED. 🚨😂','MAXIMUM LIVE WIRE — THERE WILL BE NO SURVIVORS. ⚡😂'];
 const savageBtn=document.getElementById('savageBtn');if(savageBtn)savageBtn.onclick=()=>set('savageResult',pick(savage));
 const slotA=['DAN','WILL','LIVE WIRE BAR','PHOENIX','THE BIG BOSS'];const slotB=['MUSIC','BANTER','CHAOS','NICKELBACK','RADIO'];const slotC=['😂','⚡','🚂','🎸','🍹'];
 const slotBtn=document.getElementById('slotBtn');if(slotBtn)slotBtn.onclick=()=>set('slotResult',pick(slotA)+' | '+pick(slotB)+' | '+pick(slotC));
