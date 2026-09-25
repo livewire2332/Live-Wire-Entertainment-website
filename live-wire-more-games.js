@@ -291,7 +291,7 @@ hero.insertAdjacentElement('afterend',toggle);
 
 const panel=document.createElement('section');
 panel.className='extras-section lw-arcade-panel';panel.style.display='none';
-panel.innerHTML='<div class="wrap"><h1>🎮⚡ New Live Wire Arcade</h1><p>22 games with much larger fresh question, answer and result pools. No constant repeat rotation. 😂⚡</p><div class="lwmore"></div></div>';
+panel.innerHTML='<div class="wrap"><h1>🎮⚡ New Live Wire Arcade</h1><p>50 games with proper visual gameplay, fresh content and no constant repeat rotation. 🎮⚡</p><div class="lwmore"></div></div>';
 toggle.insertAdjacentElement('afterend',panel);
 
 document.addEventListener('click',event=>{
