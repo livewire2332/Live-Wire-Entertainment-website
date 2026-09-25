@@ -103,11 +103,23 @@ function getNextScheduledShow(){
 }
 
 let currentLiveShow=null;
+const isPausePeriod=()=>{
+  const iso=new Date().toISOString().slice(0,10);
+  return iso>='2026-09-21'&&iso<='2026-09-27';
+};
 
 function setBarLiveStatus(online){
   const el=document.getElementById('barLiveStatus');
   const showEl=document.getElementById('barLiveShow');
   if(!el)return;
+  if(isPausePeriod()){
+    currentLiveShow=null;
+    el.textContent='⏸️ SHOWS PAUSED';
+    el.classList.remove('live');
+    if(showEl)showEl.textContent='⚡ We’ll be back soon — new playout systems are being brought up behind the scenes.';
+    return;
+  }
+
   const scheduled=getScheduledShow();
   const nextScheduled=getNextScheduledShow();
 
