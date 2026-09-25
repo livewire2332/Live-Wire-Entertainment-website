@@ -427,45 +427,26 @@ function playNew(i,type){
     btn('🎯 THROW!',()=>{const cm=rand(100);o.querySelector('.lw-bull-screen').textContent=cm+'cm from bull';result(cm<=8?'🔥 CLOSE TO THE BULL!':'🎯 BRAGGING RIGHTS UP FOR GRABS!');});
   }
   else if(type==='darts301'){
-    let score=301,throws=0,turnScore=0;
-    o.innerHTML='<div class="lw-dart-score">🎯 <strong>301</strong> remaining</div><div class="lw-dart-msg">Tap the dartboard where you want to throw.</div><div class="lw-dartboard-wrap"><svg class="lw-dartboard" viewBox="0 0 400 400" role="img" aria-label="Interactive dartboard"></svg></div><div class="lw-dart-actions"><button type="button" class="lw-dart-new">↻ New Game</button><button type="button" class="lw-dart-next" disabled>➡️ Next Dart</button></div>';
+    let you=301,cpu=301,darts=0,turn=0,over=false;
+    o.innerHTML='<div class="lw-dart-score">🎯 <strong>YOU 301 — CPU 301</strong> · Dart 1/3</div><div class="lw-dart-msg">Beat the computer! Aim for trebles and finish on a double.</div><div class="lw-dart-match"><div class="lw-dart-player you"><b>⚡ YOU</b><strong class="lw-you-score">301</strong><small>YOUR TURN</small></div><div class="lw-dart-vs">VS<br>🤖</div><div class="lw-dart-player cpu"><b>🤖 CPU</b><strong class="lw-cpu-score">301</strong><small>WAITING</small></div></div><div class="lw-dartboard-wrap"><svg class="lw-dartboard" viewBox="0 0 400 400" role="img" aria-label="Interactive dartboard"></svg></div><div class="lw-dart-actions"><button type="button" class="lw-dart-new">↻ NEW MATCH</button><button type="button" class="lw-dart-next" disabled>➡️ NEXT TURN</button></div>';
     c.innerHTML='';
-    const svg=o.querySelector('.lw-dartboard'), next=o.querySelector('.lw-dart-next'), fresh=o.querySelector('.lw-dart-new');
-    const nums=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
-    const cx=200,cy=200;
+    const svg=o.querySelector('.lw-dartboard'),next=o.querySelector('.lw-dart-next'),fresh=o.querySelector('.lw-dart-new'),msg=o.querySelector('.lw-dart-msg'),scoreBox=o.querySelector('.lw-dart-score'),youEl=o.querySelector('.lw-you-score'),cpuEl=o.querySelector('.lw-cpu-score');
+    const nums=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5],cx=200,cy=200;
     const polar=(r,a)=>[cx+Math.cos(a)*r,cy+Math.sin(a)*r];
-    const path=(r1,r2,a1,a2)=>{const p1=polar(r1,a1),p2=polar(r1,a2),p3=polar(r2,a2),p4=polar(r2,a1),large=(a2-a1)>Math.PI?1:0;return 'M '+p1[0]+' '+p1[1]+' L '+p2[0]+' '+p2[1]+' L '+p3[0]+' '+p3[1]+' L '+p4[0]+' '+p4[1]+' Z'};
+    const path=(r1,r2,a1,a2)=>{const p1=polar(r1,a1),p2=polar(r1,a2),p3=polar(r2,a2),p4=polar(r2,a1);return 'M '+p1[0]+' '+p1[1]+' L '+p2[0]+' '+p2[1]+' L '+p3[0]+' '+p3[1]+' L '+p4[0]+' '+p4[1]+' Z'};
     const add=(tag,attrs)=>{const el=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));svg.appendChild(el);return el};
     add('circle',{cx,cy,r:190,fill:'#17121b',stroke:'#ffd43b','stroke-width':5});
-    for(let i=0;i<20;i++){const a0=-Math.PI/2+i*Math.PI*2/20-Math.PI/40,a1=-Math.PI/2+i*Math.PI*2/20+Math.PI/40,n=nums[i];
-      [['0',34],['1',88],['3',128],['1',168]].forEach(()=>{});
-      add('path',{d:path(42,88,a0,a1),class:'lw-dart-seg',fill:i%2?'#e9e9e9':'#202020','data-value':n,'data-mult':1});
-      add('path',{d:path(128,168,a0,a1),class:'lw-dart-seg',fill:i%2?'#e9e9e9':'#202020','data-value':n,'data-mult':1});
-      add('path',{d:path(88,98,a0,a1),class:'lw-dart-seg',fill:i%2?'#b51f2a':'#1d6f54','data-value':n,'data-mult':3});
-      add('path',{d:path(168,178,a0,a1),class:'lw-dart-seg',fill:i%2?'#b51f2a':'#1d6f54','data-value':n,'data-mult':2});
-    }
-    add('circle',{cx,cy,r:34,fill:'#202020',stroke:'#ffd43b','stroke-width':2,'data-value':25,'data-mult':1,class:'lw-dart-seg'});
-    add('circle',{cx,cy,r:17,fill:'#c52b38',stroke:'#ffd43b','stroke-width':2,'data-value':25,'data-mult':2,class:'lw-dart-seg'});
-    for(let i=0;i<20;i++){const a=-Math.PI/2+(i+.5)*Math.PI*2/20,p=polar(187,a),t=add('text',{x:p[0],y:p[1]+5,'text-anchor':'middle','font-size':13,fill:'#fff','font-weight':900});t.textContent=nums[i]}
-    const scoreBox=()=>{const s=o.querySelector('.lw-dart-score');if(s)s.innerHTML='🎯 <strong>'+score+'</strong> remaining · Dart '+Math.min(throws+1,3)+'/3';};
-    const reset=()=>{score=301;throws=0;turnScore=0;next.disabled=true;svg.querySelectorAll('.lw-dart-mark').forEach(x=>x.remove());scoreBox();o.querySelector('.lw-dart-msg').textContent='Tap the dartboard where you want to throw.'};
-    const throwDart=(value,mult,el)=>{
-      if(throws>=3)return;
-      const points=value*mult;
-      if(score-points<0){result('💥 BUST! '+points+' would go below zero. Turn lost.');throws=3;turnScore=0;next.disabled=false;return;}
-      score-=points;turnScore+=points;throws++;
-      const mark=document.createElementNS('http://www.w3.org/2000/svg','circle');const box=el.getBoundingClientRect(),root=svg.getBoundingClientRect();
-      const pt=el.tagName.toLowerCase()==='circle'?[+el.getAttribute('cx'),+el.getAttribute('cy')]:null;
-      if(pt){mark.setAttribute('cx',pt[0]);mark.setAttribute('cy',pt[1]);}else{const p=polar(130,0);mark.setAttribute('cx',p[0]);mark.setAttribute('cy',p[1]);}
-      mark.setAttribute('r',5);mark.setAttribute('class','lw-dart-mark');mark.setAttribute('fill','#ffd43b');mark.setAttribute('stroke','#111');mark.setAttribute('stroke-width',2);svg.appendChild(mark);
-      if(score===0){result('🏆 CHECKOUT! '+turnScore+' points this turn — YOU WIN!');throws=3;next.disabled=true;return;}
-      result('🎯 '+(mult===3?'TRIPLE ':mult===2?'DOUBLE ':'')+value+' = '+points+' points');
-      next.disabled=false;
-      if(throws===3){result('🎯 Turn total: '+turnScore+' — '+score+' left. Tap Next Dart for another turn.');}
-    };
-    svg.addEventListener('click',e=>{const el=e.target.closest('.lw-dart-seg');if(!el||throws>=3)return;throwDart(Number(el.dataset.value),Number(el.dataset.mult),el)});
-    next.addEventListener('click',()=>{if(throws<3)return;throws=0;turnScore=0;next.disabled=true;scoreBox();o.querySelector('.lw-dart-msg').textContent='New turn — tap the board for your next dart.'});
-    fresh.addEventListener('click',reset);scoreBox();
+    for(let i=0;i<20;i++){const a0=-Math.PI/2+i*Math.PI*2/20-Math.PI/40,a1=-Math.PI/2+i*Math.PI*2/20+Math.PI/40,n=nums[i];add('path',{d:path(42,88,a0,a1),class:'lw-dart-seg',fill:i%2?'#e9e9e9':'#202020','data-value':n,'data-mult':1});add('path',{d:path(128,168,a0,a1),class:'lw-dart-seg',fill:i%2?'#e9e9e9':'#202020','data-value':n,'data-mult':1});add('path',{d:path(88,98,a0,a1),class:'lw-dart-seg',fill:i%2?'#b51f2a':'#1d6f54','data-value':n,'data-mult':3});add('path',{d:path(168,178,a0,a1),class:'lw-dart-seg',fill:i%2?'#b51f2a':'#1d6f54','data-value':n,'data-mult':2})}
+    add('circle',{cx,cy,r:34,fill:'#202020','data-value':25,'data-mult':1,class:'lw-dart-seg'});
+    add('circle',{cx,cy,r:17,fill:'#c52b38','data-value':25,'data-mult':2,class:'lw-dart-seg'});
+    for(let i=0;i<20;i++){const p=polar(187,-Math.PI/2+(i+.5)*Math.PI*2/20),t=add('text',{x:p[0],y:p[1]+5,'text-anchor':'middle','font-size':13,fill:'#fff','font-weight':900});t.textContent=nums[i]}
+    const update=()=>{youEl.textContent=you;cpuEl.textContent=cpu;scoreBox.innerHTML='🎯 <strong>YOU '+you+' — CPU '+cpu+'</strong> · '+(turn?'🤖 COMPUTER TURN':'⚡ YOUR DART '+Math.min(darts+1,3)+'/3')};
+    const mark=(el,who)=>{const m=document.createElementNS('http://www.w3.org/2000/svg','circle');const p=el.tagName.toLowerCase()==='circle'?[+el.getAttribute('cx'),+el.getAttribute('cy')]:polar(135,0);m.setAttribute('cx',p[0]);m.setAttribute('cy',p[1]);m.setAttribute('r',5);m.setAttribute('class','lw-dart-mark');m.setAttribute('fill',who==='cpu'?'#5ee7ff':'#ffd43b');m.setAttribute('stroke','#111');svg.appendChild(m)};
+    const finish=()=>{if(over)return;turn=1;darts=0;next.disabled=true;update();msg.textContent='🤖 Computer is throwing...';let n=0;const go=()=>{if(over)return;if(n++>=3){turn=0;darts=0;next.disabled=false;update();msg.textContent='🎯 Your turn — choose your target!';return}setTimeout(()=>{const target=cpu>170?20:Math.max(2,Math.ceil(cpu/2)),mult=Math.random()<.3?3:(Math.random()<.2?2:1),pts=Math.min(cpu,target*mult);if(cpu-pts===0&&mult!==2){n--;go();return}cpu-=pts;const seg=svg.querySelectorAll('.lw-dart-seg')[Math.floor(Math.random()*svg.querySelectorAll('.lw-dart-seg').length)];mark(seg,'cpu');msg.textContent='🤖 CPU scores '+pts+' — '+cpu+' left.';update();if(cpu===0){over=true;next.disabled=true;msg.textContent='🤖 CHECKOUT! COMPUTER WINS!';return}go()},450)};go()};
+    svg.addEventListener('click',e=>{const el=e.target.closest('.lw-dart-seg');if(!el||over||turn)return;const pts=Number(el.dataset.value)*Number(el.dataset.mult);if(you-pts<0){darts=3;msg.textContent='💥 BUST! Turn lost.';next.disabled=false;update();return}if(you-pts===0&&Number(el.dataset.mult)!==2){darts=3;msg.textContent='💥 You hit zero without a double — bust!';next.disabled=false;update();return}you-=pts;darts++;mark(el,'you');msg.textContent='🎯 '+(Number(el.dataset.mult)===3?'TRIPLE ':Number(el.dataset.mult)===2?'DOUBLE ':'')+el.dataset.value+' = '+pts;update();if(you===0){over=true;next.disabled=true;msg.textContent='🏆 CHECKOUT! YOU WIN!';return}if(darts>=3)next.disabled=false});
+    next.addEventListener('click',()=>{if(!over&&turn===0&&darts>=3)finish()});
+    fresh.addEventListener('click',()=>{you=301;cpu=301;darts=0;turn=0;over=false;next.disabled=true;svg.querySelectorAll('.lw-dart-mark').forEach(x=>x.remove());msg.textContent='Beat the computer! Aim for trebles and finish on a double.';update()});
+    update();
   }
   else if(type==='killer'){o.innerHTML='<div class="lw-killer-game"><div class="lw-killer-neon">☠️ KILLER DARTS</div><div class="lw-killer-board"><div class="lw-killer-ring">☠️</div><div class="lw-killer-target-display">CHOOSE YOUR TARGET</div></div></div>';const display=o.querySelector('.lw-killer-target-display');[20,19,18,17,16,15].forEach(n=>btn('TARGET '+n,()=>{display.textContent='TARGET '+n+' LOCKED';result('☠️ Target '+n+' claimed — now hit it!');btn('🎯 THROW AT '+n,()=>{const hit=rand(3)===1;display.textContent=hit?'☠️ KILLER HIT!':'MISS';result(hit?'☠️ KILLER! TARGET CLAIMED!':'😂 MISSED IT!');});}))}
   else if(type==='coinpusher'){let coins=rand(6)+4;o.innerHTML='<div class="lw-coinpusher-game"><div class="lw-coinpusher-neon">🪙 COIN PUSHER</div><div class="lw-coinpusher-machine"><div class="lw-coin-shelf"></div><div class="lw-coin-pile">'+coins+' 🪙</div><div class="lw-pusher">⬅️ PUSHER ➡️</div></div><div class="lw-coin-screen">DROP A COIN</div></div>';const screen=o.querySelector('.lw-coin-screen'),pile=o.querySelector('.lw-coin-pile');btn('🪙 DROP COIN',()=>{const push=rand(4);coins+=push-1;pile.textContent=Math.max(0,coins)+' 🪙';screen.textContent=coins>10?'🎉 COINS PUSHED! +'+push:'🪙 '+Math.max(0,coins)+' COINS WOBBLING!';})}
