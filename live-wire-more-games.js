@@ -553,25 +553,9 @@ function playNew(i,type){
   else if(type==='pickcard'){
     const prizes=['🍺 FREE ROUND (virtual!)','🎵 ONE MORE TUNE','😂 BANTER BONUS','💎 FORGOTTEN GEM','🚂 MUSIC TRAIN PASS','⚡ LIVE WIRE WILDCARD','🕺 DANCEFLOOR TOKEN','🎤 SINGALONG CARD','🪩 DISCO BONUS'];
     let chosen=false;
-    o.innerHTML='<div class="lw-dart-score">🃏 <strong>Pick a Card</strong> · Choose one mystery card!</div><div class="lw-dart-msg">Pick a card and see what the Live Wire deck has dealt you.</div><div class="lw-card-table"><div class="lw-card-deck"></div></div><button type="button" class="lw-pickcard-reset">↻ SHUFFLE DECK</button>';
-    c.innerHTML='';
-    const deck=o.querySelector('.lw-card-deck'),scoreBox=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),reset=o.querySelector('.lw-pickcard-reset');
-    const build=()=>{
-      chosen=false;deck.innerHTML='';
-      prizes.forEach((_,i)=>{
-        const card=document.createElement('button');card.type='button';card.className='lw-mystery-card';card.innerHTML='<span class="lw-card-back">⚡<small>LIVE WIRE</small></span><span class="lw-card-front">🃏</span>';
-        card.addEventListener('click',()=>{
-          if(chosen)return;chosen=true;
-          deck.querySelectorAll('.lw-mystery-card').forEach(x=>x.disabled=true);
-          card.classList.add('picked');setTimeout(()=>card.classList.add('flipped'),280);
-          scoreBox.innerHTML='🃏 <strong>Card '+(i+1)+'</strong> · DECK REVEALED';
-          msg.textContent=prizes[i];
-        });
-        deck.appendChild(card);
-      });
-      shuffle([...deck.children]).forEach((card,i)=>deck.appendChild(card));
-      msg.textContent='Pick one of the mystery cards!';
-    };
+    o.innerHTML='<div class="lw-dart-score">🃏 <strong>PICK A CARD</strong> · Mystery deck</div><div class="lw-dart-msg">Shuffle the deck, then choose a card. No button spam — pick your destiny!</div><div class="lw-card-table"><div class="lw-card-deck"></div><div class="lw-card-shine"></div></div><button type="button" class="lw-pickcard-reset">🔀 SHUFFLE DECK</button>';
+    c.innerHTML='';const deck=o.querySelector('.lw-card-deck'),box=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),reset=o.querySelector('.lw-pickcard-reset');
+    const build=()=>{chosen=false;deck.innerHTML='';const order=shuffle(prizes.map((_,i)=>i));order.forEach(i=>{const card=document.createElement('button');card.type='button';card.className='lw-mystery-card';card.dataset.prize=i;card.innerHTML='<span class="lw-card-back">⚡<small>LIVE WIRE</small></span><span class="lw-card-front">🃏</span>';card.addEventListener('click',()=>{if(chosen)return;chosen=true;deck.querySelectorAll('.lw-mystery-card').forEach(x=>x.disabled=true);card.classList.add('picked');setTimeout(()=>card.classList.add('flipped'),260);box.innerHTML='🃏 <strong>CARD REVEALED</strong> · Prize '+(i+1);msg.textContent=prizes[i];});deck.appendChild(card);});msg.textContent='Deck shuffled! Pick one card.';box.innerHTML='🃏 <strong>PICK A CARD</strong> · '+prizes.length+' mysteries';};
     reset.addEventListener('click',build);build();
   }
   else if(type==='fruitmachine'){
