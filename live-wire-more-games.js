@@ -59,7 +59,14 @@ const games=[
  ['📢 DJ Announcement Generator','dj'],['🕺 Dancefloor Decision Maker','dance'],['🎫 Ticket Checker','ticket'],
  ['🚉 Station Master','station'],['🎵 Train Playlist Builder','playlist'],['🚦 Signal Box Challenge','signal'],
  ['🍹 Build Your Live Wire Cocktail','cocktail'],['🪩 Bar Jukebox','juke'],['🎵 What Should The Bar Play Next?','barplay'],
- ['🪑 VIP Table Generator','vip']
+ ['🪑 VIP Table Generator','vip'],
+ ['🃏 Higher or Lower','higher'],['♠️ Red or Black','redblack'],['🎲 Hi-Lo Dice','dice'],['🍀 Lucky Number','luckynum'],
+ ['🏆 Pub Quiz Jackpot','pubjackpot'],['🎯 Nearest the Bull','bull'],['🎯 Darts 301','darts301'],['🎯 Killer Darts','killer'],
+ ['🪙 Coin Pusher','coinpusher'],['🎳 Pub Skittles','skittles'],['🟠 Shuffleboard','shuffleboard'],['⚽ Table Football','tablefootball'],
+ ['🎳 Pub Bowling','bowling'],['🟡 Bagatelle','bagatelle'],['🃏 Pick a Card','pickcard'],['🍒 Live Wire Fruit Machine','fruitmachine'],
+ ['🚪 Bouncer Dan','bouncer'],['🛍️ Temu Boss Challenge','temuboss'],['🍺 Dad Bod Detector','dadbod'],['🎧 Dodgy Request Machine','dodgyrequest'],
+ ['😂 Phoenix Excuse Generator','phoenixexcuse'],['💷 Bar Tab Challenge','bartab'],['🕵️ Guess That Pub Customer','pubcustomer'],['🔔 Last Orders!','lastorders'],
+ ['🤹 Who’s Had One Too Many?','toomany'],['🎵 Jukebox Gamble','jukeboxgamble']
 ];
 
 const songs=[
@@ -318,6 +325,32 @@ function bingo(i,arr,msg){
   }
   o.textContent='FRESH CARD READY!';
 }
+function playNew(i,type){
+  const o=qs('lo'+i),c=qs('lc'+i); if(!o||!c)return;
+  clear(c);
+  const btn=(label,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',fn);c.appendChild(b);};
+  const result=t=>{o.textContent=t;};
+  const rand=(n)=>Math.floor(Math.random()*n)+1;
+  if(type==='higher'||type==='redblack'){
+    const card=rand(13),suits=['♥️','♦️','♣️','♠️'],s=suits[rand(4)-1]; result('CARD: '+s+' '+card+' — make your call!');
+    if(type==='higher'){btn('⬆️ Higher',()=>result(rand(13)>=card?'🔥 Correct call!':'😂 Wrong — the pub takes the point!'));btn('⬇️ Lower',()=>result(rand(13)<=card?'🔥 Correct call!':'😂 Wrong — the pub takes the point!'));}
+    else{btn('❤️♦️ Red',()=>result(rand(2)===1?'🔥 RED!':'🖤 BLACK!'));btn('♣️♠️ Black',()=>result(rand(2)===1?'❤️♦️ RED!':'🔥 BLACK!'));}
+  } else if(type==='dice'){result('🎲 Two dice ready! Predict the total.');[2,4,6,8,10,12].forEach(n=>btn(String(n),()=>result(rand(11)+1===n?'🎉 BULLSEYE TOTAL!':'😂 The dice had other plans!')))}
+  else if(type==='luckynum'){result('🍀 Pick a number from 1–20');for(let n=1;n<=10;n++)btn('Pick '+n,()=>result(rand(20)===n?'🍀 LUCKY! JACKPOT!':'😂 Not your lucky number!'))}
+  else if(type==='pubjackpot'){result('🏆 Answer the pub question to build the jackpot.');const qs2=[['Capital of Wales?',['Cardiff','Swansea','Newport'],'Cardiff'],['Beatles album?',['Abbey Road','Rumours','Thriller'],'Abbey Road'],['How many sides on a hexagon?',['6','7','8'],'6'],['Which decade was 1990 in?',['90s','80s','00s'],'90s']];const q=P('pubjackpot-questions',qs2);o.textContent=q[0];q[1].forEach(v=>btn(v,()=>result(v===q[2]?'💷 JACKPOT BUILDS! £'+(rand(9)*10):'😂 Jackpot escapes!')))}
+  else if(type==='bull'){result('🎯 Tap THROW and try to land closest to the bull.');btn('🎯 THROW!',()=>result('You landed '+rand(100)+'cm from bull! '+(rand(5)===1?'🔥 BULLSEYE!':'Closest pub table wins bragging rights!')))}
+  else if(type==='darts301'||type==='killer'){let score=type==='darts301'?301:0;result(type==='darts301'?'🎯 301 remaining — throw 3 darts!':'🎯 Pick a target number to become the killer.');if(type==='darts301'){btn('🎯 THROW 3 DARTS',()=>{const hit=rand(60)+rand(60)+rand(60);score=Math.max(0,score-hit);result(score===0?'🏆 CHECKOUT! You won!':'🎯 '+score+' left — throw again!')})}else{[20,19,18,17,16,15].forEach(n=>btn('Hit '+n,()=>result(rand(6)===1?'☠️ KILLER! Target claimed!':'🎯 '+n+' hit — keep throwing!')))}}
+  else if(type==='coinpusher'){let coins=rand(6)+4;result('🪙 '+coins+' virtual coins on the ledge.');btn('🪙 DROP COIN',()=>{const push=rand(4);coins+=push-1;result(coins>10?'🎉 COINS PUSHED! +'+push:'🪙 '+Math.max(0,coins)+' coins wobbling on the ledge!')})}
+  else if(type==='skittles'){btn('🎳 ROLL THE BALL',()=>{const down=rand(10);result('💥 '+down+'/10 skittles down! '+(down===10?'PERFECT!':'Have another go!'))});result('🎳 Aim for all ten skittles!')}
+  else if(type==='shuffleboard'){btn('🟠 SLIDE',()=>{const d=rand(100);result(d>85?'🏆 PERFECT LANDING!':d>60?'🔥 Great slide!':'😂 Bit short — blame the table!')});result('🟠 Slide the puck towards the 100 zone.')}
+  else if(type==='tablefootball'){let a=0,b=0;result('⚽ Kick-off!');btn('⚽ ATTACK',()=>{rand(2)===1?a++:b++;result('⚽ SCORE '+a+' - '+b+' — '+(a>=5||b>=5?'🏆 FULL TIME!':'Keep attacking!'))})}
+  else if(type==='bowling'){let frame=1,pins=10;result('🎳 Frame 1 — 10 pins');btn('🎳 BOWL',()=>{const hit=rand(10);result(hit===10?'🎳 STRIKE! 🔥':'🎳 Knocked '+hit+' pins!');frame++;if(frame<=10)setTimeout(()=>result('🎳 Frame '+frame+' — roll again!'),250)})}
+  else if(type==='bagatelle'){btn('🟡 DROP BALL',()=>{const slot=rand(9);result('🟡 Ball landed in slot '+slot+' — '+(slot===9?'JACKPOT!':'Nice drop!'))});result('🟡 Drop the ball and see where it lands.')}
+  else if(type==='pickcard'){const cards=['🍺 FREE ROUND (virtual!)','🎵 ONE MORE TUNE','😂 BANTER BONUS','💎 FORGOTTEN GEM','🚂 MUSIC TRAIN PASS','⚡ LIVE WIRE WILDCARD','🕺 DANCEFLOOR TOKEN','🎤 SINGALONG CARD','🪩 DISCO BONUS'];result('🃏 Choose a mystery card');cards.forEach((x,n)=>btn('🃏 Card '+(n+1),()=>result(x)))}
+  else if(type==='fruitmachine'){const icons=['🍒','🍋','🔔','⭐','💎','⚡'];const spin=()=>{const a=icons[rand(icons.length)-1],b=icons[rand(icons.length)-1],d=icons[rand(icons.length)-1];result(a+' '+b+' '+d+(a===b&&b===d?' — 🎉 JACKPOT!':' — 😂 No jackpot, spin again!'))};btn('🍒 SPIN',spin);result('🍒 The Live Wire Fruit Machine is ready!')}
+  else {const pools={bouncer:['🚪 IN — you passed the vibe check!','🚫 OUT — too much banter at the door!','🚪 IN — DJ approved!'],temuboss:['🛍️ Ordered 4 gadgets. Needed none. 😂','📦 Your parcel has arrived… somewhere.','💳 Temu Boss says: ADD TO BASKET!'],dadbod:['💪 Elite dad bod detected!','😂 Dad bod bonus unlocked!','🔥 Platinum chest package detected!'],dodgyrequest:['🎧 Request accepted: one absolute banger!','😂 Request denied: DJ has standards!','🎵 You asked for one more. We know how this ends.'],phoenixexcuse:['🚂 The Music Train was delayed!','🎧 I was choosing the perfect tune!','😂 The jukebox distracted me!'],bartab:['💷 Tab: £'+(rand(18)+4)+' — blame the jukebox.','💷 Tab: £'+(rand(40)+20)+' — ONE MORE TUNE strikes again!','😂 Tab mysteriously disappeared.'],pubcustomer:['🍺 The one who says “I only came for one!”','🎤 The one singing every word loudly.','🎯 The darts expert who blames the board.'],lastorders:['🔔 LAST ORDERS! Finish your tune!','🔔 LAST ORDERS! The jukebox disagrees!','🔔 LAST ORDERS! One more… obviously.'],toomany:['😂 Definitely fine. Probably.','🍺 Needs the chair to stop moving.','🎵 Still knows every word somehow!'],jukeboxgamble:['🎵 80s classic!','🎵 90s floor filler!','🎵 00s throwback!','🎵 Forgotten gem!','🎵 Absolute wildcard!']};const p=pools[type]||['⚡ Live Wire chaos!'];result(P('new-'+type,p));}
+}
+
 function build(){
   if(built)return;built=true;
   const grid=panel.querySelector('.lwmore');
@@ -349,6 +382,8 @@ function build(){
   qs('lg19').addEventListener('click',()=>showSimple(19,P('bar-jukebox',simpleText[10])));
   qs('lg20').addEventListener('click',()=>showSimple(20,P('bar-play-next',simpleText[11])));
   qs('lg21').addEventListener('click',()=>showSimple(21,P('vip-tables',simpleText[12])));
+  const newTypes=['higher','redblack','dice','luckynum','pubjackpot','bull','darts301','killer','coinpusher','skittles','shuffleboard','tablefootball','bowling','bagatelle','pickcard','fruitmachine','bouncer','temuboss','dadbod','dodgyrequest','phoenixexcuse','bartab','pubcustomer','lastorders','toomany','jukeboxgamble'];
+  newTypes.forEach((type,n)=>qs('lg'+(22+n)).addEventListener('click',()=>playNew(22+n,type)));
 }
 toggle.addEventListener('click',()=>{
   const open=panel.style.display==='none';
