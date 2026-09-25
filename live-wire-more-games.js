@@ -265,7 +265,7 @@ style.textContent=`
 .lw-arcade-panel .lwb{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;width:100%;min-width:0;overflow:hidden}
 .lw-arcade-panel .lwb button{width:100%;min-width:0;max-width:100%;aspect-ratio:1/1;padding:4px 2px;font-size:clamp(8px,1.25vw,10px);line-height:1.08;white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden}
 .lw-arcade-panel .lwb .on{background:rgba(255,43,214,.35);border-color:#ffd43b}
-.lw-arcade-panel .lw-dartboard-wrap{display:flex;justify-content:center;margin:12px auto;max-width:360px}.lw-arcade-panel .lw-dartboard{width:100%;height:auto;touch-action:manipulation;border-radius:50%;background:#111;box-shadow:0 0 18px rgba(255,212,59,.2)}.lw-arcade-panel .lw-dart-seg{cursor:pointer;stroke:#111;stroke-width:1}.lw-arcade-panel .lw-dart-seg:hover{filter:brightness(1.2)}.lw-arcade-panel .lw-dart-score{text-align:center;font-size:22px;margin-bottom:5px}.lw-arcade-panel .lw-dart-msg{text-align:center;min-height:24px;font-weight:800}.lw-arcade-panel .lw-dart-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.lw-arcade-panel .lw-dart-actions button{border:1px solid #00eaff;border-radius:20px;background:#11152a;color:#fff;padding:10px;cursor:pointer}.lw-arcade-panel .lw-dart-actions button:disabled{opacity:.45;cursor:not-allowed}
+.lw-arcade-panel .lw-dartboard-wrap{display:flex;justify-content:center;margin:12px auto;max-width:360px}.lw-arcade-panel .lw-dartboard{width:100%;height:auto;touch-action:manipulation;border-radius:50%;background:#111;box-shadow:0 0 18px rgba(255,212,59,.2)}.lw-arcade-panel .lw-dart-seg{cursor:pointer;stroke:#111;stroke-width:1}.lw-arcade-panel .lw-dart-seg:hover{filter:brightness(1.2)}.lw-arcade-panel .lw-dart-score{text-align:center;font-size:22px;margin-bottom:5px}.lw-arcade-panel .lw-dart-msg{text-align:center;min-height:24px;font-weight:800}.lw-arcade-panel .lw-dart-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.lw-arcade-panel .lw-dart-actions button{border:1px solid #00eaff;border-radius:20px;background:#11152a;color:#fff;padding:10px;cursor:pointer}.lw-arcade-panel .lw-dart-actions button:disabled{opacity:.45;cursor:not-allowed}.lw-arcade-panel .lw-skittle-lane{margin:12px auto;max-width:360px;border:2px solid #00eaff;border-radius:18px;padding:12px;background:linear-gradient(180deg,#17121b,#07151d);overflow:hidden}.lw-arcade-panel .lw-skittle-stage{position:relative;height:360px;border-radius:12px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 24px,rgba(0,0,0,.08) 24px 48px);border:1px solid rgba(255,255,255,.12)}.lw-arcade-panel .lw-skittle-stage:before{content:"";position:absolute;left:7%;right:7%;top:7%;height:68%;border:2px solid rgba(255,212,59,.55);border-radius:50% 50% 18px 18px}.lw-arcade-panel .lw-skittle-pins{position:absolute;inset:7% 7% 25%}.lw-arcade-panel .lw-skittle-pin{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;padding:0;border:0;background:transparent;font-size:28px;cursor:pointer;transition:transform .18s,opacity .18s;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}.lw-arcade-panel .lw-skittle-pin.down{transform:translate(-50%,-20%) rotate(78deg);opacity:.28}.lw-arcade-panel .lw-skittle-ball{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);font-size:42px;transition:transform .42s ease}.lw-arcade-panel .lw-skittle-ball.rolling{transform:translate(-50%,-275px) rotate(720deg)}.lw-arcade-panel .lw-skittle-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.lw-arcade-panel .lw-skittle-actions button{border:1px solid #00eaff;border-radius:20px;background:#11152a;color:#fff;padding:10px;cursor:pointer}.lw-arcade-panel .lw-skittle-actions button:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:900px){.lw-arcade-panel .lwmore{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
 @media(max-width:600px){.lw-arcade-panel{padding:0}.lw-arcade-panel .lwmore{grid-template-columns:minmax(0,1fr);gap:16px}.lw-arcade-panel .lwgame{padding:16px}.lw-arcade-panel .lwgame h2{font-size:23px}.lw-arcade-panel .lwgame p{font-size:15px;line-height:1.45}.lw-arcade-panel .lwb{gap:4px}.lw-arcade-panel .lwb button{font-size:clamp(7px,2.4vw,9px);padding:3px 1px}.lw-arcade-panel .lwc button,.lw-arcade-panel .lwgo{font-size:15px;padding:11px 12px}}
 `;
@@ -383,7 +383,36 @@ function playNew(i,type){
   }
   else if(type==='killer'){let target=null;result('🎯 Choose your killer target number.');[20,19,18,17,16,15].forEach(n=>btn('Target '+n,()=>{target=n;result('☠️ Killer target: '+target+' — now hit it!');btn('🎯 THROW AT '+target,()=>result(rand(3)===1?'☠️ KILLER! Target claimed!':'😂 Missed it — keep throwing!'))}))}
   else if(type==='coinpusher'){let coins=rand(6)+4;result('🪙 '+coins+' virtual coins on the ledge.');btn('🪙 DROP COIN',()=>{const push=rand(4);coins+=push-1;result(coins>10?'🎉 COINS PUSHED! +'+push:'🪙 '+Math.max(0,coins)+' coins wobbling on the ledge!')})}
-  else if(type==='skittles'){btn('🎳 ROLL THE BALL',()=>{const down=rand(10);result('💥 '+down+'/10 skittles down! '+(down===10?'PERFECT!':'Have another go!'))});result('🎳 Aim for all ten skittles!')}
+  else if(type==='skittles'){
+    let knocked=new Set(),rolls=0,total=0;
+    o.innerHTML='<div class="lw-dart-score">🎳 <strong>10</strong> skittles standing</div><div class="lw-dart-msg">Roll the ball down the lane and knock them over!</div><div class="lw-skittle-lane"><div class="lw-skittle-stage"><div class="lw-skittle-pins"></div><div class="lw-skittle-ball">🎳</div></div></div><div class="lw-skittle-actions"><button type="button" class="lw-skittle-roll">🎳 ROLL BALL</button><button type="button" class="lw-skittle-reset">↻ NEW GAME</button></div>';
+    c.innerHTML='';
+    const pins=o.querySelector('.lw-skittle-pins'),ball=o.querySelector('.lw-skittle-ball'),scoreBox=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),roll=o.querySelector('.lw-skittle-roll'),reset=o.querySelector('.lw-skittle-reset');
+    const pinNames=['A','B','C','D','E','F','G','H','I','J'];
+    const drawPins=()=>{
+      pins.innerHTML='';
+      const spots=[[50,12],[39,28],[61,28],[28,45],[50,45],[72,45],[17,64],[39,64],[61,64],[83,64]];
+      spots.forEach((p,i)=>{
+        const el=document.createElement('button');el.type='button';el.className='lw-skittle-pin'+(knocked.has(i)?' down':'');el.style.left=p[0]+'%';el.style.top=p[1]+'%';el.textContent='🎳';el.title='Skittle '+pinNames[i];el.addEventListener('click',()=>{if(!knocked.has(i)){knocked.add(i);total=knocked.size;drawPins();update();}});
+        pins.appendChild(el);
+      });
+    };
+    const update=()=>{const left=10-knocked.size;scoreBox.innerHTML='🎳 <strong>'+left+'</strong> skittles standing · '+knocked.size+'/10 down';if(left===0){msg.textContent='🏆 PERFECT 10! ALL SKITTLES DOWN! 🔥';roll.disabled=true;}else msg.textContent=rolls?'Roll '+(rolls+1)+' — '+left+' still standing.':'Roll the ball down the lane!';};
+    const resetGame=()=>{knocked=new Set();rolls=0;total=0;roll.disabled=false;ball.classList.remove('rolling');drawPins();update();};
+    roll.addEventListener('click',()=>{
+      if(knocked.size===10)return;
+      rolls++;
+      ball.classList.remove('rolling');void ball.offsetWidth;ball.classList.add('rolling');
+      setTimeout(()=>{
+        const standing=[...Array(10).keys()].filter(i=>!knocked.has(i));
+        const hitCount=Math.min(standing.length,Math.max(1,Math.floor(Math.random()*5)+1));
+        shuffle(standing).slice(0,hitCount).forEach(i=>knocked.add(i));
+        total=knocked.size;drawPins();update();
+        if(knocked.size<10)msg.textContent='💥 '+hitCount+' skittle'+(hitCount===1?'':'s')+' down! '+(10-knocked.size)+' left.';
+      },420);
+    });
+    reset.addEventListener('click',resetGame);drawPins();update();
+  }
   else if(type==='shuffleboard'){btn('🟠 SLIDE',()=>{const d=rand(100);result(d>85?'🏆 PERFECT LANDING!':d>60?'🔥 Great slide!':'😂 Bit short — blame the table!')});result('🟠 Slide the puck towards the 100 zone.')}
   else if(type==='tablefootball'){let a=0,b=0;result('⚽ Kick-off!');btn('⚽ ATTACK',()=>{rand(2)===1?a++:b++;result('⚽ SCORE '+a+' - '+b+' — '+(a>=5||b>=5?'🏆 FULL TIME!':'Keep attacking!'))})}
   else if(type==='bowling'){let frame=1,pins=10;result('🎳 Frame 1 — 10 pins');btn('🎳 BOWL',()=>{const hit=rand(10);result(hit===10?'🎳 STRIKE! 🔥':'🎳 Knocked '+hit+' pins!');frame++;if(frame<=10)setTimeout(()=>result('🎳 Frame '+frame+' — roll again!'),250)})}
