@@ -73,6 +73,37 @@ section h1{text-shadow:0 0 8px rgba(0,234,255,.65),0 0 18px rgba(255,43,214,.3)}
 @media(max-width:600px){.jukebox-wrap{width:calc(100% - 4px);padding:11px 8px 18px;border-width:6px;border-radius:35% 35% 20px 20px/9% 9% 20px 20px;box-shadow:0 0 0 2px #ff2bd6,0 0 0 5px #00eaff,0 0 0 8px #ffd43b,0 0 22px #ff2bd6,0 0 34px rgba(0,234,255,.45),inset 0 0 25px #000}.jukebox-wrap::before{inset:7px;border-width:3px}.jukebox-header{padding:9px 6px 12px}.jukebox-kicker{font-size:10px;letter-spacing:2px}.jukebox-title{font-size:clamp(24px,8vw,32px);line-height:1.02}.jukebox-arch{padding:8px 7px 11px;border-width:4px}.jukebox-window{padding:15px 8px 14px;border-width:3px}.jukebox-window h2{font-size:27px}.jukebox-window>p{font-size:16px;line-height:1.45}.jukebox-eq{height:20px;margin:5px auto 1px}.jukebox-eq span{width:5px}.jukebox-speakers{gap:7px;margin-top:13px}.juke-speaker{height:42px;border-width:2px}.juke-light{width:12px;height:12px}}
 @media(prefers-reduced-motion:reduce){.jukebox-wrap::after,.juke-light,.jukebox-eq span,.juke-speaker{animation:none}}
 
+/* Proper vintage jukebox cabinet — compact Wurlitzer-style silhouette */
+.proper-jukebox{width:min(100%,700px);padding:0 18px 16px;border:0;border-radius:30% 30% 24px 24px/10% 10% 24px 24px;background:linear-gradient(90deg,#160d08,#4b2414 8%,#1a0d09 18%,#3b1b11 50%,#1a0d09 82%,#4b2414 92%,#160d08);box-shadow:0 12px 0 #080706,0 0 0 3px #0b0908,0 0 0 6px #b87835,0 0 28px rgba(255,43,214,.35),0 0 48px rgba(0,234,255,.22),inset 0 0 30px #050403;overflow:visible}
+.proper-jukebox::before{content:"";position:absolute;left:5%;right:5%;bottom:7px;height:9px;border-radius:999px;background:linear-gradient(90deg,#080706,#d08a3e,#ffd46b,#d08a3e,#080706);box-shadow:0 0 9px rgba(255,212,107,.65)}
+.proper-jukebox::after{content:"";position:absolute;left:9%;right:9%;top:58px;height:3px;background:linear-gradient(90deg,#00eaff,#ffd43b,#ff2bd6,#ffd43b,#00eaff);box-shadow:0 0 10px #00eaff;animation:jukeVintageSweep 4s linear infinite}
+.jukebox-crown{position:relative;z-index:5;margin:0 auto -2px;width:78%;min-height:45px;padding:8px 14px;display:flex;align-items:center;justify-content:center;gap:18px;border-radius:50% 50% 18px 18px/65% 65% 18px 18px;background:linear-gradient(180deg,#17100d,#6b321d 48%,#20100b);border:4px solid #0a0807;box-shadow:0 0 0 2px #d49a4e,0 0 15px rgba(255,212,59,.4),inset 0 -7px 14px #080504}
+.jukebox-brand{font-weight:1000;letter-spacing:3px;font-size:clamp(19px,4vw,29px);color:#fff1b7;text-shadow:0 1px 0 #7b351b,0 0 8px #ffd43b,0 0 18px #ff8a2b}
+.juke-crown-bolt{color:#ffd43b;text-shadow:0 0 8px #ffd43b;font-size:19px}
+.jukebox-arch{position:relative;z-index:2;min-height:360px;margin:0 auto;padding:48px 55px 20px;max-width:610px;border:7px solid #100b08;border-radius:42% 42% 22px 22px/19% 19% 22px 22px;background:linear-gradient(90deg,#4a2314,#9a5429 8%,#32160e 17%,#24110b 50%,#32160e 83%,#9a5429 92%,#4a2314);box-shadow:0 0 0 3px #c88a42,0 0 0 6px #21120c,0 0 20px rgba(255,183,67,.28),inset 0 0 35px #080403;overflow:hidden}
+.jukebox-arch::before{content:"";position:absolute;inset:10px;border-radius:39% 39% 16px 16px/16% 16% 16px 16px;border:3px solid #d19a53;box-shadow:inset 0 0 0 4px #160c08,inset 0 0 22px rgba(255,212,107,.2);pointer-events:none}
+.juke-curtain{position:absolute;top:18px;left:17%;right:17%;height:90px;border-radius:50% 50% 0 0/55% 55% 0 0;background:radial-gradient(ellipse at 50% 0,#7b2b22 0,#35120f 60%,#170907 100%);border:4px solid #120807;box-shadow:inset 0 -20px 25px rgba(255,74,38,.18);overflow:hidden}
+.juke-curtain::before,.juke-curtain::after{content:"";position:absolute;top:0;width:48%;height:100%;background:repeating-linear-gradient(105deg,#220b09 0 8px,#70241d 9px 15px,#2c0c0a 16px 22px);opacity:.9}
+.juke-curtain::before{left:0;border-radius:60% 0 0 0}.juke-curtain::after{right:0;transform:scaleX(-1);border-radius:60% 0 0 0}
+.juke-curtain span{position:absolute;bottom:-3px;width:12px;height:25px;border-radius:50%;background:#a84a2e;box-shadow:0 0 7px #ff7040;z-index:2}.juke-curtain span:nth-child(1){left:42%}.juke-curtain span:nth-child(2){left:49%}.juke-curtain span:nth-child(3){left:56%}
+.juke-side-column{position:absolute;top:90px;bottom:25px;width:39px;border-radius:20px;background:linear-gradient(90deg,#e78b25,#ffcc4d 35%,#d95a25 62%,#672016);border:4px solid #160c08;box-shadow:0 0 0 2px #8d4d25,0 0 12px rgba(255,137,42,.45),inset 0 0 14px rgba(255,241,170,.5);z-index:3}
+.juke-side-column.left{left:12px}.juke-side-column.right{right:12px;background:linear-gradient(90deg,#54206e,#b34ac2 35%,#2b67b7 70%,#12244b);box-shadow:0 0 0 2px #57266f,0 0 13px rgba(0,234,255,.42),inset 0 0 14px rgba(255,255,255,.32)}
+.juke-side-column i{display:block;width:16px;height:16px;margin:24px auto;border-radius:50%;background:#ffd43b;box-shadow:0 0 7px #ffd43b,0 0 15px #ff8a2b;animation:jukeLamp 1.1s ease-in-out infinite alternate}
+.juke-side-column i:nth-child(2){animation-delay:.35s}.juke-side-column i:nth-child(3){animation-delay:.7s}
+.juke-side-column.right i{background:#00eaff;box-shadow:0 0 7px #00eaff,0 0 15px #ff2bd6}
+.jukebox-header{position:relative;z-index:4;padding:2px 8px 8px;text-align:center}.jukebox-kicker{font-size:10px;letter-spacing:2px;color:#ffd76d;text-shadow:0 0 7px #ffd43b}.jukebox-title{font-size:clamp(23px,5vw,34px);color:#fff;text-shadow:0 0 7px #ff7040,0 0 14px #00eaff;margin:2px 0}
+.jukebox-window{position:relative;z-index:4;margin:0 auto;padding:11px 14px 12px;max-width:490px;border:5px solid #130b08;border-radius:18px;background:linear-gradient(145deg,#17100d,#080706);box-shadow:0 0 0 2px #b87333,0 0 0 5px #24120c,0 0 20px rgba(255,143,49,.25),inset 0 0 24px #000;overflow:hidden}
+.jukebox-window::before{content:"";position:absolute;inset:8px;border:2px solid rgba(255,212,107,.45);border-radius:11px;pointer-events:none}
+.juke-grille{height:20px;margin:-2px auto 7px;width:75%;border-radius:10px;background:repeating-linear-gradient(90deg,#3a1b11 0 7px,#d18136 8px 10px,#4a2113 11px 17px);box-shadow:0 0 10px rgba(255,157,57,.28);opacity:.9}
+.juke-console{position:relative;z-index:2}
+.jukebox-window h2{font-size:25px;margin:2px 0 4px;color:#fff0c4;text-shadow:0 0 8px #ffd43b}.jukebox-window>p{font-size:14px;line-height:1.35;color:#d8cfc5;margin:0 auto 8px}
+.jukebox-speakers{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:7px auto 0;max-width:420px}.juke-speaker{height:28px;border-radius:8px;border:2px solid #a96a32;background:radial-gradient(circle,#ffb64b 0 2px,transparent 3px) 0 0/8px 8px,linear-gradient(180deg,#140b08,#32170e);box-shadow:0 0 8px rgba(255,143,49,.35);animation:jukeSpeaker 1.15s ease-in-out infinite alternate}
+.jukebox-controls{gap:8px;margin-top:6px}.juke-light{width:10px;height:10px}.jukebox-note{font-size:11px;margin:4px 0 0;color:#bcae9e}
+.juke-bottom-grille{position:relative;z-index:4;width:64%;height:15px;margin:8px auto 0;border-radius:9px;background:repeating-linear-gradient(90deg,#21100a 0 5px,#b87333 6px 8px);box-shadow:0 0 9px rgba(255,183,67,.28)}
+@keyframes jukeVintageSweep{0%,100%{opacity:.45;filter:brightness(.8)}50%{opacity:1;filter:brightness(1.5)}}@keyframes jukeLamp{from{opacity:.45;transform:scale(.8)}to{opacity:1;transform:scale(1.08)}}
+@media(max-width:600px){.proper-jukebox{padding:0 8px 14px}.jukebox-crown{width:88%;min-height:39px;padding:6px 8px;gap:10px}.jukebox-brand{font-size:18px}.jukebox-arch{min-height:340px;padding:43px 35px 17px;border-width:6px}.juke-side-column{width:27px;top:80px}.juke-side-column.left{left:8px}.juke-side-column.right{right:8px}.juke-side-column i{width:11px;height:11px;margin:22px auto}.juke-curtain{left:16%;right:16%;height:78px}.jukebox-window{padding:9px 8px 10px}.jukebox-window h2{font-size:22px}.jukebox-window>p{font-size:13px}.juke-grille{height:16px}.juke-bottom-grille{width:70%}}
+@media(prefers-reduced-motion:reduce){.proper-jukebox::after,.juke-side-column i,.juke-speaker{animation:none}}
+
 @media(max-width:600px){.bar-hero{padding-top:45px}.player{padding:27px 18px}section{padding:32px 0}.grid{gap:17px}.request-zone{padding:25px 16px}.request-zone h2{font-size:26px}}
 @media(prefers-reduced-motion:reduce){.bar-hero::before,.bar-hero::after,.player::before,.live-status,.grid .card::before{animation:none}}
 
@@ -318,17 +349,30 @@ box-shadow:0 9px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,210,150,.08),0 0 14
 </nav>
 <div class="bar-edge-lights" aria-hidden="true"><div class="bar-edge-top"></div></div>
 <div class="bar-hero"><div class="bar-pub-lights"></div><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🍹 The Live Wire Bar</h1><p class="bar-intro"><strong>Welcome to the Live Wire Bar — a fun place where everyone can enjoy the company, music, laughs and vibes from TikTok, all from the comfort of their own home.</strong></p><p class="bar-intro">It's like one big community bar without needing to be in the same room. People come together through music and banter, share the moment, have a laugh and enjoy the Live Wire experience wherever they are.</p></div></div>
-<section><div class="bar-pub-wall"><div class="pub-neon-sign">🍺 LIVE WIRE BAR • OPEN FOR BANter • MUSIC • LAUGHS ⚡</div><div class="pub-shelf"><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span></div><div class="pub-drink-display" aria-label="Drinks on the Live Wire Bar"><div class="pub-glass pint"><div class="glass-body"></div><div class="liquid"></div><div class="foam"></div><div class="rim"></div><span class="pub-label">PINT</span></div><div class="pub-glass red pint"><div class="glass-body"></div><div class="liquid"></div><div class="rim"></div><span class="pub-label">CIDER</span></div><div class="pub-glass whisky"><div class="glass-body"></div><div class="liquid"></div><div class="ice"></div><div class="rim"></div><span class="pub-label">WHISKY</span></div><div class="pub-glass cocktail"><div class="glass-body"></div><div class="liquid"></div><div class="rim"></div><div class="garnish">🍋</div><div class="stem"></div><div class="base"></div><span class="pub-label">COCKTAIL</span></div><div class="pub-glass"><div class="glass-body"></div><div class="liquid"></div><div class="foam"></div><div class="rim"></div><div class="stem"></div><div class="base"></div><span class="pub-label">LAGER</span></div></div><div class="pub-bar-top"></div></div><div class="wrap"><div class="player"><div class="jukebox-wrap">
-<div class="jukebox-header"><div class="jukebox-kicker">⚡ LIVE WIRE ENTERTAINMENT ⚡</div><div class="jukebox-title">🎶 LIVE WIRE JUKEBOX</div></div>
-<div class="jukebox-arch"><div class="jukebox-window">
-<div id="barLiveStatus" class="live-status">⚪ CHECKING LIVE STATUS…</div>
-<div id="barLiveShow" class="bar-live-show">Checking Live Wire schedule…</div>
-<div class="jukebox-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><h2>📻 Listen Live</h2><p>When the Live Wire show is live, drop the needle and listen along directly from the website.</p>
-<div data-type="newStreamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="light" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
-<div class="jukebox-speakers" aria-hidden="true"><div class="juke-speaker"></div><div class="juke-speaker"></div></div>
-<div class="jukebox-controls" aria-hidden="true"><span class="juke-light"></span><span class="juke-light"></span><span class="juke-light"></span></div>
-<div class="jukebox-note">🎵 Turn it up, pull up a virtual bar stool and enjoy the music. ⚡</div>
-</div></div></div></div><script src="//cdn.cloud.caster.fm//widgets/embed.js"></script><script>
+<section><div class="bar-pub-wall"><div class="pub-neon-sign">🍺 LIVE WIRE BAR • OPEN FOR BANter • MUSIC • LAUGHS ⚡</div><div class="pub-shelf"><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span></div><div class="pub-drink-display" aria-label="Drinks on the Live Wire Bar"><div class="pub-glass pint"><div class="glass-body"></div><div class="liquid"></div><div class="foam"></div><div class="rim"></div><span class="pub-label">PINT</span></div><div class="pub-glass red pint"><div class="glass-body"></div><div class="liquid"></div><div class="rim"></div><span class="pub-label">CIDER</span></div><div class="pub-glass whisky"><div class="glass-body"></div><div class="liquid"></div><div class="ice"></div><div class="rim"></div><span class="pub-label">WHISKY</span></div><div class="pub-glass cocktail"><div class="glass-body"></div><div class="liquid"></div><div class="rim"></div><div class="garnish">🍋</div><div class="stem"></div><div class="base"></div><span class="pub-label">COCKTAIL</span></div><div class="pub-glass"><div class="glass-body"></div><div class="liquid"></div><div class="foam"></div><div class="rim"></div><div class="stem"></div><div class="base"></div><span class="pub-label">LAGER</span></div></div><div class="pub-bar-top"></div></div><div class="wrap"><div class="player"><div class="jukebox-wrap proper-jukebox">
+<div class="jukebox-crown"><span class="juke-crown-bolt">⚡</span><span class="jukebox-brand">LIVE WIRE</span><span class="juke-crown-bolt">⚡</span></div>
+<div class="jukebox-arch">
+  <div class="juke-curtain" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="juke-side-column left" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="juke-side-column right" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="jukebox-header"><div class="jukebox-kicker">LIVE WIRE ENTERTAINMENT</div><div class="jukebox-title">🎶 JUKEBOX</div></div>
+  <div class="jukebox-window">
+    <div class="juke-grille" aria-hidden="true"></div>
+    <div class="juke-console">
+      <div id="barLiveStatus" class="live-status">⚪ CHECKING LIVE STATUS…</div>
+      <div id="barLiveShow" class="bar-live-show">Checking Live Wire schedule…</div>
+      <div class="jukebox-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <h2>📻 Listen Live</h2>
+      <p>When the Live Wire show is live, drop the needle and listen along directly from the website.</p>
+      <div data-type="newStreamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="light" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
+      <div class="jukebox-speakers" aria-hidden="true"><div class="juke-speaker"></div><div class="juke-speaker"></div></div>
+      <div class="jukebox-controls" aria-hidden="true"><span class="juke-light"></span><span class="juke-light"></span><span class="juke-light"></span></div>
+      <div class="jukebox-note">🎵 Turn it up, pull up a virtual bar stool and enjoy the music. ⚡</div>
+    </div>
+  </div>
+  <div class="juke-bottom-grille" aria-hidden="true"></div>
+</div>
+</div><script src="//cdn.cloud.caster.fm//widgets/embed.js"></script><script>
 const CASTER_STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
 const CASTER_MOUNT='/6W6zw';
 const BAR_WORKER_STATUS='https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status';
