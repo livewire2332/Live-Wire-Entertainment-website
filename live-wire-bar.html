@@ -124,9 +124,55 @@ linear-gradient(90deg,rgba(91,48,25,.52),rgba(24,13,9,.72) 18%,rgba(74,38,20,.35
 .pub-shelf{position:relative;z-index:1;display:flex;justify-content:center;align-items:flex-end;gap:18px;min-height:76px;padding:12px 12px 10px;border-bottom:8px solid #482513;border-radius:5px;background:linear-gradient(180deg,rgba(8,6,5,.4),rgba(34,17,10,.7));box-shadow:inset 0 -8px 15px rgba(0,0,0,.45)}.pub-bottle{width:25px;height:53px;border-radius:7px 7px 4px 4px;background:linear-gradient(90deg,#173b2b,#65a95b 48%,#163021);border:1px solid rgba(255,212,124,.4);box-shadow:0 0 8px rgba(255,187,74,.16);position:relative}.pub-bottle::before{content:"";position:absolute;left:7px;right:7px;top:-10px;height:12px;border-radius:3px 3px 0 0;background:#9d6a36}.pub-bottle:nth-child(2n){height:62px;background:linear-gradient(90deg,#4b1d19,#b85d37 50%,#3d1715)}.pub-bottle:nth-child(3n){height:48px;background:linear-gradient(90deg,#5a4814,#d0a83e 50%,#4a3a10)}
 .pub-bar-top{position:relative;z-index:1;margin:22px auto 0;height:14px;max-width:900px;border-radius:50%;background:linear-gradient(180deg,#c17a38,#633418 50%,#2b160c);box-shadow:0 6px 20px rgba(0,0,0,.45),0 0 14px rgba(255,164,61,.12)}
 @media(max-width:600px){.bar-pub-wall{margin:0 1% 20px;padding:22px 10px 25px}.pub-shelf{gap:9px;min-height:64px}.pub-bottle{width:19px;height:45px}.pub-bottle:nth-child(2n){height:51px}.pub-bottle:nth-child(3n){height:41px}.pub-neon-sign{font-size:12px;letter-spacing:1px;padding:8px 12px}.pub-bar-top{margin-top:15px}}
+
+/* Live Wire Bar visual atmosphere v2 — richer wood, bottle silhouettes, animated perimeter and logo */
+html{background:#080504}
+body{background:#110907!important}
+body::before{background:
+radial-gradient(ellipse at 18% 8%,rgba(255,184,91,.22),transparent 24%),
+radial-gradient(ellipse at 82% 12%,rgba(255,67,180,.13),transparent 25%),
+linear-gradient(90deg,rgba(39,20,11,.96),rgba(14,8,6,.92) 25%,rgba(42,22,12,.9) 50%,rgba(12,7,5,.94) 75%,rgba(39,19,10,.96)),
+repeating-linear-gradient(92deg,rgba(255,190,112,.035) 0 2px,transparent 2px 13px,rgba(0,0,0,.045) 13px 19px);
+background-blend-mode:screen,screen,normal,soft-light}
+body::after{opacity:.68;background:
+repeating-linear-gradient(90deg,rgba(255,205,145,.035) 0 2px,transparent 2px 72px),
+repeating-linear-gradient(3deg,transparent 0 38px,rgba(255,181,96,.025) 39px 41px),
+radial-gradient(ellipse at 50% 35%,transparent 0 45%,rgba(0,0,0,.48) 100%)}
+.bar-hero{background:
+linear-gradient(180deg,rgba(19,10,7,.48),rgba(8,5,4,.78)),
+repeating-linear-gradient(92deg,rgba(255,190,112,.028) 0 2px,transparent 2px 14px),
+radial-gradient(ellipse at 50% 0,rgba(255,181,79,.28),transparent 58%)}
+.bar-hero .logo{position:relative;z-index:3;border-radius:50%;padding:5px;background:rgba(4,4,8,.7);box-shadow:0 0 0 2px rgba(255,212,59,.75),0 0 0 5px rgba(0,234,255,.5),0 0 18px rgba(255,43,214,.7),0 0 42px rgba(0,234,255,.38);animation:liveWireLogoPulse 3.2s ease-in-out infinite}
+.bar-hero .logo:hover{animation:liveWireLogoActive .75s ease-in-out infinite}
+@keyframes liveWireLogoPulse{0%,100%{filter:brightness(.95);transform:scale(1);box-shadow:0 0 0 2px rgba(255,212,59,.7),0 0 0 5px rgba(0,234,255,.45),0 0 18px rgba(255,43,214,.55),0 0 36px rgba(0,234,255,.28)}50%{filter:brightness(1.16);transform:scale(1.035);box-shadow:0 0 0 2px #ffd43b,0 0 0 6px #00eaff,0 0 25px #ff2bd6,0 0 52px rgba(0,234,255,.55)}}
+@keyframes liveWireLogoActive{50%{transform:scale(1.08) rotate(1deg);filter:brightness(1.35) saturate(1.2)}}
+.bar-edge-lights{position:fixed;inset:0;z-index:20;pointer-events:none}
+.bar-edge-lights::before,.bar-edge-lights::after{content:"";position:absolute;top:0;bottom:0;width:4px;border-radius:999px;background:linear-gradient(180deg,transparent,#00eaff 12%,#ff2bd6 34%,#ffd43b 52%,#00eaff 72%,#ff2bd6 88%,transparent);box-shadow:0 0 8px #00eaff,0 0 18px #ff2bd6,0 0 30px rgba(255,212,59,.6);opacity:.72;animation:barEdgePulse 3.8s ease-in-out infinite}
+.bar-edge-lights::before{left:5px}.bar-edge-lights::after{right:5px;animation-delay:1.9s}
+.bar-edge-top{position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,#00eaff 15%,#ff2bd6 33%,#ffd43b 50%,#ff2bd6 67%,#00eaff 85%,transparent);box-shadow:0 0 10px #00eaff,0 0 24px #ff2bd6;animation:barEdgeSweep 5s linear infinite}
+@keyframes barEdgePulse{0%,100%{opacity:.48;filter:brightness(.85)}50%{opacity:1;filter:brightness(1.45)}}@keyframes barEdgeSweep{0%{transform:translateX(-10%)}50%{transform:translateX(10%)}100%{transform:translateX(-10%)}}
+.bar-pub-wall{background:
+linear-gradient(180deg,rgba(82,43,24,.58),rgba(25,13,8,.84)),
+repeating-linear-gradient(87deg,rgba(255,197,124,.08) 0 3px,rgba(65,31,15,.18) 3px 11px,rgba(0,0,0,.08) 11px 16px),
+repeating-linear-gradient(2deg,rgba(255,220,159,.035) 0 2px,transparent 2px 46px);
+border-color:rgba(190,117,56,.62)}
+.pub-shelf{background:
+linear-gradient(180deg,rgba(7,5,4,.18),rgba(27,13,7,.82)),
+repeating-linear-gradient(90deg,rgba(255,184,92,.04) 0 2px,transparent 2px 22px);
+}
+.pub-bottle{position:relative;width:27px;height:61px;border-radius:7px 7px 5px 5px;background:
+linear-gradient(90deg,rgba(10,31,23,.96),#2f754d 25%,#78b86a 47%,#214b34 70%,#081c14 100%);
+border:1px solid rgba(255,218,148,.5);box-shadow:inset 3px 0 5px rgba(255,255,255,.16),inset -4px 0 7px rgba(0,0,0,.42),0 2px 6px rgba(0,0,0,.55)}
+.pub-bottle::before{height:13px;top:-12px;left:8px;right:8px;background:linear-gradient(90deg,#67401f,#c08a4b,#5a371c);border:1px solid rgba(255,220,151,.32)}
+.pub-bottle::after{content:"";position:absolute;left:5px;right:5px;top:25px;height:12px;border-radius:2px;background:linear-gradient(180deg,#f5d47d,#9d5b2c);opacity:.9;box-shadow:0 0 4px rgba(255,213,109,.22)}
+.pub-bottle:nth-child(2n){height:70px;background:linear-gradient(90deg,#321311,#7b2e22 25%,#c26a45 48%,#612117 73%,#1f0b0a)}.pub-bottle:nth-child(2n)::after{background:linear-gradient(180deg,#f3e0ad,#8e4630)}
+.pub-bottle:nth-child(3n){height:57px;background:linear-gradient(90deg,#493b0d,#a98624 28%,#e0bf55 49%,#766018 73%,#31290a)}.pub-bottle:nth-child(3n)::after{background:linear-gradient(180deg,#fff1b0,#b27d24)}
+@media(max-width:600px){.bar-edge-lights::before{left:2px}.bar-edge-lights::after{right:2px}.pub-bottle{width:20px;height:51px}.pub-bottle:nth-child(2n){height:57px}.pub-bottle:nth-child(3n){height:47px}.bar-hero .logo{padding:4px}}
+@media(prefers-reduced-motion:reduce){.bar-edge-lights::before,.bar-edge-lights::after,.bar-edge-top,.bar-hero .logo{animation:none}}
 </style>
 </head>
 <body>
+<div class="bar-edge-lights" aria-hidden="true"><div class="bar-edge-top"></div></div>
 <div class="bar-hero"><div class="bar-pub-lights"></div><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🍹 The Live Wire Bar</h1><p class="bar-intro"><strong>Welcome to the Live Wire Bar — a fun place where everyone can enjoy the company, music, laughs and vibes from TikTok, all from the comfort of their own home.</strong></p><p class="bar-intro">It's like one big community bar without needing to be in the same room. People come together through music and banter, share the moment, have a laugh and enjoy the Live Wire experience wherever they are.</p></div></div>
 <section><div class="bar-pub-wall"><div class="pub-neon-sign">🍺 LIVE WIRE BAR • OPEN FOR BANter • MUSIC • LAUGHS ⚡</div><div class="pub-shelf"><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span><span class="pub-bottle"></span></div><div class="pub-bar-top"></div></div><div class="wrap"><div class="player"><div class="jukebox-wrap">
 <div class="jukebox-header"><div class="jukebox-kicker">⚡ LIVE WIRE ENTERTAINMENT ⚡</div><div class="jukebox-title">🎶 LIVE WIRE JUKEBOX</div></div>
