@@ -265,6 +265,7 @@ style.textContent=`
 .lw-arcade-panel .lwb{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;width:100%;min-width:0;overflow:hidden}
 .lw-arcade-panel .lwb button{width:100%;min-width:0;max-width:100%;aspect-ratio:1/1;padding:4px 2px;font-size:clamp(8px,1.25vw,10px);line-height:1.08;white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden}
 .lw-arcade-panel .lwb .on{background:rgba(255,43,214,.35);border-color:#ffd43b}
+.lw-arcade-panel .lw-dartboard-wrap{display:flex;justify-content:center;margin:12px auto;max-width:360px}.lw-arcade-panel .lw-dartboard{width:100%;height:auto;touch-action:manipulation;border-radius:50%;background:#111;box-shadow:0 0 18px rgba(255,212,59,.2)}.lw-arcade-panel .lw-dart-seg{cursor:pointer;stroke:#111;stroke-width:1}.lw-arcade-panel .lw-dart-seg:hover{filter:brightness(1.2)}.lw-arcade-panel .lw-dart-score{text-align:center;font-size:22px;margin-bottom:5px}.lw-arcade-panel .lw-dart-msg{text-align:center;min-height:24px;font-weight:800}.lw-arcade-panel .lw-dart-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.lw-arcade-panel .lw-dart-actions button{border:1px solid #00eaff;border-radius:20px;background:#11152a;color:#fff;padding:10px;cursor:pointer}.lw-arcade-panel .lw-dart-actions button:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:900px){.lw-arcade-panel .lwmore{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
 @media(max-width:600px){.lw-arcade-panel{padding:0}.lw-arcade-panel .lwmore{grid-template-columns:minmax(0,1fr);gap:16px}.lw-arcade-panel .lwgame{padding:16px}.lw-arcade-panel .lwgame h2{font-size:23px}.lw-arcade-panel .lwgame p{font-size:15px;line-height:1.45}.lw-arcade-panel .lwb{gap:4px}.lw-arcade-panel .lwb button{font-size:clamp(7px,2.4vw,9px);padding:3px 1px}.lw-arcade-panel .lwc button,.lw-arcade-panel .lwgo{font-size:15px;padding:11px 12px}}
 `;
@@ -339,7 +340,48 @@ function playNew(i,type){
   else if(type==='luckynum'){result('🍀 Pick a number from 1–20');for(let n=1;n<=10;n++)btn('Pick '+n,()=>result(rand(20)===n?'🍀 LUCKY! JACKPOT!':'😂 Not your lucky number!'))}
   else if(type==='pubjackpot'){result('🏆 Answer the pub question to build the jackpot.');const qs2=[['Capital of Wales?',['Cardiff','Swansea','Newport'],'Cardiff'],['Beatles album?',['Abbey Road','Rumours','Thriller'],'Abbey Road'],['How many sides on a hexagon?',['6','7','8'],'6'],['Which decade was 1990 in?',['90s','80s','00s'],'90s']];const q=P('pubjackpot-questions',qs2);o.textContent=q[0];q[1].forEach(v=>btn(v,()=>result(v===q[2]?'💷 JACKPOT BUILDS! £'+(rand(9)*10):'😂 Jackpot escapes!')))}
   else if(type==='bull'){result('🎯 Tap THROW and try to land closest to the bull.');btn('🎯 THROW!',()=>result('You landed '+rand(100)+'cm from bull! '+(rand(5)===1?'🔥 BULLSEYE!':'Closest pub table wins bragging rights!')))}
-  else if(type==='darts301'||type==='killer'){let score=type==='darts301'?301:0;result(type==='darts301'?'🎯 301 remaining — throw 3 darts!':'🎯 Pick a target number to become the killer.');if(type==='darts301'){btn('🎯 THROW 3 DARTS',()=>{const hit=rand(60)+rand(60)+rand(60);score=Math.max(0,score-hit);result(score===0?'🏆 CHECKOUT! You won!':'🎯 '+score+' left — throw again!')})}else{[20,19,18,17,16,15].forEach(n=>btn('Hit '+n,()=>result(rand(6)===1?'☠️ KILLER! Target claimed!':'🎯 '+n+' hit — keep throwing!')))}}
+  else if(type==='darts301'){
+    let score=301,throws=0,turnScore=0;
+    o.innerHTML='<div class="lw-dart-score">🎯 <strong>301</strong> remaining</div><div class="lw-dart-msg">Tap the dartboard where you want to throw.</div><div class="lw-dartboard-wrap"><svg class="lw-dartboard" viewBox="0 0 400 400" role="img" aria-label="Interactive dartboard"></svg></div><div class="lw-dart-actions"><button type="button" class="lw-dart-new">↻ New Game</button><button type="button" class="lw-dart-next" disabled>➡️ Next Dart</button></div>';
+    c.innerHTML='';
+    const svg=o.querySelector('.lw-dartboard'), next=o.querySelector('.lw-dart-next'), fresh=o.querySelector('.lw-dart-new');
+    const nums=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
+    const cx=200,cy=200;
+    const polar=(r,a)=>[cx+Math.cos(a)*r,cy+Math.sin(a)*r];
+    const path=(r1,r2,a1,a2)=>{const p1=polar(r1,a1),p2=polar(r1,a2),p3=polar(r2,a2),p4=polar(r2,a1),large=(a2-a1)>Math.PI?1:0;return 'M '+p1[0]+' '+p1[1]+' L '+p2[0]+' '+p2[1]+' L '+p3[0]+' '+p3[1]+' L '+p4[0]+' '+p4[1]+' Z'};
+    const add=(tag,attrs)=>{const el=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));svg.appendChild(el);return el};
+    add('circle',{cx,cy,r:190,fill:'#17121b',stroke:'#ffd43b','stroke-width':5});
+    for(let i=0;i<20;i++){const a0=-Math.PI/2+i*Math.PI*2/20-Math.PI/40,a1=-Math.PI/2+i*Math.PI*2/20+Math.PI/40,n=nums[i];
+      [['0',34],['1',88],['3',128],['1',168]].forEach(()=>{});
+      add('path',{d:path(42,88,a0,a1),class:'lw-dart-seg',fill:i%2?'#e9e9e9':'#202020','data-value':n,'data-mult':1});
+      add('path',{d:path(128,168,a0,a1),class:'lw-dart-seg',fill:i%2?'#e9e9e9':'#202020','data-value':n,'data-mult':1});
+      add('path',{d:path(88,98,a0,a1),class:'lw-dart-seg',fill:i%2?'#b51f2a':'#1d6f54','data-value':n,'data-mult':3});
+      add('path',{d:path(168,178,a0,a1),class:'lw-dart-seg',fill:i%2?'#b51f2a':'#1d6f54','data-value':n,'data-mult':2});
+    }
+    add('circle',{cx,cy,r:34,fill:'#202020',stroke:'#ffd43b','stroke-width':2,'data-value':25,'data-mult':1,class:'lw-dart-seg'});
+    add('circle',{cx,cy,r:17,fill:'#c52b38',stroke:'#ffd43b','stroke-width':2,'data-value':25,'data-mult':2,class:'lw-dart-seg'});
+    for(let i=0;i<20;i++){const a=-Math.PI/2+(i+.5)*Math.PI*2/20,p=polar(187,a),t=add('text',{x:p[0],y:p[1]+5,'text-anchor':'middle','font-size':13,fill:'#fff','font-weight':900});t.textContent=nums[i]}
+    const scoreBox=()=>{const s=o.querySelector('.lw-dart-score');if(s)s.innerHTML='🎯 <strong>'+score+'</strong> remaining · Dart '+Math.min(throws+1,3)+'/3';};
+    const reset=()=>{score=301;throws=0;turnScore=0;next.disabled=true;svg.querySelectorAll('.lw-dart-mark').forEach(x=>x.remove());scoreBox();o.querySelector('.lw-dart-msg').textContent='Tap the dartboard where you want to throw.'};
+    const throwDart=(value,mult,el)=>{
+      if(throws>=3)return;
+      const points=value*mult;
+      if(score-points<0){result('💥 BUST! '+points+' would go below zero. Turn lost.');throws=3;turnScore=0;next.disabled=false;return;}
+      score-=points;turnScore+=points;throws++;
+      const mark=document.createElementNS('http://www.w3.org/2000/svg','circle');const box=el.getBoundingClientRect(),root=svg.getBoundingClientRect();
+      const pt=el.tagName.toLowerCase()==='circle'?[+el.getAttribute('cx'),+el.getAttribute('cy')]:null;
+      if(pt){mark.setAttribute('cx',pt[0]);mark.setAttribute('cy',pt[1]);}else{const p=polar(130,0);mark.setAttribute('cx',p[0]);mark.setAttribute('cy',p[1]);}
+      mark.setAttribute('r',5);mark.setAttribute('class','lw-dart-mark');mark.setAttribute('fill','#ffd43b');mark.setAttribute('stroke','#111');mark.setAttribute('stroke-width',2);svg.appendChild(mark);
+      if(score===0){result('🏆 CHECKOUT! '+turnScore+' points this turn — YOU WIN!');throws=3;next.disabled=true;return;}
+      result('🎯 '+(mult===3?'TRIPLE ':mult===2?'DOUBLE ':'')+value+' = '+points+' points');
+      next.disabled=false;
+      if(throws===3){result('🎯 Turn total: '+turnScore+' — '+score+' left. Tap Next Dart for another turn.');}
+    };
+    svg.addEventListener('click',e=>{const el=e.target.closest('.lw-dart-seg');if(!el||throws>=3)return;throwDart(Number(el.dataset.value),Number(el.dataset.mult),el)});
+    next.addEventListener('click',()=>{if(throws<3)return;throws=0;turnScore=0;next.disabled=true;scoreBox();o.querySelector('.lw-dart-msg').textContent='New turn — tap the board for your next dart.'});
+    fresh.addEventListener('click',reset);scoreBox();
+  }
+  else if(type==='killer'){let target=null;result('🎯 Choose your killer target number.');[20,19,18,17,16,15].forEach(n=>btn('Target '+n,()=>{target=n;result('☠️ Killer target: '+target+' — now hit it!');btn('🎯 THROW AT '+target,()=>result(rand(3)===1?'☠️ KILLER! Target claimed!':'😂 Missed it — keep throwing!'))}))}
   else if(type==='coinpusher'){let coins=rand(6)+4;result('🪙 '+coins+' virtual coins on the ledge.');btn('🪙 DROP COIN',()=>{const push=rand(4);coins+=push-1;result(coins>10?'🎉 COINS PUSHED! +'+push:'🪙 '+Math.max(0,coins)+' coins wobbling on the ledge!')})}
   else if(type==='skittles'){btn('🎳 ROLL THE BALL',()=>{const down=rand(10);result('💥 '+down+'/10 skittles down! '+(down===10?'PERFECT!':'Have another go!'))});result('🎳 Aim for all ten skittles!')}
   else if(type==='shuffleboard'){btn('🟠 SLIDE',()=>{const d=rand(100);result(d>85?'🏆 PERFECT LANDING!':d>60?'🔥 Great slide!':'😂 Bit short — blame the table!')});result('🟠 Slide the puck towards the 100 zone.')}
