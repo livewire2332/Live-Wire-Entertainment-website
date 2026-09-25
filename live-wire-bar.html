@@ -169,6 +169,57 @@ border:1px solid rgba(255,218,148,.5);box-shadow:inset 3px 0 5px rgba(255,255,25
 .pub-bottle:nth-child(3n){height:57px;background:linear-gradient(90deg,#493b0d,#a98624 28%,#e0bf55 49%,#766018 73%,#31290a)}.pub-bottle:nth-child(3n)::after{background:linear-gradient(180deg,#fff1b0,#b27d24)}
 @media(max-width:600px){.bar-edge-lights::before{left:2px}.bar-edge-lights::after{right:2px}.pub-bottle{width:20px;height:51px}.pub-bottle:nth-child(2n){height:57px}.pub-bottle:nth-child(3n){height:47px}.bar-hero .logo{padding:4px}}
 @media(prefers-reduced-motion:reduce){.bar-edge-lights::before,.bar-edge-lights::after,.bar-edge-top,.bar-hero .logo{animation:none}}
+
+/* Toilet scene polish — unify the wall, cubicles and control shelf */
+.lw-toilet-scene{min-height:330px;background:linear-gradient(180deg,#171b25 0,#11141d 68%,#0b0d13 100%);border:4px solid #151923;box-shadow:inset 0 0 45px rgba(0,0,0,.7),0 0 0 1px rgba(0,234,255,.18);border-radius:18px}
+.lw-tile-wall{inset:0 0 78px;background:
+linear-gradient(180deg,rgba(255,255,255,.025),transparent 28%),
+repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.045) 59px 60px),
+repeating-linear-gradient(0deg,transparent 0 43px,rgba(255,255,255,.035) 44px 45px),
+linear-gradient(135deg,#171b25,#252a35 55%,#151821);}
+/* Remove the competing floating staff plaque and put the hand-wash reminder neatly in the wall. */
+.lw-wall-sign{left:3%;top:12px;padding:4px 8px;font-size:8px;letter-spacing:.7px;opacity:.9}
+.lw-sign-small{left:20%;top:18px;color:#aeb7c4;font-size:8px;letter-spacing:.8px;opacity:.72}
+/* Dedicated vanity zone: mirror + sink stay entirely left of the cubicles. */
+.lw-mirror{left:3%;top:48px;width:17%;height:112px;border-width:5px;border-radius:12px;background:linear-gradient(145deg,#75cbd8,#263341 45%,#b77ba8);box-shadow:0 0 0 2px #00eaff,0 0 14px rgba(0,234,255,.35),inset 0 0 18px rgba(255,255,255,.22)}
+.lw-reflection{font-size:17px}.lw-reflection strong{font-size:9px}.lw-reflection span{font-size:8px}
+.lw-sink{left:4%;top:177px;width:14%;height:48px;border-width:4px;box-shadow:0 0 0 2px #00eaff,0 0 10px rgba(0,234,255,.2)}
+.lw-tap{font-size:23px;top:-34px}
+.lw-water{top:20px;height:0}.lw-water.running{height:28px}
+/* Cubicles share one visual style and sit in a clean row. */
+.lw-door{top:42px;height:232px;border-width:5px;border-radius:8px 8px 2px 2px;box-shadow:0 0 0 2px #ff2bd6,0 0 14px rgba(255,43,214,.22)}
+.lw-door-sign{top:18px;min-width:74px;padding:6px 4px;border-radius:6px;font-size:12px}
+.lw-door-copy{bottom:17px;font-size:10px;line-height:1.45}
+.lw-door-handle{right:15px;top:125px;width:11px;height:11px}
+.lw-door-women{right:3%}
+/* The bog-brush notice becomes a tidy wall plaque instead of sitting on the women's door. */
+.lw-brush-holder{right:28%;top:12px;width:78px;padding:4px 5px;background:rgba(8,10,15,.9);border:1px solid rgba(255,95,114,.65);border-radius:7px;box-shadow:0 0 9px rgba(255,95,114,.16);z-index:6}
+.lw-brush-holder .hook{height:18px;font-size:8px;display:flex;align-items:center;justify-content:center}
+.lw-brush-holder span{font-size:7px;margin-top:2px}
+/* Bottom controls are a single pub-style control shelf, not loose floating objects. */
+.lw-toilet-floor{height:78px;background:linear-gradient(180deg,#151922,#0b0d13);border-top:2px solid rgba(0,234,255,.18);box-shadow:inset 0 8px 18px rgba(0,0,0,.35)}
+.lw-toilet-floor::before{content:"LIVE WIRE TOILET CONTROLS";position:absolute;left:50%;top:5px;transform:translateX(-50%);font-size:7px;font-weight:900;letter-spacing:1.2px;color:#727b89}
+.lw-roll-area{left:7%;bottom:10px;gap:6px}.lw-roll{font-size:35px}.lw-roll-copy{font-size:9px}
+.lw-soap{left:27%;bottom:12px;font-size:20px}.lw-dryer{left:35%;bottom:12px;font-size:19px}
+.lw-flush{right:42%;bottom:10px;width:50px;height:30px;font-size:17px}
+.lw-phone{left:51%;bottom:12px;font-size:25px}.lw-knock{right:27%;top:auto;bottom:16px;font-size:21px}
+.lw-toilet-queue{right:4%;bottom:11px;font-size:27px;gap:6px}
+/* Keep the incident console visually tied to the scene. */
+.lw-toilet-console{margin-top:10px;border:1px solid rgba(255,43,214,.5);background:linear-gradient(180deg,rgba(10,11,17,.94),rgba(5,6,10,.96));box-shadow:inset 0 0 24px rgba(0,234,255,.025)}
+@media(max-width:650px){
+ .lw-toilet-scene{min-height:360px}
+ .lw-wall-sign{left:3%;top:11px;font-size:7px}
+ .lw-sign-small{left:28%;top:16px;font-size:7px}
+ .lw-mirror{left:3%;top:47px;width:17%;height:100px}
+ .lw-sink{left:4%;top:157px;width:13%;height:44px}
+ .lw-door{right:42%;top:40px;width:33%;height:242px}
+ .lw-door-women{right:3%;width:33%}
+ .lw-brush-holder{right:35%;top:11px;width:64px}
+ .lw-brush-holder span{font-size:6px}
+ .lw-roll-area{left:5%}.lw-roll-copy{display:none}
+ .lw-soap{left:25%}.lw-dryer{left:34%}.lw-flush{right:43%;width:44px}.lw-phone{left:51%}.lw-knock{right:29%}
+ .lw-toilet-queue{right:3%;font-size:24px}
+}
 </style>
 </head>
 <body>
