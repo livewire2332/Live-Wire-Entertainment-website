@@ -410,7 +410,7 @@ function playNew(i,type){
     next.addEventListener('click',()=>{if(throws<3)return;throws=0;turnScore=0;next.disabled=true;scoreBox();o.querySelector('.lw-dart-msg').textContent='New turn — tap the board for your next dart.'});
     fresh.addEventListener('click',reset);scoreBox();
   }
-  else if(type==='killer'){let target=null;result('🎯 Choose your killer target number.');[20,19,18,17,16,15].forEach(n=>btn('Target '+n,()=>{target=n;result('☠️ Killer target: '+target+' — now hit it!');btn('🎯 THROW AT '+target,()=>result(rand(3)===1?'☠️ KILLER! Target claimed!':'😂 Missed it — keep throwing!'))}))}
+  else if(type==='killer'){o.innerHTML='<div class="lw-killer-game"><div class="lw-killer-neon">☠️ KILLER DARTS</div><div class="lw-killer-board"><div class="lw-killer-ring">☠️</div><div class="lw-killer-target-display">CHOOSE YOUR TARGET</div></div></div>';const display=o.querySelector('.lw-killer-target-display');[20,19,18,17,16,15].forEach(n=>btn('TARGET '+n,()=>{display.textContent='TARGET '+n+' LOCKED';result('☠️ Target '+n+' claimed — now hit it!');btn('🎯 THROW AT '+n,()=>{const hit=rand(3)===1;display.textContent=hit?'☠️ KILLER HIT!':'MISS';result(hit?'☠️ KILLER! TARGET CLAIMED!':'😂 MISSED IT!');});}))}
   else if(type==='coinpusher'){let coins=rand(6)+4;result('🪙 '+coins+' virtual coins on the ledge.');btn('🪙 DROP COIN',()=>{const push=rand(4);coins+=push-1;result(coins>10?'🎉 COINS PUSHED! +'+push:'🪙 '+Math.max(0,coins)+' coins wobbling on the ledge!')})}
   else if(type==='skittles'){
     let knocked=new Set(),rolls=0,total=0;
