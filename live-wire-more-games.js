@@ -283,6 +283,8 @@ panel.className='extras-section lw-arcade-panel';panel.style.display='none';
 panel.innerHTML='<div class="wrap"><h1>🎮⚡ New Live Wire Arcade</h1><p>22 games with much larger fresh question, answer and result pools. No constant repeat rotation. 😂⚡</p><div class="lwmore"></div></div>';
 toggle.insertAdjacentElement('afterend',panel);
 
+document.querySelectorAll('[data-open-arcade]').forEach(button=>button.addEventListener('click',()=>toggle.click()));
+
 let built=false;
 const qs=id=>panel.querySelector('#'+id);
 const clear=x=>{while(x.firstChild)x.removeChild(x.firstChild)};
