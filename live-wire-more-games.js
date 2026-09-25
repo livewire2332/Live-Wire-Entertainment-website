@@ -269,6 +269,15 @@ style.textContent=`
 @media(max-width:900px){.lw-arcade-panel .lwmore{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
 @media(max-width:600px){.lw-arcade-panel{padding:0}.lw-arcade-panel .lwmore{grid-template-columns:minmax(0,1fr);gap:16px}.lw-arcade-panel .lwgame{padding:16px}.lw-arcade-panel .lwgame h2{font-size:23px}.lw-arcade-panel .lwgame p{font-size:15px;line-height:1.45}.lw-arcade-panel .lwb{gap:4px}.lw-arcade-panel .lwb button{font-size:clamp(7px,2.4vw,9px);padding:3px 1px}.lw-arcade-panel .lwc button,.lw-arcade-panel .lwgo{font-size:15px;padding:11px 12px}}
 `;
+style.textContent+=`
+.lw-arcade-panel .lw-visual-stage,.lw-arcade-panel .lw-quiz-machine,.lw-arcade-panel .lw-card-game,.lw-arcade-panel .lw-dice-game,.lw-arcade-panel .lw-lucky-game,.lw-arcade-panel .lw-jackpot-game,.lw-arcade-panel .lw-bull-game{max-width:390px;margin:12px auto;padding:16px;border:3px solid #00eaff;border-radius:20px;background:radial-gradient(circle at 50% 35%,#202a50,#080b18 72%);box-shadow:inset 0 0 28px rgba(0,234,255,.12),0 0 16px rgba(0,234,255,.1);box-sizing:border-box;overflow:hidden}
+.lw-visual-neon,.lw-quiz-lights,.lw-card-neon,.lw-dice-neon,.lw-jackpot-neon,.lw-bull-neon{text-align:center;font-weight:1000;letter-spacing:2px;color:#ffd21f;text-shadow:0 0 10px rgba(255,210,31,.7)}
+.lw-visual-screen,.lw-quiz-screen,.lw-dice-screen,.lw-lucky-screen,.lw-jackpot-screen,.lw-bull-screen{margin:12px auto;padding:14px;border:2px solid #00eaff;border-radius:12px;background:#050914;color:#fff;text-align:center;box-shadow:inset 0 0 18px rgba(0,234,255,.08)}
+.lw-visual-icon,.lw-lucky-wheel{font-size:58px;text-align:center;margin:8px}.lw-visual-label{font-weight:900;color:#58eaff;text-align:center}.lw-visual-output{margin-top:10px;min-height:42px;font-weight:900}.lw-visual-lights{display:flex;justify-content:center;gap:9px}.lw-visual-lights i{width:8px;height:8px;border-radius:50%;background:#ffd21f;box-shadow:0 0 9px #ffd21f;animation:lwArcadeBlink .7s infinite alternate}
+.lw-quiz-question{font-size:17px;font-weight:900;line-height:1.35}.lw-quiz-meter{height:8px;margin-top:12px;background:#151a2d;border-radius:9px;overflow:hidden}.lw-quiz-meter span{display:block;height:100%;width:12%;background:#00eaff;transition:width .35s}.lw-quiz-answer{margin-top:10px;color:#ffd21f;font-weight:900}.lw-quiz-screen.correct{box-shadow:0 0 22px rgba(44,255,136,.5)}.lw-quiz-screen.wrong{box-shadow:0 0 22px rgba(255,59,48,.45)}
+.lw-card-game,.lw-dice-game,.lw-lucky-game,.lw-jackpot-game,.lw-bull-game{min-height:210px}.lw-big-playing-card{width:130px;height:155px;margin:14px auto;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:14px;background:#fff;color:#111;font-size:28px;box-shadow:0 8px 20px rgba(0,0,0,.4);transform:rotate(-2deg)}.lw-big-playing-card strong{font-size:62px}.lw-card-table-line{text-align:center;color:#58eaff;font-weight:900}.lw-dice-pair{display:flex;justify-content:center;gap:18px;font-size:58px;margin:16px}.lw-dice-screen,.lw-lucky-screen,.lw-jackpot-screen,.lw-bull-screen{font-weight:900;min-height:24px}.lw-lucky-wheel{width:100px;height:100px;margin:16px auto;border-radius:50%;display:grid;place-items:center;border:4px solid #ffd21f;background:radial-gradient(circle,#27315c,#10152a);box-shadow:0 0 20px rgba(255,212,59,.35);animation:lwLuckySpin 3s linear infinite}.lw-jackpot-pot{font-size:42px;text-align:center;color:#ffd21f;font-weight:1000;text-shadow:0 0 12px #ffd21f;margin:16px}.lw-bull-target{width:150px;height:150px;margin:15px auto;border-radius:50%;display:grid;place-items:center;background:repeating-radial-gradient(circle,#fff 0 16px,#d33 16px 32px,#fff 32px 48px,#111 48px 64px);box-shadow:0 0 18px rgba(255,212,59,.25)}.lw-bull-target span{font-size:35px}
+@keyframes lwArcadeBlink{to{opacity:.35}}@keyframes lwLuckySpin{to{transform:rotate(360deg)}}
+`;
 document.head.appendChild(style);
 
 const hero=document.querySelector('.extras-hero');
@@ -294,16 +303,23 @@ function card(i,title,desc){
   d.innerHTML='<div class="mini-label">FRESH POOL ⚡</div><h2>'+title+'</h2><p>'+desc+'</p><div id="lo'+i+'" class="lwout">READY?</div><div id="lc'+i+'" class="lwc"></div><button type="button" class="lwgo" id="lg'+i+'">⚡ PLAY</button>';
   return d;
 }
-function showSimple(i,text){const o=qs('lo'+i),c=qs('lc'+i);if(o)o.textContent=text;if(c)clear(c)}
+function showSimple(i,text){
+  const o=qs('lo'+i),c=qs('lc'+i);if(!o||!c)return;
+  clear(c);
+  const visuals=[['🔀','DECADE SHUFFLE','Pick the next musical era.'],['🥁','DRUMROLL REVEAL','The drumroll is building...'],['🎸','ROCK OR POP?','The genre scanner is ready.'],['🚨','WHO WOULD DO IT?','The Live Wire suspects are on screen.'],['📢','DJ ANNOUNCEMENT','Broadcast console online.'],['🕺','DANCEFLOOR DECISION','Floor status awaiting your call.'],['🎫','TICKET CHECKER','Scan your virtual Live Wire ticket.'],['🚉','STATION MASTER','Platform board is live.'],['🎵','TRAIN PLAYLIST BUILDER','Three carriage slots are waiting.'],['🚦','SIGNAL BOX CHALLENGE','Rail signal is waiting for a decision.'],['🍹','LIVE WIRE COCKTAIL','The bar counter is open.'],['🪩','BAR JUKEBOX','Jukebox screen ready.'],['🎵','PLAY NEXT','The jukebox selector is spinning.'],['🪑','VIP TABLE','Your table is waiting.']];
+  const v=visuals[i-2]||['⚡','LIVE WIRE ARCADE','Interactive game ready.'];
+  o.innerHTML='<div class="lw-visual-stage"><div class="lw-visual-neon">'+v[0]+' '+v[1]+'</div><div class="lw-visual-screen"><div class="lw-visual-icon">'+v[0]+'</div><div class="lw-visual-label">'+v[2]+'</div><div class="lw-visual-output">'+text+'</div></div><div class="lw-visual-lights"><i></i><i></i><i></i><i></i><i></i></div></div>';
+}
 function mc(i,data){
   const o=qs('lo'+i),c=qs('lc'+i);if(!o||!c)return;
-  const x=P('quiz-'+i,data);o.textContent=x[0];clear(c);
+  const x=P('quiz-'+i,data);clear(c);
+  o.innerHTML='<div class="lw-quiz-machine"><div class="lw-quiz-lights">● ● ● ● ●</div><div class="lw-quiz-screen"><div class="lw-quiz-question">'+x[0]+'</div><div class="lw-quiz-meter"><span></span></div></div></div>';
   shuffle(x[1]).forEach(v=>{
     const b=document.createElement('button');b.type='button';b.textContent=v;
     b.addEventListener('click',()=>{
-      o.textContent=v===x[2]?'⚡ CORRECT! 🔥':'😂 NOT QUITE — '+x[2];
-      Array.from(c.children).forEach(q=>q.disabled=true);
-      setTimeout(()=>mc(i,data),750);
+      const screen=o.querySelector('.lw-quiz-screen');screen.classList.add(v===x[2]?'correct':'wrong');o.querySelector('.lw-quiz-meter span').style.width=v===x[2]?'100%':'35%';
+      const answer=document.createElement('div');answer.className='lw-quiz-answer';answer.textContent=v===x[2]?'⚡ CORRECT! 🔥':'😂 NOT QUITE — '+x[2];screen.appendChild(answer);
+      Array.from(c.children).forEach(q=>q.disabled=true);setTimeout(()=>mc(i,data),850);
     });c.appendChild(b);
   });
 }
@@ -335,13 +351,24 @@ function playNew(i,type){
   const result=t=>{o.textContent=t;};
   const rand=(n)=>Math.floor(Math.random()*n)+1;
   if(type==='higher'||type==='redblack'){
-    const card=rand(13),suits=['♥️','♦️','♣️','♠️'],s=suits[rand(4)-1]; result('CARD: '+s+' '+card+' — make your call!');
-    if(type==='higher'){btn('⬆️ Higher',()=>result(rand(13)>=card?'🔥 Correct call!':'😂 Wrong — the pub takes the point!'));btn('⬇️ Lower',()=>result(rand(13)<=card?'🔥 Correct call!':'😂 Wrong — the pub takes the point!'));}
-    else{btn('❤️♦️ Red',()=>result(rand(2)===1?'🔥 RED!':'🖤 BLACK!'));btn('♣️♠️ Black',()=>result(rand(2)===1?'❤️♦️ RED!':'🔥 BLACK!'));}
-  } else if(type==='dice'){result('🎲 Two dice ready! Predict the total.');[2,4,6,8,10,12].forEach(n=>btn(String(n),()=>result(rand(11)+1===n?'🎉 BULLSEYE TOTAL!':'😂 The dice had other plans!')))}
-  else if(type==='luckynum'){result('🍀 Pick a number from 1–20');for(let n=1;n<=10;n++)btn('Pick '+n,()=>result(rand(20)===n?'🍀 LUCKY! JACKPOT!':'😂 Not your lucky number!'))}
-  else if(type==='pubjackpot'){result('🏆 Answer the pub question to build the jackpot.');const qs2=[['Capital of Wales?',['Cardiff','Swansea','Newport'],'Cardiff'],['Beatles album?',['Abbey Road','Rumours','Thriller'],'Abbey Road'],['How many sides on a hexagon?',['6','7','8'],'6'],['Which decade was 1990 in?',['90s','80s','00s'],'90s']];const q=P('pubjackpot-questions',qs2);o.textContent=q[0];q[1].forEach(v=>btn(v,()=>result(v===q[2]?'💷 JACKPOT BUILDS! £'+(rand(9)*10):'😂 Jackpot escapes!')))}
-  else if(type==='bull'){result('🎯 Tap THROW and try to land closest to the bull.');btn('🎯 THROW!',()=>result('You landed '+rand(100)+'cm from bull! '+(rand(5)===1?'🔥 BULLSEYE!':'Closest pub table wins bragging rights!')))}
+    const card=rand(13),suits=['♥️','♦️','♣️','♠️'],s=suits[rand(4)-1];
+    o.innerHTML='<div class="lw-card-game"><div class="lw-card-neon">'+(type==='higher'?'⬆️ HIGHER OR LOWER':'♠️ RED OR BLACK')+'</div><div class="lw-big-playing-card">'+s+'<strong>'+card+'</strong></div><div class="lw-card-table-line">MAKE YOUR CALL</div></div>';
+    const judge=type==='higher'?(v=>result(rand(13)>=card?'🔥 CORRECT CALL!':'😂 WRONG — THE PUB TAKES THE POINT!')):(v=>result(rand(2)===1?'🔥 RED!':'🖤 BLACK!'));
+    if(type==='higher'){btn('⬆️ Higher',judge);btn('⬇️ Lower',judge);}else{btn('❤️♦️ Red',judge);btn('♣️♠️ Black',judge);}
+  } else if(type==='dice'){
+    o.innerHTML='<div class="lw-dice-game"><div class="lw-dice-neon">🎲 HI-LO DICE</div><div class="lw-dice-pair"><span>⚀</span><span>⚄</span></div><div class="lw-dice-screen">PREDICT THE TOTAL</div></div>';
+    [2,4,6,8,10,12].forEach(n=>btn('TOTAL '+n,()=>{const a=rand(6),b=rand(6);o.querySelector('.lw-dice-pair').innerHTML='<span>'+['⚀','⚁','⚂','⚃','⚄','⚅'][a-1]+'</span><span>'+['⚀','⚁','⚂','⚃','⚄','⚅'][b-1]+'</span>';result(a+b===n?'🎉 BULLSEYE TOTAL!':'😂 THE DICE HAD OTHER PLANS!');}));
+  } else if(type==='luckynum'){
+    o.innerHTML='<div class="lw-lucky-game"><div class="lw-lucky-wheel">🍀</div><div class="lw-lucky-screen">PICK A NUMBER 1–20</div></div>';
+    for(let n=1;n<=10;n++)btn('PICK '+n,()=>{const drawn=rand(20);o.querySelector('.lw-lucky-screen').textContent='DRAW: '+drawn;result(drawn===n?'🍀 LUCKY! JACKPOT!':'😂 NOT YOUR LUCKY NUMBER!');});
+  } else if(type==='pubjackpot'){
+    const qs2=[['Capital of Wales?',['Cardiff','Swansea','Newport'],'Cardiff'],['Beatles album?',['Abbey Road','Rumours','Thriller'],'Abbey Road'],['How many sides on a hexagon?',['6','7','8'],'6'],['Which decade was 1990 in?',['90s','80s','00s'],'90s']];const q=P('pubjackpot-questions',qs2);
+    o.innerHTML='<div class="lw-jackpot-game"><div class="lw-jackpot-neon">🏆 PUB QUIZ JACKPOT</div><div class="lw-jackpot-screen">'+q[0]+'</div><div class="lw-jackpot-pot">£000</div></div>';
+    q[1].forEach(v=>btn(v,()=>{const ok=v===q[2];o.querySelector('.lw-jackpot-pot').textContent=ok?'£'+(rand(9)*10):'£0';result(ok?'💷 JACKPOT BUILDS!':'😂 JACKPOT ESCAPES!');}));
+  } else if(type==='bull'){
+    o.innerHTML='<div class="lw-bull-game"><div class="lw-bull-neon">🎯 NEAREST THE BULL</div><div class="lw-bull-target"><span>🎯</span></div><div class="lw-bull-screen">READY TO THROW</div></div>';
+    btn('🎯 THROW!',()=>{const cm=rand(100);o.querySelector('.lw-bull-screen').textContent=cm+'cm from bull';result(cm<=8?'🔥 CLOSE TO THE BULL!':'🎯 BRAGGING RIGHTS UP FOR GRABS!');});
+  }
   else if(type==='darts301'){
     let score=301,throws=0,turnScore=0;
     o.innerHTML='<div class="lw-dart-score">🎯 <strong>301</strong> remaining</div><div class="lw-dart-msg">Tap the dartboard where you want to throw.</div><div class="lw-dartboard-wrap"><svg class="lw-dartboard" viewBox="0 0 400 400" role="img" aria-label="Interactive dartboard"></svg></div><div class="lw-dart-actions"><button type="button" class="lw-dart-new">↻ New Game</button><button type="button" class="lw-dart-next" disabled>➡️ Next Dart</button></div>';
