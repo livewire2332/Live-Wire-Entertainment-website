@@ -232,6 +232,33 @@ const setHtml = (id, value) => {
   if (el) el.innerHTML = value;
 };
 
+function visualHit(id, extraClass) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const card = el.closest('.fun-card');
+  if (card) {
+    card.classList.remove('is-active');
+    void card.offsetWidth;
+    card.classList.add('is-active');
+    clearTimeout(card._lwVisualTimer);
+    card._lwVisualTimer = setTimeout(() => card.classList.remove('is-active'), 650);
+  }
+  el.classList.remove('visual-pop');
+  void el.offsetWidth;
+  el.classList.add('visual-pop');
+  if (extraClass) {
+    el.classList.remove(extraClass);
+    void el.offsetWidth;
+    el.classList.add(extraClass);
+  }
+}
+
+function selectDecadeButton(target) {
+  document.querySelectorAll('#decadeButtons .fun-btn').forEach(btn => btn.classList.remove('is-selected'));
+  target.classList.add('is-selected');
+}
+
+
 function handleClick(event) {
   const target = event.target instanceof Element ? event.target.closest('button') : null;
   if (!target) return;
@@ -245,6 +272,7 @@ function handleClick(event) {
     setHtml('memoryResult',
       '<div class="memory-year">' + m[0] + ' MUSIC MEMORY</div>' +
       '<div class="memory-song">' + m[1] + '</div>');
+    visualHit('memoryResult');
     return;
   }
 
@@ -252,10 +280,12 @@ function handleClick(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
     const dec = target.textContent.trim();
+    selectDecadeButton(target);
     if (songs[dec]) {
       setHtml('songResult',
         '<div class="memory-year">LIVE WIRE JUKEBOX • ' + dec + '</div>' +
         '<div class="memory-song">' + pickFresh('jukebox-' + dec, songs[dec]) + '</div>');
+      visualHit('songResult');
     }
     return;
   }
@@ -266,6 +296,7 @@ function handleClick(event) {
     const m = pickFresh('friday-moods', fridayMoods);
     setText('fridayMood', m[0]);
     setText('fridaySub', m[1]);
+    visualHit('fridayMood');
     return;
   }
 
@@ -273,6 +304,7 @@ function handleClick(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
     setText('banterText', pickFresh('banter-box', banter));
+    visualHit('banterText');
     return;
   }
 
@@ -280,6 +312,9 @@ function handleClick(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
     setText('destination', 'NEXT STOP: ' + pickFresh('train-destinations', destinations).toUpperCase());
+    visualHit('destination');
+    const trainLine = document.querySelector('.train-line');
+    if (trainLine) { trainLine.classList.remove('visual-speed'); void trainLine.offsetWidth; trainLine.classList.add('visual-speed'); }
     return;
   }
 
@@ -287,7 +322,9 @@ function handleClick(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
     const night = target.dataset.night;
+    document.querySelectorAll('.night-buttons .night').forEach(btn => btn.classList.toggle('is-selected', btn === target));
     setText('selectedNight', night + ': ' + (nightText[night] || 'Live Wire night selected. ⚡'));
+    visualHit('selectedNight');
   }
 }
 
