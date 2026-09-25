@@ -559,28 +559,13 @@ function playNew(i,type){
     reset.addEventListener('click',build);build();
   }
   else if(type==='fruitmachine'){
-    const icons=['🍒','🍋','🔔','⭐','💎','⚡'];
-    let credits=10,spinning=false;
-    o.innerHTML='<div class="lw-dart-score">🍒 <strong>LIVE WIRE FRUIT MACHINE</strong> · Credits 10</div><div class="lw-dart-msg">Three reels. One big jackpot. Spin the machine!</div><div class="lw-fruit-machine"><div class="lw-fruit-top">⚡ LIVE WIRE ⚡</div><div class="lw-fruit-reels"><div class="lw-fruit-reel">🍒</div><div class="lw-fruit-reel">🍋</div><div class="lw-fruit-reel">🔔</div></div><div class="lw-fruit-paytable">🍒🍒🍒 ×5 &nbsp; ⭐⭐⭐ ×10 &nbsp; 💎💎💎 ×20 &nbsp; ⚡⚡⚡ JACKPOT ×50</div><div class="lw-fruit-lights">● ● ● ● ● ● ● ● ●</div></div><div class="lw-fruit-controls"><button type="button" class="lw-fruit-spin">🍒 SPIN</button><button type="button" class="lw-fruit-reset">↻ REFILL 10</button></div>';
-    c.innerHTML='';
-    const scoreBox=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),reels=[...o.querySelectorAll('.lw-fruit-reel')],spinBtn=o.querySelector('.lw-fruit-spin'),reset=o.querySelector('.lw-fruit-reset');
-    const update=()=>{scoreBox.innerHTML='🍒 <strong>LIVE WIRE FRUIT MACHINE</strong> · Credits '+credits;spinBtn.disabled=spinning||credits<=0;};
-    const spin=()=>{
-      if(spinning||credits<=0)return;
-      credits--;spinning=true;update();msg.textContent='🎰 Reels spinning...';
-      reels.forEach((r,i)=>{r.classList.remove('spinning','winner');void r.offsetWidth;r.classList.add('spinning');});
-      const final=[0,1,2].map(()=>icons[rand(icons.length)-1]);
-      setTimeout(()=>{reels.forEach((r,i)=>{r.textContent=final[i];r.classList.remove('spinning');});
-        let win=0;
-        if(final[0]===final[1]&&final[1]===final[2]){const mult=final[0]==='⚡'?50:final[0]==='💎'?20:final[0]==='⭐'?10:5;win=mult;msg.textContent=final[0]==='⚡'?'⚡⚡⚡ JACKPOT! +50 CREDITS!':'🎉 THREE '+final[0]+'! +'+mult+' CREDITS!';reels.forEach(r=>r.classList.add('winner'));setTimeout(()=>reels.forEach(r=>r.classList.remove('winner')),900);}
-        else if(final[0]===final[1]||final[1]===final[2]||final[0]===final[2]){win=2;msg.textContent='✨ TWO MATCH! +2 CREDITS!';}
-        else msg.textContent='😂 No match — spin again!';
-        credits+=win;spinning=false;update();
-      },950);
-    };
-    spinBtn.addEventListener('click',spin);
-    reset.addEventListener('click',()=>{credits=10;spinning=false;reels.forEach((r,i)=>r.textContent=icons[i]);msg.textContent='Machine refilled with 10 credits!';update();});
-    update();
+    const icons=['🍒','🍋','🔔','⭐','💎','⚡'];let credits=10,spinning=false,pulling=false;
+    o.innerHTML='<div class="lw-dart-score">🍒 <strong>LIVE WIRE FRUIT MACHINE</strong> · Credits 10</div><div class="lw-dart-msg">Pull the lever and watch the reels stop one by one!</div><div class="lw-fruit-machine"><div class="lw-fruit-top">⚡ LIVE WIRE ⚡</div><div class="lw-fruit-reels"><div class="lw-fruit-reel">🍒</div><div class="lw-fruit-reel">🍋</div><div class="lw-fruit-reel">🔔</div></div><div class="lw-fruit-paytable">🍒🍒🍒 ×5 · ⭐⭐⭐ ×10 · 💎💎💎 ×20 · ⚡⚡⚡ JACKPOT ×50</div><div class="lw-fruit-lights">● ● ● ● ● ● ● ● ●</div></div><div class="lw-fruit-lever"><div class="lw-fruit-handle">⚡</div><div class="lw-fruit-track"></div></div><button type="button" class="lw-fruit-reset">↻ REFILL 10</button>';
+    c.innerHTML='';const box=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),reels=[...o.querySelectorAll('.lw-fruit-reel')],lever=o.querySelector('.lw-fruit-lever'),handle=o.querySelector('.lw-fruit-handle'),reset=o.querySelector('.lw-fruit-reset');
+    const update=()=>{box.innerHTML='🍒 <strong>LIVE WIRE FRUIT MACHINE</strong> · Credits '+credits;lever.style.pointerEvents=spinning||credits<=0?'none':'auto';};
+    const spin=()=>{if(spinning||credits<=0)return;credits--;spinning=true;update();handle.classList.add('pulled');msg.textContent='🎰 REELS SPINNING...';const final=[0,1,2].map(()=>icons[Math.floor(Math.random()*icons.length)]);reels.forEach((r,i)=>{r.classList.remove('spinning','winner');void r.offsetWidth;r.classList.add('spinning');setTimeout(()=>{r.textContent=final[i];r.classList.remove('spinning');},650+i*330);});setTimeout(()=>{let win=0;if(final[0]===final[1]&&final[1]===final[2])win=final[0]==='⚡'?50:final[0]==='💎'?20:final[0]==='⭐'?10:5;else if(final[0]===final[1]||final[1]===final[2]||final[0]===final[2])win=2;credits+=win;spinning=false;handle.classList.remove('pulled');reels.forEach(r=>r.classList.toggle('winner',win>=5));msg.textContent=win>=50?'⚡⚡⚡ JACKPOT! +50!':win>=5?'🎉 THREE MATCH! +'+win+'!':win===2?'✨ TWO MATCH! +2!':'😂 No match — pull again!';update();},1800);};
+    lever.addEventListener('pointerdown',e=>{pulling=true;lever.setPointerCapture?.(e.pointerId);handle.classList.add('pulled');});lever.addEventListener('pointerup',e=>{if(pulling){pulling=false;handle.classList.remove('pulled');spin();}});lever.addEventListener('click',spin);
+    reset.addEventListener('click',()=>{credits=10;spinning=false;reels.forEach((r,i)=>r.textContent=icons[i]);msg.textContent='Machine refilled — pull the lever!';update();});update();
   }
   else if(type==='bouncer'){
     let score=0,round=1,active=false;
