@@ -423,8 +423,13 @@ function playNew(i,type){
     o.innerHTML='<div class="lw-jackpot-game"><div class="lw-jackpot-neon">🏆 PUB QUIZ JACKPOT</div><div class="lw-jackpot-screen">'+q[0]+'</div><div class="lw-jackpot-pot">£000</div></div>';
     q[1].forEach(v=>btn(v,()=>{const ok=v===q[2];o.querySelector('.lw-jackpot-pot').textContent=ok?'£'+(rand(9)*10):'£0';result(ok?'💷 JACKPOT BUILDS!':'😂 JACKPOT ESCAPES!');}));
   } else if(type==='bull'){
-    o.innerHTML='<div class="lw-bull-game"><div class="lw-bull-neon">🎯 NEAREST THE BULL</div><div class="lw-bull-target"><span>🎯</span></div><div class="lw-bull-screen">READY TO THROW</div></div>';
-    btn('🎯 THROW!',()=>{const cm=rand(100);o.querySelector('.lw-bull-screen').textContent=cm+'cm from bull';result(cm<=8?'🔥 CLOSE TO THE BULL!':'🎯 BRAGGING RIGHTS UP FOR GRABS!');});
+    let shots=0,best=999,total=0,drag=false;
+    o.innerHTML='<div class="lw-dart-score">🎯 <strong>NEAREST THE BULL</strong> · 3 throws · Best: —</div><div class="lw-dart-msg">Drag the dart around the board and release as close to the bull as you can!</div><div class="lw-bull-board"><div class="lw-bull-ring r1"></div><div class="lw-bull-ring r2"></div><div class="lw-bull-ring r3"></div><div class="lw-bull-centre">🎯</div><div class="lw-aim-dart">🎯</div></div><div class="lw-bull-actions"><button type="button" class="lw-bull-throw">🎯 THROW DART</button><button type="button" class="lw-bull-reset">↻ NEW GAME</button></div>';
+    c.innerHTML='';const board=o.querySelector('.lw-bull-board'),dart=o.querySelector('.lw-aim-dart'),box=o.querySelector('.lw-dart-score'),msg=o.querySelector('.lw-dart-msg'),throwBtn=o.querySelector('.lw-bull-throw'),reset=o.querySelector('.lw-bull-reset');
+    const place=e=>{const r=board.getBoundingClientRect();dart.style.left=Math.max(8,Math.min(r.width-8,e.clientX-r.left))+'px';dart.style.top=Math.max(8,Math.min(r.height-8,e.clientY-r.top))+'px';};
+    board.addEventListener('pointermove',e=>{if(drag)place(e);});board.addEventListener('pointerdown',e=>{drag=true;board.setPointerCapture?.(e.pointerId);place(e);});board.addEventListener('pointerup',e=>{if(drag){drag=false;place(e);}});
+    throwBtn.addEventListener('click',()=>{if(shots>=3)return;shots++;const r=board.getBoundingClientRect(),x=parseFloat(dart.style.left)||r.width/2,y=parseFloat(dart.style.top)||r.height/2,d=Math.round(Math.hypot(x-r.width/2,y-r.height/2)/(r.width/2)*100);best=Math.min(best,d);total+=d;msg.textContent=d<=10?'🔥 BULLSEYE!':d<=25?'🎯 VERY CLOSE!':'😂 That dart has gone on holiday!';box.innerHTML='🎯 <strong>NEAREST THE BULL</strong> · '+shots+'/3 throws · Best: '+best+' · Avg: '+Math.round(total/shots);if(shots>=3){msg.textContent+=' 🏆 FINAL!';throwBtn.disabled=true;}});
+    reset.addEventListener('click',()=>{shots=0;best=999;total=0;throwBtn.disabled=false;dart.style.left='50%';dart.style.top='50%';box.innerHTML='🎯 <strong>NEAREST THE BULL</strong> · 3 throws · Best: —';msg.textContent='Drag the dart around the board and release as close to the bull as you can!';});
   }
   else if(type==='darts301'){
     let you=301,cpu=301,darts=0,turn=0,over=false;
