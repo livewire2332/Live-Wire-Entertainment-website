@@ -1670,6 +1670,47 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
  .proper-jukebox .bar-live-show{font-size:17px!important}
  .proper-jukebox .jukebox-window h2{font-size:24px!important}
 }
+</style><style id="lw-final-drink-bar-repair">
+/* Final drink shelf repair: every product uses a predictable transparent/cropped silhouette and reliable sizing. */
+.real-top-drink img,
+.real-bottle img{
+  display:block!important;
+  width:100%!important;
+  height:155px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  mix-blend-mode:normal!important;
+  filter:saturate(1.03) contrast(1.04) drop-shadow(0 5px 5px rgba(0,0,0,.68))!important;
+}
+.real-top-drink img.shelf-budweiser-cutout,
+.real-top-drink img.shelf-gin-cutout,
+.real-bottle img.shelf-captain-cutout,
+.real-bottle img.shelf-jd-fire-cutout,
+.real-bottle img.shelf-jd-silver-cutout{
+  clip-path:none!important;
+}
+.real-top-drink img.shelf-can-cutout{
+  /* Strongbow artwork includes fruit around the bottle; this keeps the bottle silhouette only. */
+  clip-path:polygon(40% 1%,60% 1%,62% 7%,64% 12%,63% 92%,59% 98%,41% 98%,37% 92%,37% 12%,39% 7%)!important;
+}
+.real-top-drink img.shelf-madri-cutout{
+  /* Madrí official artwork contains a glass/medals beside the bottle; keep the central bottle. */
+  clip-path:polygon(45% 1%,59% 1%,61% 8%,61% 29%,64% 35%,66% 42%,66% 93%,61% 98%,43% 98%,39% 93%,39% 42%,41% 35%,44% 29%)!important;
+}
+.real-bottle img.shelf-guinness-cutout{
+  clip-path:none!important;
+  transform:scale(1.32)!important;
+  transform-origin:center bottom!important;
+}
+@media(max-width:600px){
+  .real-top-drink img,.real-bottle img{height:112px!important}
+  .real-top-drink img.shelf-can-cutout{clip-path:polygon(40% 1%,60% 1%,62% 7%,64% 12%,63% 92%,59% 98%,41% 98%,37% 92%,37% 12%,39% 7%)!important}
+  .real-top-drink img.shelf-madri-cutout{clip-path:polygon(45% 1%,59% 1%,61% 8%,61% 29%,64% 35%,66% 42%,66% 93%,61% 98%,43% 98%,39% 93%,39% 42%,41% 35%,44% 29%)!important}
+  .real-bottle img.shelf-guinness-cutout{transform:scale(1.32)!important}
+}
 </style></head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
@@ -1686,18 +1727,18 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 <section><div class="bar-pub-wall"><div class="pub-neon-sign">🍺 LIVE WIRE BAR • OPEN FOR BANter • MUSIC • LAUGHS ⚡</div><div class="pub-shelf real-top-shelf" aria-label="Real drinks on the upper bar shelf">
   <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-madri-cutout" src="https://www.madriexcepcional.com/sites/madri/files/2022-02/Madri%20Bottle%20Glass%20%26%20Medals.png" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
-  <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-budweiser-cutout" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-gin-cutout" src="https://www.kindpng.com/picc/m/236-2368093_gordons-pink-gin-70cl-gordons-pink-gin-png.png" alt="Pink gin bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>PINK GIN</figcaption></figure>
-  <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713 alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
-  <figure class="real-top-drink"><img class="photo-cutout shelf-madri-cutout" src="https://www.madriexcepcional.com/sites/madri/files/2022-02/Madri%20Bottle%20Glass%20%26%20Medals.png alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-madri-cutout" src="https://www.madriexcepcional.com/sites/madri/files/2022-02/Madri%20Bottle%20Glass%20%26%20Medals.png" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
 </div><div class="pub-drink-display photographic-drink-shelf" aria-label="Real drinks on the Live Wire Bar shelf">
   <figure class="real-bottle">
-    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Captain_Morgan_Rum_-_Bottle.png" alt="Captain Morgan bottle" loading="lazy">
+    <img class="photo-cutout shelf-captain-cutout" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Captain_Morgan_Rum_-_Bottle.png" alt="Captain Morgan bottle" loading="lazy">
     <figcaption>CAPTAIN MORGAN</figcaption>
   </figure>
   <figure class="real-bottle">
-    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/W2411-JackDaniels_Fire_Extracted.png" alt="Jack Daniel's bottle" loading="lazy">
+    <img class="photo-cutout shelf-jd-fire-cutout" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/W2411-JackDaniels_Fire_Extracted.png" alt="Jack Daniel's bottle" loading="lazy">
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
   <figure class="real-bottle wide-photo">
@@ -1709,7 +1750,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>STRONGBOW</figcaption>
   </figure>
   <figure class="real-bottle">
-    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/W2418-JackDaniels_SilverSelect_Extracted_20160409_008N960.png" alt="Jack Daniel's Silver Select bottle" loading="lazy">
+    <img class="photo-cutout shelf-jd-silver-cutout" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/W2418-JackDaniels_SilverSelect_Extracted_20160409_008N960.png" alt="Jack Daniel's Silver Select bottle" loading="lazy">
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
 </div><div class="pub-bar-top"></div></div><div class="wrap"><div class="player"><div class="jukebox-wrap proper-jukebox">
