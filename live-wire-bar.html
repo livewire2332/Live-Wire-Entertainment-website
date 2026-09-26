@@ -4239,3 +4239,42 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+<style id="lw-coming-text-under-player-final">
+/* Keep the Live Wire audio line in normal flow, directly underneath the jukebox. */
+.player{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+}
+.player > .proper-jukebox{
+  position:relative!important;
+  flex:0 0 auto!important;
+  order:1!important;
+}
+.player > .coming{
+  position:static!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  left:auto!important;
+  transform:none!important;
+  clear:none!important;
+  order:2!important;
+  display:block!important;
+  width:100%!important;
+  max-width:760px!important;
+  margin:16px auto 4px!important;
+  padding:0 12px!important;
+  line-height:1.4!important;
+  text-align:center!important;
+  z-index:2!important;
+}
+@media(max-width:600px){
+  .player > .coming{
+    margin:14px auto 3px!important;
+    padding:0 10px!important;
+    line-height:1.35!important;
+  }
+}
+</style>
