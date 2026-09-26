@@ -1805,10 +1805,13 @@ function getScheduledShow(){
   const iso=now.toISOString().slice(0,10);
   const mins=now.getHours()*60+now.getMinutes();
 
-  // These are the actual scheduled show windows.
-  // Outside these windows, a newly-connected stream is Live Wire Radio.
+  // Actual scheduled show windows. The jukebox reacts only when the stream
+  // is detected during one of these windows.
   if(day===3&&mins>=1200&&mins<1320){
     return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
+  }
+  if(day===4&&mins>=1200&&mins<1320){
+    return ['Thursday Surprise Package with Mr Phoenix','8:00pm'];
   }
   if(day===5&&mins>=1170&&mins<1380){
     return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
@@ -1827,19 +1830,34 @@ function getScheduledShow(){
   return null;
 }
 
-
 function getNextScheduledShow(){
   const now=new Date();
-  const day=now.getDay();
-  const iso=now.toISOString().slice(0,10);
-  const mins=now.getHours()*60+now.getMinutes();
+  const base=new Date(now);
+  base.setHours(0,0,0,0);
 
-  if(day===3&&mins<1200)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
-  if(day===5&&mins<1170)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
-  if(day===6&&mins<1170){
-    return iso<'2026-10-03'
-      ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
-      : ['The Music Train with Mr Phoenix','7:30pm'];
+  // Look ahead a full week so the jukebox always has a genuine next show.
+  for(let offset=0;offset<=7;offset++){
+    const d=new Date(base);
+    d.setDate(base.getDate()+offset);
+    const day=d.getDay();
+    const iso=d.toISOString().slice(0,10);
+    const startMin=day===5?1170:1200;
+    const mins=offset===0 ? now.getHours()*60+now.getMinutes() : -1;
+
+    if(day===3&&mins<1200){
+      return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
+    }
+    if(day===4&&mins<1200){
+      return ['Thursday Surprise Package with Mr Phoenix','8:00pm'];
+    }
+    if(day===5&&mins<1170){
+      return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+    }
+    if(day===6&&mins<1170){
+      return iso<'2026-10-03'
+        ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
+        : ['The Music Train with Mr Phoenix','7:30pm'];
+    }
   }
   return null;
 }
@@ -3174,5 +3192,38 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   .proper-jukebox .jukebox-window h2{font-size:23px!important}
   .proper-jukebox .lw-player-label{font-size:16px!important}
   .proper-jukebox .lw-player-state{font-size:15px!important}
+}
+</style>
+
+
+<style id="lw-jukebox-schedule-reaction">
+/* Keep every jukebox reaction tied to the real detected stream state. */
+.proper-jukebox:not(.live-stream) .jukebox-eq span{
+  animation-duration:1.15s!important;
+  opacity:.72!important;
+}
+.proper-jukebox.live-stream .jukebox-eq span{
+  animation-duration:.34s!important;
+  opacity:1!important;
+}
+.proper-jukebox.live-stream .live-status{
+  animation:lwLiveButtonReact .9s ease-in-out infinite!important;
+}
+.proper-jukebox.live-stream .bar-live-show{
+  animation:lwLiveTextPulse 1.25s ease-in-out infinite!important;
+}
+.proper-jukebox.shows-paused .jukebox-eq span{
+  animation:none!important;
+  opacity:.38!important;
+}
+.proper-jukebox.shows-paused .bar-live-show{
+  animation:none!important;
+}
+@keyframes lwLiveTextPulse{
+  0%,100%{text-shadow:0 0 7px rgba(0,234,255,.55)}
+  50%{text-shadow:0 0 12px rgba(0,234,255,.95),0 0 22px rgba(255,43,214,.35)}
+}
+@media(max-width:600px){
+  .proper-jukebox .bar-live-show{font-size:16px!important;line-height:1.35!important}
 }
 </style>
