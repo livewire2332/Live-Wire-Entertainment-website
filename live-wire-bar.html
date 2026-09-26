@@ -3975,19 +3975,19 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
 </style>
 
 <style id="lw-caster-widget-live-wire-shell">
-/* Fit the Caster player naturally inside the Live Wire audio panel. */
+/* Give the official Caster player enough room to show its artwork, status and controls. */
 .proper-jukebox .lw-native-player{position:relative!important;z-index:12!important}
-.proper-jukebox .lw-player-screen{overflow:hidden!important}
+.proper-jukebox .lw-player-screen{overflow:visible!important}
 .proper-jukebox .lw-caster-player{
   display:block!important;
   position:relative!important;
   width:100%!important;
   max-width:430px!important;
-  height:170px!important;
-  min-height:170px!important;
+  height:285px!important;
+  min-height:285px!important;
   margin:9px auto 0!important;
   padding:0!important;
-  background:transparent!important;
+  background:#05070c!important;
   border:0!important;
   box-shadow:none!important;
   overflow:hidden!important;
@@ -3997,9 +3997,9 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   display:block!important;
   position:relative!important;
   width:100%!important;
-  height:170px!important;
-  min-height:170px!important;
-  max-height:170px!important;
+  height:285px!important;
+  min-height:285px!important;
+  max-height:none!important;
   margin:0!important;
   padding:0!important;
   border:0!important;
@@ -4007,15 +4007,15 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
 }
 @media(max-width:600px){
   .proper-jukebox .lw-caster-player{
-    height:160px!important;
-    min-height:160px!important;
+    height:275px!important;
+    min-height:275px!important;
     margin:8px auto 0!important;
   }
   .proper-jukebox .lw-caster-player iframe{
     width:100%!important;
-    height:160px!important;
-    min-height:160px!important;
-    max-height:160px!important;
+    height:275px!important;
+    min-height:275px!important;
+    max-height:none!important;
     margin:0!important;
     transform:none!important;
   }
