@@ -1480,6 +1480,92 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   .proper-jukebox .lw-native-player{padding-top:6px!important}
   .proper-jukebox #lwAudioPlayer{height:32px!important}
 }
+</style><style id="lw-modern-neon-reactive-pass">
+/* Modern neon/reactive pass: brighter live indicator, clearer hierarchy, slightly larger type. */
+.proper-jukebox{
+  box-shadow:0 10px 0 #080706,0 0 0 2px #8d5b2c,0 0 26px rgba(0,234,255,.30),0 0 42px rgba(255,43,214,.18),inset 0 0 28px #050403!important;
+}
+.proper-jukebox::after{
+  left:10%!important;right:10%!important;top:55px!important;height:3px!important;
+  background:linear-gradient(90deg,transparent,#00eaff,#ff2bd6,#ffd43b,#ff2bd6,#00eaff,transparent)!important;
+  box-shadow:0 0 8px #00eaff,0 0 16px #ff2bd6!important;
+  opacity:1!important;
+  animation:lwModernSweep 2.8s linear infinite!important;
+}
+.proper-jukebox .jukebox-crown{
+  box-shadow:0 0 14px rgba(255,212,59,.28),0 0 22px rgba(0,234,255,.12),inset 0 0 12px #000!important;
+}
+.proper-jukebox .jukebox-title{
+  text-shadow:0 0 7px #fff,0 0 13px #00eaff,0 0 25px #ff2bd6!important;
+}
+.proper-jukebox .jukebox-window{
+  border-color:rgba(0,234,255,.9)!important;
+  box-shadow:0 0 0 1px rgba(255,43,214,.4),0 0 18px rgba(0,234,255,.28),0 0 30px rgba(255,43,214,.12),inset 0 0 24px #000!important;
+}
+.proper-jukebox .live-status{
+  position:relative!important;
+  z-index:3!important;
+  font-size:16px!important;
+  min-height:38px!important;
+  padding:7px 15px!important;
+  color:#fff!important;
+  border:2px solid #ffd43b!important;
+  background:linear-gradient(90deg,rgba(255,212,59,.12),rgba(255,43,214,.16),rgba(0,234,255,.12))!important;
+  box-shadow:0 0 8px #ffd43b,0 0 18px #ff2bd6,0 0 30px rgba(0,234,255,.45)!important;
+  text-shadow:0 0 7px #fff,0 0 13px #ffd43b!important;
+  animation:lwLiveButtonPulse 1.35s ease-in-out infinite!important;
+}
+.proper-jukebox .live-status::before{
+  content:"";display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%;
+  background:#ff365c;box-shadow:0 0 7px #ff365c,0 0 14px #ff365c;vertical-align:1px;
+  animation:lwLiveDot .8s ease-in-out infinite!important;
+}
+.proper-jukebox .bar-live-show{
+  font-size:17px!important;
+  line-height:1.35!important;
+  font-weight:900!important;
+  color:#7ff5ff!important;
+  text-shadow:0 0 7px #00eaff,0 0 14px rgba(0,234,255,.55)!important;
+  max-width:430px!important;
+}
+.proper-jukebox .jukebox-eq{
+  height:18px!important;
+  gap:5px!important;
+  margin:2px auto 1px!important;
+  filter:drop-shadow(0 0 5px rgba(0,234,255,.5))!important;
+}
+.proper-jukebox .jukebox-eq span{width:7px!important;height:10px}
+.proper-jukebox .jukebox-window h2{
+  font-size:24px!important;
+  margin:1px 0 3px!important;
+  text-shadow:0 0 8px #00eaff,0 0 16px rgba(255,43,214,.4)!important;
+}
+.proper-jukebox .lw-native-player{
+  border-top:1px solid rgba(0,234,255,.5)!important;
+  padding:8px 2px 3px!important;
+}
+.proper-jukebox .lw-player-label{
+  font-size:13px!important;
+  text-shadow:0 0 8px #ffd43b,0 0 15px rgba(255,43,214,.45)!important;
+}
+.proper-jukebox .lw-player-state{
+  font-size:12px!important;
+}
+.proper-jukebox #lwAudioPlayer{height:36px!important;filter:drop-shadow(0 0 5px rgba(0,234,255,.25))}
+@keyframes lwLiveButtonPulse{
+  0%,100%{transform:scale(1);filter:brightness(1);box-shadow:0 0 8px #ffd43b,0 0 18px #ff2bd6,0 0 30px rgba(0,234,255,.45)}
+  50%{transform:scale(1.035);filter:brightness(1.25);box-shadow:0 0 12px #ffd43b,0 0 25px #ff2bd6,0 0 40px rgba(0,234,255,.7)}
+}
+@keyframes lwLiveDot{0%,100%{opacity:.45;transform:scale(.75)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes lwModernSweep{0%{transform:translateX(-8%);opacity:.65}50%{opacity:1}100%{transform:translateX(8%);opacity:.65}}
+@media(max-width:600px){
+  .proper-jukebox .live-status{font-size:15px!important;min-height:37px!important;padding:7px 13px!important}
+  .proper-jukebox .bar-live-show{font-size:16px!important}
+  .proper-jukebox .jukebox-window h2{font-size:23px!important}
+  .proper-jukebox .lw-player-label{font-size:13px!important}
+  .proper-jukebox .lw-player-state{font-size:11px!important}
+  .proper-jukebox #lwAudioPlayer{height:35px!important}
+}
 </style></head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
