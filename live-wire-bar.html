@@ -1399,7 +1399,119 @@ setInterval(refreshBarLiveStatus,15000);
  render();
 })();
 </script>
-<svg class="lw-image-filters" aria-hidden="true" width="0" height="0" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="lwRemoveWhiteBg" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0 0" result="rgb"/><feColorMatrix in="rgb" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -1 -1 -1 0 3" result="cut"/><feComponentTransfer in="cut"><feFuncA type="table" tableValues="0 0 0 0 .15 .45 1 1 1 1 1"/></feComponentTransfer></filter></defs></svg></body>
+<style>
+/* FINAL LIVE WIRE JUKEBOX: real tall cabinet, no giant square housing, large integrated player. */
+.proper-jukebox{
+  width:min(92vw,560px) !important;
+  height:auto !important;
+  min-height:0 !important;
+  aspect-ratio:486 / 910 !important;
+  margin:18px auto 26px !important;
+  border-radius:34px !important;
+  overflow:hidden !important;
+  background:transparent !important;
+  box-shadow:0 26px 55px rgba(0,0,0,.88),0 0 0 2px rgba(83,47,24,.9),0 0 32px rgba(255,55,190,.14) !important;
+}
+.proper-jukebox::before{
+  inset:0 !important;
+  background-image:url("https://upload.wikimedia.org/wikipedia/commons/4/41/Wurlitzer_1015.jpg") !important;
+  background-repeat:no-repeat !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  filter:saturate(1.18) contrast(1.08) brightness(1.05) !important;
+  opacity:1 !important;
+  z-index:1 !important;
+}
+.proper-jukebox::after{
+  background:
+    radial-gradient(ellipse at 50% 35%,transparent 20%,rgba(5,2,1,.08) 55%,rgba(4,2,1,.42) 100%),
+    linear-gradient(180deg,rgba(255,95,195,.10),transparent 20%,transparent 78%,rgba(0,0,0,.35)) !important;
+  box-shadow:inset 0 0 38px rgba(0,0,0,.52) !important;
+  z-index:2 !important;
+}
+/* Bring the Caster player up to the actual display size of the cabinet. */
+.proper-jukebox .jukebox-window{
+  top:48% !important;
+  left:50% !important;
+  width:min(76%,390px) !important;
+  max-width:390px !important;
+  transform:translate(-50%,-50%) scale(1) !important;
+  padding:12px 11px 10px !important;
+  border:3px solid rgba(255,214,113,.95) !important;
+  border-radius:18px !important;
+  background:rgba(12,7,5,.82) !important;
+  box-shadow:
+    0 0 0 4px rgba(255,57,190,.34),
+    0 0 20px rgba(255,57,190,.40),
+    0 12px 30px rgba(0,0,0,.85),
+    inset 0 0 20px rgba(0,0,0,.82) !important;
+  backdrop-filter:none !important;
+  z-index:8 !important;
+}
+.proper-jukebox .jukebox-window h2{
+  font-size:clamp(18px,4vw,25px) !important;
+}
+.proper-jukebox .jukebox-window>p{
+  font-size:11px !important;
+  max-width:330px !important;
+}
+.proper-jukebox .live-status{
+  font-size:10px !important;
+}
+.proper-jukebox .jukebox-speakers{
+  margin-top:7px !important;
+}
+.proper-jukebox .juke-speaker{
+  height:26px !important;
+}
+/* Vibrant real-jukebox lighting: glowing arch, side lamps and lower grille lights. */
+.proper-jukebox .juke-live-lights{
+  z-index:9 !important;
+}
+.proper-jukebox .juke-live-lights i{
+  width:12px !important;
+  height:12px !important;
+  border:1px solid rgba(255,239,190,.75) !important;
+  box-shadow:0 0 6px currentColor,0 0 15px currentColor !important;
+}
+.proper-jukebox:not(.live-stream)::before{
+  filter:saturate(1.25) contrast(1.08) brightness(1.08) !important;
+}
+@keyframes lwJukeArchGlow{
+  0%,100%{box-shadow:0 0 10px rgba(255,190,75,.45),0 0 24px rgba(255,48,190,.18)}
+  33%{box-shadow:0 0 12px rgba(72,225,255,.65),0 0 28px rgba(72,225,255,.22)}
+  66%{box-shadow:0 0 13px rgba(255,48,190,.70),0 0 30px rgba(255,48,190,.28)}
+}
+.proper-jukebox .jukebox-window{
+  animation:lwJukeArchGlow 3.2s ease-in-out infinite !important;
+}
+@media(max-width:600px){
+  .proper-jukebox{
+    width:min(92vw,390px) !important;
+    aspect-ratio:486 / 910 !important;
+    margin:12px auto 22px !important;
+  }
+  .proper-jukebox .jukebox-window{
+    top:48% !important;
+    width:80% !important;
+    max-width:none !important;
+    padding:9px 7px 8px !important;
+    border-width:2px !important;
+    border-radius:14px !important;
+  }
+  .proper-jukebox .jukebox-window h2{
+    font-size:19px !important;
+  }
+  .proper-jukebox .jukebox-window>p{
+    font-size:10px !important;
+    line-height:1.25 !important;
+  }
+  .proper-jukebox .juke-live-lights i{
+    width:9px !important;
+    height:9px !important;
+  }
+}
+</style></body>
 </html>
 /* Final mobile jukebox alignment */
 @media(max-width:600px){
