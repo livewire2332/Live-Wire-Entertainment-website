@@ -613,6 +613,24 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 .pub-bottle::after{height:22px!important;box-shadow:inset 3px 0 3px rgba(255,255,255,.12),inset -3px 0 3px rgba(0,0,0,.3)}
 .pub-drink-display .pub-bottle:nth-of-type(2){height:106px!important}.pub-drink-display .pub-bottle:nth-of-type(3){height:87px!important}
 </style>
+<style>
+/* Tighten the Bar opening view — get visitors to the jukebox faster */
+.bar-hero{padding:30px 20px 18px}
+.bar-hero h1{font-size:clamp(34px,7vw,56px);margin:4px 0}
+.bar-intro{font-size:17px;margin:10px auto 12px;max-width:700px}
+.bar-hero .live-status{margin-bottom:9px}
+.bar-hero .bar-live-show{margin:-2px auto 8px;font-size:16px}
+.bar-hero + section{padding-top:22px}
+.bar-hero + section h1{margin-top:0}
+@media(max-width:600px){
+ .bar-hero{padding:25px 14px 14px}
+ .bar-hero h1{font-size:clamp(31px,10vw,43px)}
+ .bar-intro{font-size:16px;line-height:1.4;margin:7px auto 9px}
+ .bar-hero .live-status{padding:6px 12px;margin-bottom:6px}
+ .bar-hero .bar-live-show{font-size:14px;margin-bottom:5px}
+ .bar-hero + section{padding-top:15px}
+}
+</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
