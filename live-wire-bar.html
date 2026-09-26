@@ -1410,7 +1410,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
       <div class="jukebox-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <h2>📻 Listen Live</h2>
       <p>When the Live Wire show is live, drop the needle and listen along directly from the website.</p>
-      <div data-type="streamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="dark" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
+      <div data-type="streamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="dark" data-color="e81e4d" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
       <div class="jukebox-speakers" aria-hidden="true"><div class="juke-speaker"></div><div class="juke-speaker"></div></div>
       <div class="jukebox-controls" aria-hidden="true"><span class="juke-light"></span><span class="juke-light"></span><span class="juke-light"></span></div>
       <div class="jukebox-note">🎵 Turn it up, pull up a virtual bar stool and enjoy the music. ⚡</div>
@@ -1418,7 +1418,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   </div>
   <div class="juke-bottom-grille" aria-hidden="true"></div>
 </div>
-</div><script src="//cdn.cloud.caster.fm//widgets/embed.js"></script><script>
+</div><script src="https://cdn.cloud.caster.fm/widgets/embed.js"></script><script>
 const CASTER_STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
 const CASTER_MOUNT='/6W6zw';
 const BAR_WORKER_STATUS='https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status';
@@ -2327,6 +2327,17 @@ setInterval(refreshBarLiveStatus,15000);
   .lw-knock{width:36px!important;height:36px!important}
   .lw-knock::after{padding-top:14px!important;font-size:6px!important}
   .lw-toilet-queue{font-size:15px!important}
+}
+</style>
+<style id="lw-caster-404-recovery">
+/* Caster.fm recovery: let Caster resolve the current public channel from the public token. */
+.proper-jukebox .cstrEmbed{
+  min-height:145px!important;
+}
+.proper-jukebox .cstrEmbed iframe{
+  width:100%!important;
+  min-height:145px!important;
+  border:0!important;
 }
 </style>
 <style id="lw-caster-real-player-fit">
