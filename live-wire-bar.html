@@ -1742,7 +1742,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
   <figure class="real-bottle wide-photo">
-    <img class="photo-cutout shelf-guinness-cutout" src="https://www.pngkey.com/png/detail/84-840717_guinness-draught-bottles-330ml-guinness-draught-bottle-png.png" alt="Guinness bottle" loading="eager" decoding="async" fetchpriority="high">
+    <img class="photo-cutout shelf-guinness-cutout" src="https://www.pngkey.com/png/detail/816-8160102_guinness-draught-beer.png" alt="Guinness bottle" loading="eager" decoding="async" fetchpriority="high">
     <figcaption>GUINNESS</figcaption>
   </figure>
   <figure class="real-bottle">
@@ -3641,6 +3641,28 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   .real-bottle img.shelf-guinness-cutout{
     mix-blend-mode:multiply!important;
     transform:scale(1.24)!important;
+  }
+}
+</style>
+
+<style id="lw-guinness-final-cutout">
+/* Guinness: use the taller transparent PNG and make the bottle larger on the lower shelf. */
+.real-bottle img.shelf-guinness-cutout{
+  mix-blend-mode:normal!important;
+  clip-path:none!important;
+  width:100%!important;
+  height:122px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  transform:scale(1.38)!important;
+  transform-origin:center bottom!important;
+  background:transparent!important;
+  filter:saturate(1.06) contrast(1.06) drop-shadow(0 4px 6px rgba(0,0,0,.78))!important;
+}
+@media(max-width:600px){
+  .real-bottle img.shelf-guinness-cutout{
+    height:88px!important;
+    transform:scale(1.38)!important;
   }
 }
 </style>
