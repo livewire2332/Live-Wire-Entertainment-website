@@ -868,6 +868,20 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   .proper-jukebox .juke-live-lights i{width:8px !important;height:8px !important}
 }
 </style>
+<style>
+/* Product-photo cleanup: remove visible white/rectangular photo boxes so drinks sit naturally on the timber shelf. */
+.real-top-shelf,.photographic-drink-shelf{isolation:isolate}
+.real-top-drink img,.real-bottle img{
+  background:transparent !important;
+  mix-blend-mode:multiply;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.real-top-drink img{filter:saturate(.98) contrast(1.05) brightness(1.02)}
+.real-bottle img{filter:saturate(.96) contrast(1.05) brightness(1.02)}
+.real-top-drink,.real-bottle{background:transparent !important}
+.real-bottle.wide-photo img{mix-blend-mode:multiply !important}
+</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
@@ -883,12 +897,12 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 <div class="bar-hero"><div class="bar-pub-lights"></div><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🍹 The Live Wire Bar</h1><p class="bar-intro"><strong>Welcome to the Live Wire Bar — a fun place where everyone can enjoy the company, music, laughs and vibes from TikTok, all from the comfort of their own home.</strong></p><p class="bar-intro">It's like one big community bar without needing to be in the same room. People come together through music and banter, share the moment, have a laugh and enjoy the Live Wire experience wherever they are.</p></div></div>
 <section><div class="bar-pub-wall"><div class="pub-neon-sign">🍺 LIVE WIRE BAR • OPEN FOR BANter • MUSIC • LAUGHS ⚡</div><div class="pub-shelf real-top-shelf" aria-label="Real drinks on the upper bar shelf">
   <figure class="real-top-drink"><img src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="lazy"><figcaption>STRONGBOW</figcaption></figure>
-  <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Madri_excepcional.jpg" alt="Madri Excepcional bottle" loading="lazy"><figcaption>MADRI</figcaption></figure>
-  <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Budweiser_Bottle.jpg" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
-  <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Wild_Burrow_Pink_Gin.jpg" alt="Pink gin bottle" loading="lazy"><figcaption>PINK GIN</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="lazy"><figcaption>MADRI</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://www.lidl.de/assets/gcp67dbde3109e54f4e9dfe1fb94119d77a.jpeg" alt="Pink gin bottle" loading="lazy"><figcaption>PINK GIN</figcaption></figure>
   <figure class="real-top-drink"><img src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="lazy"><figcaption>STRONGBOW</figcaption></figure>
-  <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Madri_excepcional.jpg" alt="Madri Excepcional bottle" loading="lazy"><figcaption>MADRI</figcaption></figure>
-  <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Budweiser_Bottle.jpg" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="lazy"><figcaption>MADRI</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
 </div><div class="pub-drink-display photographic-drink-shelf" aria-label="Real drinks on the Live Wire Bar shelf">
   <figure class="real-bottle">
     <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Captain_Morgan_Rum_-_Bottle.png" alt="Captain Morgan bottle" loading="lazy">
@@ -899,7 +913,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
   <figure class="real-bottle wide-photo">
-    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Guinness_bottle.jpg" alt="Guinness bottle" loading="lazy">
+    <img src="https://digitalcontent.api.tesco.com/v2/media/ghs/92de2822-ea49-459d-a487-2848547ce255/83b3e2b0-3632-4335-a538-6a50e6f28141_524731649.jpeg?h=960&w=960" alt="Guinness bottle" loading="lazy">
     <figcaption>GUINNESS</figcaption>
   </figure>
   <figure class="real-bottle">
