@@ -3079,3 +3079,100 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-jukebox-readability-reactive-final">
+/* Final jukebox readability + detection reaction pass. */
+.proper-jukebox{
+  width:min(100%,730px)!important;
+  padding:12px!important;
+}
+.proper-jukebox .jukebox-crown{
+  width:74%!important;
+  padding:8px 16px!important;
+}
+.proper-jukebox .jukebox-brand{
+  font-size:clamp(18px,3.7vw,26px)!important;
+}
+.proper-jukebox .jukebox-arch{
+  padding:14px!important;
+}
+.proper-jukebox .jukebox-header{
+  padding:3px 5px 9px!important;
+}
+.proper-jukebox .jukebox-title{
+  font-size:clamp(27px,6.2vw,40px)!important;
+}
+.proper-jukebox .jukebox-window{
+  padding:14px!important;
+}
+.proper-jukebox .live-status{
+  font-size:clamp(15px,3vw,18px)!important;
+  min-height:42px!important;
+  padding:8px 16px!important;
+  font-weight:900!important;
+  letter-spacing:.2px!important;
+  transition:background .25s ease,border-color .25s ease,box-shadow .25s ease,transform .25s ease!important;
+}
+.proper-jukebox .live-status.live{
+  border-color:#ff365c!important;
+  background:rgba(255,54,92,.13)!important;
+  box-shadow:0 0 10px #ff365c,0 0 22px rgba(255,54,92,.72),0 0 38px rgba(255,43,214,.38)!important;
+  animation:lwLiveButtonReact .9s ease-in-out infinite!important;
+}
+.proper-jukebox.shows-paused .live-status{
+  border-color:#ffd43b!important;
+  background:rgba(255,212,59,.10)!important;
+  box-shadow:0 0 10px #ffd43b,0 0 22px rgba(255,212,59,.32)!important;
+  animation:none!important;
+}
+.proper-jukebox .bar-live-show{
+  font-size:clamp(16px,3.1vw,19px)!important;
+  line-height:1.4!important;
+  margin:0 auto 7px!important;
+}
+.proper-jukebox .jukebox-window h2{
+  font-size:clamp(23px,4.5vw,28px)!important;
+  margin:3px 0 5px!important;
+}
+.proper-jukebox .lw-player-label{
+  font-size:clamp(15px,3vw,18px)!important;
+}
+.proper-jukebox .lw-player-state{
+  font-size:clamp(14px,2.8vw,17px)!important;
+}
+.proper-jukebox .lw-native-player{
+  width:100%!important;
+}
+@keyframes lwLiveButtonReact{
+  0%,100%{transform:scale(1);filter:brightness(1)}
+  50%{transform:scale(1.035);filter:brightness(1.2)}
+}
+@media(max-width:600px){
+  .proper-jukebox{
+    width:calc(100% - 4px)!important;
+    padding:8px!important;
+  }
+  .proper-jukebox .jukebox-crown{
+    width:84%!important;
+    padding:7px 10px!important;
+  }
+  .proper-jukebox .jukebox-brand{font-size:18px!important}
+  .proper-jukebox .jukebox-arch{padding:9px!important}
+  .proper-jukebox .jukebox-header{padding:2px 3px 6px!important}
+  .proper-jukebox .jukebox-title{font-size:30px!important}
+  .proper-jukebox .jukebox-window{padding:10px!important}
+  .proper-jukebox .live-status{
+    font-size:16px!important;
+    min-height:40px!important;
+    padding:7px 13px!important;
+  }
+  .proper-jukebox .bar-live-show{
+    font-size:16px!important;
+    line-height:1.35!important;
+  }
+  .proper-jukebox .jukebox-window h2{font-size:23px!important}
+  .proper-jukebox .lw-player-label{font-size:16px!important}
+  .proper-jukebox .lw-player-state{font-size:15px!important}
+}
+</style>
