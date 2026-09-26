@@ -882,6 +882,224 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 .real-top-drink,.real-bottle{background:transparent !important}
 .real-bottle.wide-photo img{mix-blend-mode:multiply !important}
 </style>
+
+<style>
+/* Final jukebox integration: use the real front-facing Wurlitzer as a blended cabinet,
+   then place the live Caster.fm player inside its central display. */
+.proper-jukebox{
+  position:relative !important;
+  width:min(100%,760px) !important;
+  min-height:780px !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:28px !important;
+  overflow:hidden !important;
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse at 50% 18%,rgba(255,184,86,.12),transparent 34%),
+    linear-gradient(90deg,#160b07 0,#3b1c10 12%,#1d0d08 50%,#3b1c10 88%,#160b07 100%) !important;
+  box-shadow:0 22px 46px rgba(0,0,0,.86),0 0 0 2px #090604,0 0 0 5px #754a28 !important;
+  filter:none !important;
+}
+/* The photograph is its own layer. Multiply removes the pale/white photo surround
+   instead of leaving a rectangular picture behind the machine. */
+.proper-jukebox::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+  background-image:url("https://upload.wikimedia.org/wikipedia/commons/4/41/Wurlitzer_1015.jpg") !important;
+  background-repeat:no-repeat !important;
+  background-position:center 14px !important;
+  background-size:auto 94% !important;
+  background-color:transparent !important;
+  background-blend-mode:multiply !important;
+  mix-blend-mode:normal !important;
+  filter:saturate(1.12) contrast(1.08) brightness(1.10) !important;
+  opacity:.98 !important;
+}
+/* Soft pub-wall vignette over the photo, so it belongs in the room rather than
+   looking like a pasted image. */
+.proper-jukebox::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:2 !important;
+  pointer-events:none !important;
+  background:
+    radial-gradient(ellipse at 50% 48%,transparent 26%,rgba(20,8,4,.10) 55%,rgba(8,4,2,.58) 100%),
+    linear-gradient(180deg,rgba(12,6,3,.10),transparent 30%,rgba(8,4,2,.28) 88%,rgba(4,2,1,.60));
+  box-shadow:inset 0 0 55px rgba(0,0,0,.72) !important;
+}
+.proper-jukebox .jukebox-crown{display:none !important}
+.proper-jukebox .jukebox-arch{
+  position:absolute !important;
+  z-index:7 !important;
+  left:0 !important;
+  top:0 !important;
+  width:100% !important;
+  max-width:none !important;
+  min-height:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+.proper-jukebox .juke-curtain,
+.proper-jukebox .juke-side-column,
+.proper-jukebox .juke-bottom-grille,
+.proper-jukebox .jukebox-header,
+.proper-jukebox .jukebox-arch::before{display:none !important}
+
+/* The player is physically placed into the jukebox's middle window. */
+.proper-jukebox .jukebox-window{
+  position:absolute !important;
+  left:50% !important;
+  top:40.5% !important;
+  transform:translate(-50%,-50%) !important;
+  width:min(62%,390px) !important;
+  max-width:390px !important;
+  margin:0 !important;
+  padding:12px 12px 11px !important;
+  z-index:8 !important;
+  border:2px solid rgba(224,177,100,.78) !important;
+  border-radius:12px !important;
+  background:rgba(10,6,4,.78) !important;
+  backdrop-filter:blur(2px) !important;
+  box-shadow:0 9px 24px rgba(0,0,0,.72),inset 0 0 22px rgba(0,0,0,.72),0 0 0 1px rgba(255,226,170,.12) !important;
+}
+.proper-jukebox .juke-console{position:relative;z-index:2}
+.proper-jukebox .jukebox-window h2{
+  font-size:clamp(18px,3vw,25px) !important;
+  margin:2px 0 3px !important;
+  color:#ffe9bd !important;
+  text-shadow:0 2px 4px #000 !important;
+}
+.proper-jukebox .jukebox-window>p{
+  font-size:12px !important;
+  line-height:1.3 !important;
+  margin:0 auto 6px !important;
+  color:#e6ddd0 !important;
+}
+.proper-jukebox .live-status{font-size:11px !important;padding:5px 9px !important;margin-bottom:7px !important}
+.proper-jukebox .bar-live-show{font-size:11px !important;margin:-3px auto 6px !important}
+.proper-jukebox .jukebox-eq{height:17px !important;margin:3px auto 1px !important}
+.proper-jukebox .jukebox-eq span{width:4px !important}
+.proper-jukebox .jukebox-speakers{gap:5px !important;margin-top:5px !important}
+.proper-jukebox .juke-speaker{height:22px !important;border-width:1px !important}
+.proper-jukebox .jukebox-controls{margin-top:5px !important}
+.proper-jukebox .juke-light{width:8px !important;height:8px !important}
+.proper-jukebox .jukebox-note{font-size:9px !important;margin:3px 0 0 !important}
+
+/* Lots of real-looking bulbs around the actual cabinet silhouette. */
+.proper-jukebox .juke-live-lights{
+  position:absolute !important;
+  z-index:9 !important;
+  inset:0 !important;
+  pointer-events:none !important;
+}
+.proper-jukebox .juke-live-lights i{
+  position:absolute !important;
+  display:block !important;
+  width:11px !important;
+  height:11px !important;
+  border-radius:50% !important;
+  background:#e8c36e !important;
+  opacity:.62 !important;
+  transform:scale(.9) !important;
+  box-shadow:0 0 5px rgba(255,205,100,.65),0 0 11px rgba(255,160,45,.22) !important;
+  transition:background-color .8s ease,box-shadow .8s ease,opacity .8s ease,transform .35s ease !important;
+}
+/* Top arch */
+.proper-jukebox .juke-live-lights i:nth-child(1){left:37%;top:6%}
+.proper-jukebox .juke-live-lights i:nth-child(2){left:42%;top:4.7%}
+.proper-jukebox .juke-live-lights i:nth-child(3){left:47%;top:4.2%}
+.proper-jukebox .juke-live-lights i:nth-child(4){left:52%;top:4.2%}
+.proper-jukebox .juke-live-lights i:nth-child(5){left:57%;top:4.7%}
+.proper-jukebox .juke-live-lights i:nth-child(6){left:62%;top:6%}
+/* Left side */
+.proper-jukebox .juke-live-lights i:nth-child(7){left:28%;top:13%}
+.proper-jukebox .juke-live-lights i:nth-child(8){left:24.5%;top:20%}
+.proper-jukebox .juke-live-lights i:nth-child(9){left:22.5%;top:28%}
+.proper-jukebox .juke-live-lights i:nth-child(10){left:21.5%;top:36%}
+.proper-jukebox .juke-live-lights i:nth-child(11){left:21.5%;top:45%}
+.proper-jukebox .juke-live-lights i:nth-child(12){left:21.5%;top:54%}
+/* Right side */
+.proper-jukebox .juke-live-lights i:nth-child(13){right:28%;top:13%}
+.proper-jukebox .juke-live-lights i:nth-child(14){right:24.5%;top:20%}
+.proper-jukebox .juke-live-lights i:nth-child(15){right:22.5%;top:28%}
+.proper-jukebox .juke-live-lights i:nth-child(16){right:21.5%;top:36%}
+.proper-jukebox .juke-live-lights i:nth-child(17){right:21.5%;top:45%}
+.proper-jukebox .juke-live-lights i:nth-child(18){right:21.5%;top:54%}
+/* Lower cabinet */
+.proper-jukebox .juke-live-lights i:nth-child(19){left:28%;top:63%}
+.proper-jukebox .juke-live-lights i:nth-child(20){left:33%;top:69%}
+.proper-jukebox .juke-live-lights i:nth-child(21){left:39%;top:73%}
+.proper-jukebox .juke-live-lights i:nth-child(22){right:39%;top:73%}
+.proper-jukebox .juke-live-lights i:nth-child(23){right:33%;top:69%}
+.proper-jukebox .juke-live-lights i:nth-child(24){right:28%;top:63%}
+
+/* OFF AIR: slow, gentle colour drift — still alive, but not pretending music is playing. */
+.proper-jukebox:not(.live-stream) .juke-live-lights i{
+  animation:jukeIdleColour 9s ease-in-out infinite !important;
+}
+.proper-jukebox:not(.live-stream) .juke-live-lights i:nth-child(3n){animation-delay:-3s !important}
+.proper-jukebox:not(.live-stream) .juke-live-lights i:nth-child(4n){animation-delay:-5.5s !important}
+@keyframes jukeIdleColour{
+  0%,100%{background:#f0c56b;box-shadow:0 0 5px #f0c56b,0 0 13px rgba(240,197,107,.30);opacity:.55}
+  25%{background:#ff8a5c;box-shadow:0 0 6px #ff8a5c,0 0 14px rgba(255,138,92,.28);opacity:.72}
+  50%{background:#d97cff;box-shadow:0 0 6px #d97cff,0 0 15px rgba(217,124,255,.28);opacity:.62}
+  75%{background:#62dff2;box-shadow:0 0 6px #62dff2,0 0 15px rgba(98,223,242,.28);opacity:.72}
+}
+
+/* LIVE: much faster, brighter and staggered, like music is driving the cabinet. */
+.proper-jukebox.live-stream .juke-live-lights i{
+  animation:jukeLiveColour .52s ease-in-out infinite !important;
+  opacity:1 !important;
+}
+.proper-jukebox.live-stream .juke-live-lights i:nth-child(2n){animation-delay:-.13s !important}
+.proper-jukebox.live-stream .juke-live-lights i:nth-child(3n){animation-delay:-.26s !important}
+.proper-jukebox.live-stream .juke-live-lights i:nth-child(5n){animation-delay:-.39s !important}
+@keyframes jukeLiveColour{
+  0%{background:#ffb347;box-shadow:0 0 7px #ffb347,0 0 18px #ff8a2b;transform:scale(.86)}
+  20%{background:#ff4fd8;box-shadow:0 0 8px #ff4fd8,0 0 21px rgba(255,79,216,.85);transform:scale(1.14)}
+  40%{background:#57e8ff;box-shadow:0 0 8px #57e8ff,0 0 21px rgba(87,232,255,.85);transform:scale(.92)}
+  60%{background:#ffe06a;box-shadow:0 0 8px #ffe06a,0 0 22px rgba(255,224,106,.9);transform:scale(1.18)}
+  80%{background:#ff7048;box-shadow:0 0 8px #ff7048,0 0 20px rgba(255,112,72,.85);transform:scale(.94)}
+  100%{background:#ffb347;box-shadow:0 0 7px #ffb347,0 0 18px #ff8a2b;transform:scale(.86)}
+}
+.proper-jukebox.live-stream .jukebox-window{
+  box-shadow:0 10px 28px rgba(0,0,0,.76),inset 0 0 25px rgba(0,0,0,.72),0 0 0 1px rgba(255,225,160,.16),0 0 28px rgba(255,142,57,.12) !important;
+}
+.proper-jukebox.live-stream::after{
+  background:
+    radial-gradient(ellipse at 50% 48%,transparent 24%,rgba(255,173,72,.05) 52%,rgba(8,4,2,.50) 100%),
+    linear-gradient(180deg,rgba(12,6,3,.08),transparent 30%,rgba(8,4,2,.25) 88%,rgba(4,2,1,.55)) !important;
+}
+
+/* Mobile keeps the same physical proportions rather than shrinking the cabinet into a card. */
+@media(max-width:600px){
+  .proper-jukebox{min-height:600px !important;border-radius:20px !important}
+  .proper-jukebox::before{background-size:auto 94% !important;background-position:center 8px !important}
+  .proper-jukebox .jukebox-window{
+    top:40.5% !important;
+    width:min(76%,330px) !important;
+    padding:9px 8px 9px !important;
+  }
+  .proper-jukebox .jukebox-window h2{font-size:18px !important}
+  .proper-jukebox .jukebox-window>p{font-size:9.5px !important}
+  .proper-jukebox .live-status{font-size:9px !important}
+  .proper-jukebox .bar-live-show{font-size:9px !important}
+  .proper-jukebox .juke-live-lights i{width:8px !important;height:8px !important}
+}
+@media(prefers-reduced-motion:reduce){
+  .proper-jukebox:not(.live-stream) .juke-live-lights i,
+  .proper-jukebox.live-stream .juke-live-lights i{animation:none !important;opacity:.9 !important}
+}
+</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
@@ -925,7 +1143,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
 </div><div class="pub-bar-top"></div></div><div class="wrap"><div class="player"><div class="jukebox-wrap proper-jukebox">
-<div class="juke-live-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="juke-live-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 <div class="jukebox-crown"><span class="juke-crown-bolt">⚡</span><span class="jukebox-brand">LIVE WIRE</span><span class="juke-crown-bolt">⚡</span></div>
 <div class="jukebox-arch">
   <div class="juke-curtain" aria-hidden="true"><span></span><span></span><span></span></div>
