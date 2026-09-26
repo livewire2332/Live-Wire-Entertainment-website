@@ -1353,7 +1353,11 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   }
 }
 </style>
-</head>
+<style id="lw-native-caster-player">
+.proper-jukebox .lw-native-player{width:100%!important;max-width:100%!important;margin:3px auto 0!important;padding:9px!important;box-sizing:border-box!important;border-radius:12px!important;background:linear-gradient(145deg,#090b10,#1b1017)!important;border:2px solid #00eaff!important;box-shadow:0 0 12px rgba(0,234,255,.45),inset 0 0 18px #000!important}
+.proper-jukebox .lw-player-screen{text-align:center;margin-bottom:7px}.proper-jukebox .lw-player-label{font-weight:900;color:#ffd43b;font-size:13px;text-shadow:0 0 7px #ffd43b}.proper-jukebox .lw-player-state{font-size:11px;color:#cfc6bc;margin-top:2px}.proper-jukebox #lwAudioPlayer{display:block;width:100%;height:38px}
+@media(max-width:600px){.proper-jukebox .lw-native-player{padding:7px!important;border-radius:10px!important}.proper-jukebox .lw-player-label{font-size:12px}.proper-jukebox .lw-player-state{font-size:10px}.proper-jukebox #lwAudioPlayer{height:36px}}
+</style></head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
   <div class="lw-page-nav-inner">
@@ -1410,7 +1414,15 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
       <div class="jukebox-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <h2>📻 Listen Live</h2>
       <p>When the Live Wire show is live, drop the needle and listen along directly from the website.</p>
-      <div data-type="streamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="dark" data-color="e81e4d" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
+      <div class="lw-native-player" id="lwNativePlayer">
+        <div class="lw-player-screen">
+          <div class="lw-player-label">⚡ LIVE WIRE AUDIO</div>
+          <div class="lw-player-state" id="lwPlayerState">Ready to listen</div>
+        </div>
+        <audio id="lwAudioPlayer" controls preload="none" playsinline>
+          <source src="https://sapircast.caster.fm:12036/6W6zw" type="audio/mpeg">
+        </audio>
+      </div>
       <div class="jukebox-speakers" aria-hidden="true"><div class="juke-speaker"></div><div class="juke-speaker"></div></div>
       <div class="jukebox-controls" aria-hidden="true"><span class="juke-light"></span><span class="juke-light"></span><span class="juke-light"></span></div>
       <div class="jukebox-note">🎵 Turn it up, pull up a virtual bar stool and enjoy the music. ⚡</div>
@@ -1418,7 +1430,17 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   </div>
   <div class="juke-bottom-grille" aria-hidden="true"></div>
 </div>
-</div><script src="https://cdn.cloud.caster.fm/widgets/embed.js"></script><script>
+</div><script>
+const lwAudio=document.getElementById('lwAudioPlayer');
+const lwAudioState=document.getElementById('lwPlayerState');
+if(lwAudio){
+ lwAudio.addEventListener('play',function(){if(lwAudioState)lwAudioState.textContent='🔊 Live Wire audio playing';});
+ lwAudio.addEventListener('pause',function(){if(lwAudioState)lwAudioState.textContent='Paused';});
+ lwAudio.addEventListener('waiting',function(){if(lwAudioState)lwAudioState.textContent='Connecting to Live Wire…';});
+ lwAudio.addEventListener('error',function(){if(lwAudioState)lwAudioState.textContent='Stream currently offline — try again when we are live.';});
+}
+</script>
+<script>
 const CASTER_STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
 const CASTER_MOUNT='/6W6zw';
 const BAR_WORKER_STATUS='https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status';
