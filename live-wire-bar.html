@@ -1728,7 +1728,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-madri-cutout" src="https://www.madriexcepcional.com/sites/madri/files/2022-02/Madri%20Bottle%20Glass%20%26%20Medals.png" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-budweiser-cutout" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
-  <figure class="real-top-drink"><img class="photo-cutout shelf-gin-cutout" src="https://www.kindpng.com/picc/m/236-2368093_gordons-pink-gin-70cl-gordons-pink-gin-png.png" alt="Pink gin bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>PINK GIN</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-gin-cutout" src="https://images.ctfassets.net/vvbow7h7clgh/4JzzNw9AG2CDAlML6olkW4/77fbf36e978d521b6f49f23ef7174fb5/9d4801df43d5b1a71ee625e9c5cbd5ef086eec6c.png" alt="Pink gin bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>PINK GIN</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-madri-cutout" src="https://www.madriexcepcional.com/sites/madri/files/2022-02/Madri%20Bottle%20Glass%20%26%20Medals.png" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
@@ -1742,7 +1742,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
   <figure class="real-bottle wide-photo">
-    <img class="photo-cutout shelf-guinness-cutout" src="https://www.pngkey.com/png/detail/110-1100599_guinness-draught-11-2-fl-oz-bottle.png" alt="Guinness bottle" loading="eager" decoding="async" fetchpriority="high">
+    <img class="photo-cutout shelf-guinness-cutout" src="https://www.pngkey.com/png/detail/84-840717_guinness-draught-bottles-330ml-guinness-draught-bottle-png.png" alt="Guinness bottle" loading="eager" decoding="async" fetchpriority="high">
     <figcaption>GUINNESS</figcaption>
   </figure>
   <figure class="real-bottle">
@@ -3560,6 +3560,35 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
   .real-bottle img.shelf-guinness-cutout{
     transform:scale(1.58)!important;
+  }
+}
+</style>
+
+
+<style id="lw-final-real-alpha-drinks">
+/* Use the replacement bottle assets with their own transparent backgrounds.
+   No white-canvas clipping or blend-mode tricks needed. */
+.real-top-drink img.shelf-gin-cutout{
+  mix-blend-mode:normal!important;
+  clip-path:none!important;
+  transform:none!important;
+  background:transparent!important;
+  filter:saturate(1.03) contrast(1.04) drop-shadow(0 4px 5px rgba(0,0,0,.68))!important;
+}
+.real-bottle img.shelf-guinness-cutout{
+  mix-blend-mode:normal!important;
+  clip-path:none!important;
+  transform:scale(1.12)!important;
+  transform-origin:center bottom!important;
+  background:transparent!important;
+  filter:saturate(1.03) contrast(1.04) drop-shadow(0 4px 5px rgba(0,0,0,.7))!important;
+}
+@media(max-width:600px){
+  .real-top-drink img.shelf-gin-cutout{
+    transform:none!important;
+  }
+  .real-bottle img.shelf-guinness-cutout{
+    transform:scale(1.12)!important;
   }
 }
 </style>
