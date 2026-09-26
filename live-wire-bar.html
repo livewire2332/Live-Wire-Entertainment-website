@@ -1357,6 +1357,129 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 .proper-jukebox .lw-native-player{width:100%!important;max-width:100%!important;margin:3px auto 0!important;padding:9px!important;box-sizing:border-box!important;border-radius:12px!important;background:linear-gradient(145deg,#090b10,#1b1017)!important;border:2px solid #00eaff!important;box-shadow:0 0 12px rgba(0,234,255,.45),inset 0 0 18px #000!important}
 .proper-jukebox .lw-player-screen{text-align:center;margin-bottom:7px}.proper-jukebox .lw-player-label{font-weight:900;color:#ffd43b;font-size:13px;text-shadow:0 0 7px #ffd43b}.proper-jukebox .lw-player-state{font-size:11px;color:#cfc6bc;margin-top:2px}.proper-jukebox #lwAudioPlayer{display:block;width:100%;height:38px}
 @media(max-width:600px){.proper-jukebox .lw-native-player{padding:7px!important;border-radius:10px!important}.proper-jukebox .lw-player-label{font-size:12px}.proper-jukebox .lw-player-state{font-size:10px}.proper-jukebox #lwAudioPlayer{height:36px}}
+</style><style id="lw-modern-jukebox-cleanup">
+/* Modern jukebox cleanup: one clean cabinet, one glass display, minimal framing. */
+.proper-jukebox{
+  width:min(100%,620px)!important;
+  padding:0 8px 12px!important;
+  border:0!important;
+  border-radius:34% 34% 24px 24px/10% 10% 24px 24px!important;
+  background:linear-gradient(90deg,#130b08,#3a1b11 8%,#17100d 18%,#24120d 50%,#17100d 82%,#3a1b11 92%,#130b08)!important;
+  box-shadow:0 10px 0 #080706,0 0 0 2px #8d5b2c,0 0 24px rgba(0,234,255,.18),inset 0 0 28px #050403!important;
+}
+.proper-jukebox::before{
+  left:7%!important;right:7%!important;bottom:6px!important;height:5px!important;
+  background:linear-gradient(90deg,transparent,#b87333,#ffd46b,#b87333,transparent)!important;
+  box-shadow:0 0 7px rgba(255,212,107,.45)!important;
+}
+.proper-jukebox::after{
+  left:14%!important;right:14%!important;top:55px!important;height:2px!important;
+  opacity:.65!important;
+}
+.proper-jukebox .jukebox-crown{
+  width:72%!important;
+  min-height:38px!important;
+  padding:5px 12px!important;
+  gap:12px!important;
+  border:2px solid #9c6937!important;
+  border-radius:999px!important;
+  background:linear-gradient(180deg,#24130d,#100a08)!important;
+  box-shadow:0 0 12px rgba(255,212,59,.18),inset 0 0 12px #000!important;
+}
+.proper-jukebox .jukebox-brand{
+  font-size:clamp(18px,4vw,25px)!important;
+  letter-spacing:3px!important;
+}
+.proper-jukebox .juke-crown-bolt{font-size:16px!important}
+.proper-jukebox .jukebox-arch{
+  min-height:0!important;
+  height:auto!important;
+  margin:0 auto!important;
+  padding:31px 22px 12px!important;
+  max-width:570px!important;
+  border:0!important;
+  border-radius:34% 34% 20px 20px/16% 16% 20px 20px!important;
+  background:linear-gradient(90deg,rgba(104,48,25,.5),rgba(28,13,9,.95) 16%,rgba(17,10,8,.98) 50%,rgba(28,13,9,.95) 84%,rgba(104,48,25,.5))!important;
+  box-shadow:inset 0 0 30px #050403!important;
+  overflow:hidden!important;
+}
+.proper-jukebox .jukebox-arch::before{inset:8px!important;border:1px solid rgba(210,154,83,.55)!important;box-shadow:inset 0 0 18px rgba(255,212,107,.08)!important}
+.proper-jukebox .juke-curtain{
+  top:14px!important;left:22%!important;right:22%!important;height:55px!important;
+  border:0!important;border-radius:50% 50% 8px 8px/65% 65% 8px 8px!important;
+  opacity:.72!important;
+}
+.proper-jukebox .juke-side-column{
+  top:61px!important;bottom:16px!important;width:18px!important;
+  border:2px solid #6f4222!important;border-radius:12px!important;
+  box-shadow:0 0 8px rgba(255,143,49,.25)!important;
+  opacity:.9!important;
+}
+.proper-jukebox .juke-side-column.left{left:7px!important}
+.proper-jukebox .juke-side-column.right{right:7px!important}
+.proper-jukebox .juke-side-column i{width:7px!important;height:7px!important;margin:22px auto!important}
+.proper-jukebox .jukebox-header{padding:0 4px 5px!important}
+.proper-jukebox .jukebox-kicker{font-size:9px!important;letter-spacing:2.5px!important}
+.proper-jukebox .jukebox-title{
+  font-size:clamp(25px,6vw,32px)!important;
+  letter-spacing:2px!important;
+  margin:1px 0!important;
+}
+.proper-jukebox .jukebox-window{
+  width:96%!important;max-width:510px!important;
+  padding:9px 10px 10px!important;
+  border:1px solid rgba(0,234,255,.65)!important;
+  border-radius:16px!important;
+  background:linear-gradient(145deg,rgba(8,10,15,.97),rgba(20,10,17,.96))!important;
+  box-shadow:0 0 0 1px rgba(255,43,214,.25),0 0 16px rgba(0,234,255,.16),inset 0 0 24px #000!important;
+}
+.proper-jukebox .jukebox-window::before{inset:5px!important;border:0!important}
+.proper-jukebox .juke-grille{
+  height:9px!important;width:58%!important;margin:0 auto 5px!important;
+  opacity:.55!important;
+}
+.proper-jukebox .live-status{
+  font-size:13px!important;min-height:30px!important;
+  padding:5px 11px!important;border:1px solid #ffd43b!important;
+  box-shadow:0 0 8px rgba(255,212,59,.28)!important;
+}
+.proper-jukebox .bar-live-show{font-size:14px!important}
+.proper-jukebox .jukebox-eq{height:12px!important}
+.proper-jukebox .jukebox-window h2{font-size:21px!important}
+.proper-jukebox .lw-native-player{
+  border:0!important;
+  border-top:1px solid rgba(0,234,255,.28)!important;
+  border-radius:0!important;
+  margin:3px auto 0!important;
+  padding:7px 2px 2px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.proper-jukebox .lw-player-label{font-size:12px!important}
+.proper-jukebox #lwAudioPlayer{height:34px!important}
+.proper-jukebox .juke-bottom-grille{display:none!important}
+@media(max-width:600px){
+  .proper-jukebox{
+    width:calc(100% - 14px)!important;
+    height:auto!important;min-height:0!important;
+    padding:0 4px 9px!important;
+  }
+  .proper-jukebox .jukebox-crown{width:78%!important;min-height:34px!important;padding:4px 9px!important}
+  .proper-jukebox .jukebox-brand{font-size:17px!important}
+  .proper-jukebox .jukebox-arch{
+    height:auto!important;
+    padding:27px 12px 9px!important;
+  }
+  .proper-jukebox .juke-curtain{height:48px!important;top:10px!important}
+  .proper-jukebox .juke-side-column{top:55px!important;bottom:13px!important;width:16px!important}
+  .proper-jukebox .juke-side-column.left{left:5px!important}.proper-jukebox .juke-side-column.right{right:5px!important}
+  .proper-jukebox .juke-side-column i{width:6px!important;height:6px!important;margin:18px auto!important}
+  .proper-jukebox .jukebox-window{width:94%!important;padding:7px 6px 8px!important;border-radius:14px!important}
+  .proper-jukebox .live-status{font-size:13px!important}
+  .proper-jukebox .jukebox-window h2{font-size:20px!important}
+  .proper-jukebox .lw-native-player{padding-top:6px!important}
+  .proper-jukebox #lwAudioPlayer{height:32px!important}
+}
 </style></head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
