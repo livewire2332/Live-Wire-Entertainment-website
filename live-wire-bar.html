@@ -1823,3 +1823,14 @@ setInterval(refreshBarLiveStatus,15000);
   filter:saturate(.98) contrast(1.04) !important;
 }
 </style>
+<style id="live-wire-jukebox-paused-size-fix">
+/* Restore the original jukebox display scale; keep paused status/message at full size. */
+.proper-jukebox .jukebox-window{width:min(84%,470px)!important;max-width:470px!important;transform:none!important;left:auto!important;top:auto!important;}
+.proper-jukebox .live-status{font-size:clamp(12px,2.8vw,16px)!important;padding:7px 13px!important;}
+.proper-jukebox .bar-live-show{font-size:clamp(13px,3vw,18px)!important;line-height:1.35!important;}
+@media(max-width:600px){
+ .proper-jukebox .jukebox-window{width:84%!important;max-width:none!important;transform:none!important;left:auto!important;top:auto!important;padding:12px 10px 11px!important;}
+ .proper-jukebox .live-status{font-size:14px!important;padding:7px 13px!important;}
+ .proper-jukebox .bar-live-show{font-size:15px!important;line-height:1.4!important;}
+}
+</style>
