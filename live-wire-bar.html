@@ -321,6 +321,29 @@ box-shadow:0 9px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,210,150,.08),0 0 14
 .guestbook-entries{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;max-width:1000px;margin:auto;position:relative;z-index:2}.guest-entry{padding:17px 16px;border-radius:13px;background:linear-gradient(145deg,#24130c,#110a08);border:1px solid rgba(255,211,106,.25);box-shadow:inset 0 0 16px rgba(255,255,255,.018)}.guest-entry strong{display:block;color:#ffd36a;margin-bottom:5px}.guest-entry p{margin:0;color:#e5d9d0;line-height:1.45;font-size:14px}.guest-entry small{display:block;margin-top:8px;color:#8e8178;font-size:11px}.guestbook-note{text-align:center;margin:17px 0 0;color:#8f8178;font-size:11px}
 @media(max-width:760px){.guestbook-form{grid-template-columns:1fr}.guestbook-form textarea{min-height:80px}.guestbook-entries{grid-template-columns:1fr}.guestbook-zone{padding:27px 15px}.guestbook-zone::before{inset:7px}}
 @media(prefers-reduced-motion:reduce){.guestbook-sign{transition:none}}
+
+/* Photorealistic Wurlitzer treatment — keep existing player/functionality */
+.proper-jukebox{background:linear-gradient(90deg,#120905 0%,#3a1c0d 7%,#6a3517 13%,#291208 22%,#4b2410 50%,#291208 78%,#6a3517 87%,#3a1c0d 93%,#120905 100%);border-radius:28% 28% 18px 18px/9% 9% 18px 18px;box-shadow:0 18px 24px rgba(0,0,0,.65),0 0 0 2px #080604,0 0 0 4px #8c5b2e,inset 12px 0 22px rgba(255,190,110,.12),inset -12px 0 22px rgba(0,0,0,.5);filter:saturate(.9)}
+.proper-jukebox:before{background:linear-gradient(90deg,#1a0c06,#7d4b22 12%,#d19a53 50%,#7d4b22 88%,#1a0c06);box-shadow:0 2px 6px rgba(0,0,0,.7),0 0 9px rgba(255,211,120,.25)}
+.jukebox-crown{background:linear-gradient(180deg,#26130a,#7b421e 42%,#2b1208 70%,#120704);border-color:#100704;box-shadow:0 3px 0 #080403,0 0 0 2px #bd8140,inset 0 3px 8px rgba(255,224,157,.22),inset 0 -8px 13px rgba(0,0,0,.55)}
+.jukebox-brand{font-family:Georgia,serif;letter-spacing:2px;color:#f5d79a;text-shadow:0 1px 1px #2b1007,0 2px 0 #7d421d,0 0 7px rgba(255,211,120,.35)}
+.jukebox-arch{background:linear-gradient(90deg,#3a190c,#8a4a20 7%,#35150a 18%,#1d0b07 50%,#35150a 82%,#8a4a20 93%,#3a190c),repeating-linear-gradient(88deg,rgba(255,210,135,.035) 0 2px,transparent 2px 9px);box-shadow:0 5px 14px rgba(0,0,0,.7),0 0 0 2px #b47a3b,0 0 0 5px #160a06,inset 0 0 35px rgba(0,0,0,.8),inset 5px 0 10px rgba(255,196,105,.1),inset -5px 0 10px rgba(0,0,0,.5)}
+.jukebox-arch:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.07) 42%,transparent 49%);pointer-events:none;mix-blend-mode:screen}
+.juke-curtain{background:linear-gradient(180deg,#641b18,#2a0b0a 65%,#120505);box-shadow:inset 0 -18px 25px rgba(0,0,0,.65),inset 0 4px 10px rgba(255,91,55,.14)}
+.juke-side-column{background:linear-gradient(90deg,#6e3b17,#c98b42 22%,#6b3517 55%,#2b1108 100%);box-shadow:0 2px 6px rgba(0,0,0,.7),0 0 0 2px #6f401e,inset 2px 0 5px rgba(255,231,174,.3),inset -4px 0 8px rgba(0,0,0,.55)}
+.juke-side-column.right{background:linear-gradient(90deg,#25110a,#72411d 25%,#b47b38 50%,#3a190c 78%,#160804);box-shadow:0 2px 6px rgba(0,0,0,.7),0 0 0 2px #6f401e,inset 2px 0 5px rgba(255,231,174,.25),inset -4px 0 8px rgba(0,0,0,.55)}
+.juke-side-column i{width:11px;height:11px;background:#ffd982;box-shadow:0 0 5px rgba(255,211,105,.8);animation:jukeRealLamp 4s ease-in-out infinite alternate}
+.juke-side-column.right i{background:#f4bd61;box-shadow:0 0 5px rgba(255,190,90,.7)}
+.jukebox-window{background:linear-gradient(145deg,#120b08,#050403 55%,#1b0c08);border-color:#120806;box-shadow:0 4px 12px rgba(0,0,0,.8),0 0 0 2px #a36b32,inset 0 0 25px #000,inset 0 1px 7px rgba(255,220,160,.12)}
+.jukebox-window:after{content:"";position:absolute;inset:7px;border-radius:11px;background:linear-gradient(115deg,rgba(255,255,255,.07),transparent 24%,transparent 70%,rgba(255,255,255,.025));pointer-events:none}
+.juke-grille{background:repeating-linear-gradient(90deg,#21100a 0 5px,#8e5b2c 6px 8px,#30160c 9px 15px);box-shadow:inset 0 2px 4px rgba(255,221,160,.16),0 3px 6px rgba(0,0,0,.55)}
+.juke-speaker{background:radial-gradient(circle,rgba(210,145,71,.28) 0 1px,transparent 2px) 0 0/7px 7px,linear-gradient(180deg,#120805,#291208);border-color:#8c5b2e;box-shadow:inset 0 0 8px #000,0 2px 5px rgba(0,0,0,.6);animation:jukeRealSpeaker 1.8s ease-in-out infinite alternate}
+.jukebox-window h2{color:#f2d49c;text-shadow:0 1px 2px #000,0 0 5px rgba(255,210,120,.35)}
+.jukebox-title{color:#f5d79a;text-shadow:0 1px 2px #000,0 0 8px rgba(255,160,65,.28)}
+.juke-bottom-grille{background:repeating-linear-gradient(90deg,#21100a 0 5px,#8e5b2c 6px 8px,#30160c 9px 15px);box-shadow:inset 0 2px 4px rgba(255,221,160,.14),0 3px 7px rgba(0,0,0,.65)}
+@keyframes jukeRealLamp{0%,100%{opacity:.45;transform:scale(.92)}50%{opacity:.8;transform:scale(1)}}
+@keyframes jukeRealSpeaker{0%{transform:scale(.995);filter:brightness(.9)}100%{transform:scale(1.008);filter:brightness(1.05)}}
+@media(prefers-reduced-motion:reduce){.juke-side-column i,.juke-speaker{animation:none}}
 </style><style>
 /* Live Wire venue-to-venue transition portals */
 .lw-transition-portal{position:relative;max-width:920px;margin:10px auto 8px;padding:5px;border-radius:28px;background:linear-gradient(90deg,rgba(255,174,69,.18),rgba(255,43,214,.16),rgba(0,234,255,.18));box-shadow:0 0 18px rgba(0,234,255,.12),0 0 30px rgba(255,43,214,.08)}
