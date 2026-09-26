@@ -1251,6 +1251,68 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 }
 </style>
 
+<style id="live-wire-jukebox-final-size">
+/* Final jukebox mobile/display correction: restore the player to the cabinet's proper scale. */
+.proper-jukebox .jukebox-window{
+  transform:translate(-50%,-50%) scale(1) !important;
+  width:min(84%,470px) !important;
+  max-width:470px !important;
+  padding:12px 12px 11px !important;
+}
+.proper-jukebox .jukebox-window .cstrEmbed{
+  width:100% !important;
+  max-width:100% !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+.proper-jukebox.shows-paused .live-status{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:150px !important;
+  padding:7px 13px !important;
+  border:2px solid #ffd43b !important;
+  border-radius:999px !important;
+  background:linear-gradient(180deg,rgba(91,54,12,.96),rgba(38,20,7,.96)) !important;
+  color:#ffe9a0 !important;
+  font-weight:1000 !important;
+  letter-spacing:.4px !important;
+  box-shadow:0 0 8px rgba(255,212,59,.55),0 0 20px rgba(255,145,40,.25),inset 0 0 10px rgba(255,212,59,.12) !important;
+  animation:lwPausedPulse 2s ease-in-out infinite !important;
+  cursor:default !important;
+}
+.proper-jukebox.shows-paused .bar-live-show{
+  color:#ffd98a !important;
+  text-shadow:0 0 7px rgba(255,190,90,.28) !important;
+}
+@keyframes lwPausedPulse{
+  0%,100%{filter:brightness(.95);box-shadow:0 0 8px rgba(255,212,59,.45),0 0 18px rgba(255,145,40,.20),inset 0 0 10px rgba(255,212,59,.10)}
+  50%{filter:brightness(1.12);box-shadow:0 0 12px rgba(255,212,59,.75),0 0 26px rgba(255,145,40,.32),inset 0 0 13px rgba(255,212,59,.16)}
+}
+@media(max-width:600px){
+  .proper-jukebox{
+    min-height:650px !important;
+  }
+  .proper-jukebox .jukebox-window{
+    top:43% !important;
+    left:50% !important;
+    width:88% !important;
+    max-width:none !important;
+    transform:translate(-50%,-50%) scale(1) !important;
+    padding:10px 7px 9px !important;
+  }
+  .proper-jukebox .jukebox-window h2{
+    font-size:24px !important;
+  }
+  .proper-jukebox .jukebox-window>p{
+    font-size:13px !important;
+    line-height:1.35 !important;
+  }
+  .proper-jukebox .live-status{
+    font-size:11px !important;
+  }
+}
+</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
@@ -1376,7 +1438,7 @@ function setBarLiveStatus(online){
   const el=document.getElementById('barLiveStatus');
   const showEl=document.getElementById('barLiveShow');
   const jukebox=document.querySelector('.proper-jukebox');
-  if(jukebox)jukebox.classList.toggle('live-stream',!!online && !isPausePeriod());
+  if(jukebox){jukebox.classList.toggle('live-stream',!!online && !isPausePeriod());jukebox.classList.toggle('shows-paused',isPausePeriod());}
   if(!el)return;
   if(isPausePeriod()){
     currentLiveShow=null;
