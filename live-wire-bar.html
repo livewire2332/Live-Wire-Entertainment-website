@@ -3466,3 +3466,100 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-drink-shelves-final-tighten">
+/* Final mobile bar-shelf tightening + precise visual crops for the two remaining white canvases. */
+.bar-pub-wall{
+  padding:12px 7px 14px!important;
+}
+.real-top-shelf{
+  height:116px!important;
+  padding:5px 3px 5px!important;
+  gap:1px!important;
+}
+.real-top-drink{
+  height:102px!important;
+  width:clamp(45px,6.5vw,64px)!important;
+  flex-basis:64px!important;
+}
+.real-top-drink img{height:91px!important}
+.photographic-drink-shelf,
+.pub-drink-display{
+  min-height:128px!important;
+  height:128px!important;
+  padding:7px 5px 7px!important;
+  gap:3px!important;
+  border-bottom-width:6px!important;
+}
+.real-bottle{
+  width:clamp(47px,6.8vw,65px)!important;
+  height:111px!important;
+  flex-basis:65px!important;
+}
+.real-bottle img{height:101px!important}
+
+/* Pink Gin: crop tightly around the actual bottle silhouette, excluding the white canvas. */
+.real-top-drink img.shelf-gin-cutout{
+  mix-blend-mode:normal!important;
+  clip-path:polygon(
+    39% 3%,61% 3%,
+    61% 11%,64% 15%,70% 18%,
+    73% 24%,74% 31%,74% 90%,
+    69% 97%,31% 97%,26% 90%,
+    26% 31%,27% 24%,30% 18%,
+    36% 15%,39% 11%
+  )!important;
+  transform:scale(1.08)!important;
+  transform-origin:center bottom!important;
+}
+
+/* Guinness: narrow crop follows the bottle/shoulder shape rather than the white source box. */
+.real-bottle img.shelf-guinness-cutout{
+  mix-blend-mode:normal!important;
+  transform:scale(1.58)!important;
+  transform-origin:center bottom!important;
+  clip-path:polygon(
+    39% 2%,61% 2%,
+    61% 13%,65% 18%,70% 23%,
+    73% 30%,73% 91%,68% 97%,
+    32% 97%,27% 91%,27% 30%,
+    30% 23%,35% 18%,39% 13%
+  )!important;
+}
+@media(max-width:600px){
+  .bar-pub-wall{padding:8px 4px 11px!important}
+  .real-top-shelf{
+    height:84px!important;
+    padding:4px 2px 4px!important;
+  }
+  .real-top-drink{
+    width:37px!important;
+    height:72px!important;
+    flex-basis:37px!important;
+  }
+  .real-top-drink img{height:65px!important}
+  .real-top-drink figcaption{font-size:3.5px!important}
+  .photographic-drink-shelf,
+  .pub-drink-display{
+    min-height:94px!important;
+    height:94px!important;
+    padding:5px 2px 5px!important;
+    gap:1px!important;
+    border-bottom-width:5px!important;
+  }
+  .real-bottle{
+    width:37px!important;
+    height:82px!important;
+    flex-basis:37px!important;
+  }
+  .real-bottle img{height:74px!important}
+  .real-bottle figcaption{font-size:3.5px!important}
+  .real-top-drink img.shelf-gin-cutout{
+    transform:scale(1.05)!important;
+  }
+  .real-bottle img.shelf-guinness-cutout{
+    transform:scale(1.58)!important;
+  }
+}
+</style>
