@@ -2123,3 +2123,45 @@ setInterval(refreshBarLiveStatus,15000);
   }
 }
 </style>
+
+
+<style id="live-wire-caster-player-visible">
+/* Keep the Caster.fm player visible inside the compact jukebox on phones. */
+.proper-jukebox .jukebox-window .cstrEmbed{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-height:82px!important;
+  height:auto!important;
+  margin:7px auto 6px!important;
+  overflow:visible!important;
+  position:relative!important;
+  z-index:8!important;
+}
+.proper-jukebox .jukebox-window .cstrEmbed iframe{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-height:82px!important;
+  border:0!important;
+}
+@media(max-width:600px){
+  .proper-jukebox{
+    height:500px!important;
+    min-height:500px!important;
+  }
+  .proper-jukebox .jukebox-arch{
+    height:435px!important;
+  }
+  .proper-jukebox .jukebox-window>p{
+    display:none!important;
+  }
+  .proper-jukebox .jukebox-window .cstrEmbed{
+    min-height:86px!important;
+    margin:5px auto 5px!important;
+  }
+  .proper-jukebox .jukebox-window .cstrEmbed iframe{
+    min-height:86px!important;
+  }
+}
+</style>
