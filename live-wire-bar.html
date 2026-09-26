@@ -889,7 +889,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 .proper-jukebox{
   position:relative !important;
   width:min(100%,760px) !important;
-  min-height:780px !important;
+  min-height:760px !important;
   padding:0 !important;
   border:0 !important;
   border-radius:28px !important;
@@ -909,14 +909,13 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   inset:0 !important;
   z-index:1 !important;
   pointer-events:none !important;
-  background-image:url("https://upload.wikimedia.org/wikipedia/commons/4/41/Wurlitzer_1015.jpg") !important;
+  background-image:url("https://toppng.com/uploads/preview/wurlitzer-jukebox-1080-78rpm-11549348089tysblfvqnx.png") !important;
   background-repeat:no-repeat !important;
-  background-position:center 0 !important;
-  background-size:auto 100% !important;
+  background-position:center 100% !important;
+  background-size:min(92%,680px) auto !important;
   background-color:transparent !important;
   background-blend-mode:normal !important;
   mix-blend-mode:normal !important;
-  clip-path:polygon(18% 0%,82% 0%,91% 5%,96% 15%,96% 88%,88% 88%,88% 94%,80% 98%,20% 98%,12% 94%,12% 88%,4% 88%,4% 15%,9% 5%);
   filter:saturate(1.12) contrast(1.08) brightness(1.10) !important;
   opacity:.98 !important;
 }
@@ -959,14 +958,14 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 .proper-jukebox .jukebox-window{
   position:absolute !important;
   left:50% !important;
-  top:49% !important;
-  transform:translate(-50%,-50%) !important;
-  width:min(84%,430px) !important;
+  top:43% !important;
+  transform:translate(-50%,-50%) scale(.72) !important;
+  width:min(78%,430px) !important;
   max-width:430px !important;
   margin:0 !important;
   padding:12px 12px 11px !important;
   z-index:8 !important;
-  transform:translate(-50%,-50%) scale(.66) !important;
+  transform:translate(-50%,-50%) scale(.72) !important;
   transform-origin:center center !important;
   border:2px solid rgba(224,177,100,.78) !important;
   border-radius:12px !important;
@@ -1091,7 +1090,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     top:49% !important;
     width:min(90%,430px) !important;
     padding:9px 8px 9px !important;
-    transform:translate(-50%,-50%) scale(.62) !important;
+    transform:translate(-50%,-50%) scale(.68) !important;
   }
   .proper-jukebox .jukebox-window h2{font-size:18px !important}
   .proper-jukebox .jukebox-window>p{font-size:9.5px !important}
@@ -1103,7 +1102,48 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   .proper-jukebox:not(.live-stream) .juke-live-lights i,
   .proper-jukebox.live-stream .juke-live-lights i{animation:none !important;opacity:.9 !important}
 }
-</style>
+
+/* Vibrant jukebox finish — real cabinet stays photographic; lighting supplies the Live Wire energy. */
+.proper-jukebox{
+  background:
+    radial-gradient(circle at 50% 28%,rgba(255,77,214,.14),transparent 24%),
+    radial-gradient(circle at 50% 72%,rgba(73,224,255,.12),transparent 30%),
+    linear-gradient(90deg,#120805,#3a180d 16%,#1a0906 50%,#3a180d 84%,#120805) !important;
+  box-shadow:0 24px 52px rgba(0,0,0,.9),0 0 0 2px #080403,0 0 0 5px #7b4b25,0 0 34px rgba(255,102,205,.18) !important;
+}
+.proper-jukebox::before{
+  filter:saturate(1.18) contrast(1.08) brightness(1.08) drop-shadow(0 18px 18px rgba(0,0,0,.72)) !important;
+  opacity:1 !important;
+}
+.proper-jukebox::after{
+  background:
+    radial-gradient(ellipse at 50% 20%,rgba(255,86,210,.16),transparent 24%),
+    radial-gradient(ellipse at 50% 62%,rgba(62,222,255,.10),transparent 30%),
+    linear-gradient(180deg,rgba(12,6,3,.04),transparent 30%,rgba(8,4,2,.18) 86%,rgba(4,2,1,.48)) !important;
+  box-shadow:inset 0 0 70px rgba(0,0,0,.6),inset 0 0 0 2px rgba(255,194,92,.18) !important;
+}
+.proper-jukebox .juke-live-lights i{
+  width:13px !important;height:13px !important;
+  border:1px solid rgba(255,236,182,.65) !important;
+}
+.proper-jukebox .juke-live-lights i:nth-child(2n){
+  filter:drop-shadow(0 0 6px #ff4fd8);
+}
+.proper-jukebox .juke-live-lights i:nth-child(3n){
+  filter:drop-shadow(0 0 6px #55eaff);
+}
+.proper-jukebox .jukebox-window{
+  background:rgba(7,4,3,.82) !important;
+  border:2px solid rgba(255,201,103,.9) !important;
+  box-shadow:0 12px 30px rgba(0,0,0,.82),inset 0 0 26px rgba(0,0,0,.84),0 0 18px rgba(255,65,207,.18),0 0 34px rgba(70,225,255,.10) !important;
+}
+.proper-jukebox.live-stream .jukebox-window{
+  box-shadow:0 12px 32px rgba(0,0,0,.82),inset 0 0 28px rgba(0,0,0,.84),0 0 24px rgba(255,65,207,.32),0 0 42px rgba(70,225,255,.22) !important;
+}
+@media(max-width:600px){
+  .proper-jukebox{min-height:620px !important}
+  .proper-jukebox .juke-live-lights i{width:9px !important;height:9px !important}
+}</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
@@ -1118,12 +1158,12 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 <div class="bar-edge-lights" aria-hidden="true"><div class="bar-edge-top"></div></div>
 <div class="bar-hero"><div class="bar-pub-lights"></div><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🍹 The Live Wire Bar</h1><p class="bar-intro"><strong>Welcome to the Live Wire Bar — a fun place where everyone can enjoy the company, music, laughs and vibes from TikTok, all from the comfort of their own home.</strong></p><p class="bar-intro">It's like one big community bar without needing to be in the same room. People come together through music and banter, share the moment, have a laugh and enjoy the Live Wire experience wherever they are.</p></div></div>
 <section><div class="bar-pub-wall"><div class="pub-neon-sign">🍺 LIVE WIRE BAR • OPEN FOR BANter • MUSIC • LAUGHS ⚡</div><div class="pub-shelf real-top-shelf" aria-label="Real drinks on the upper bar shelf">
-  <figure class="real-top-drink"><img class="remove-photo-bg" src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="lazy"><figcaption>STRONGBOW</figcaption></figure>
-  <figure class="real-top-drink"><img class="remove-photo-bg" src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="lazy"><figcaption>MADRI</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
-  <figure class="real-top-drink"><img class="remove-photo-bg" src="https://www.lidl.de/assets/gcp67dbde3109e54f4e9dfe1fb94119d77a.jpeg" alt="Pink gin bottle" loading="lazy"><figcaption>PINK GIN</figcaption></figure>
-  <figure class="real-top-drink"><img class="remove-photo-bg" src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="lazy"><figcaption>STRONGBOW</figcaption></figure>
-  <figure class="real-top-drink"><img class="remove-photo-bg" src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="lazy"><figcaption>MADRI</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://www.lidl.de/assets/gcp67dbde3109e54f4e9dfe1fb94119d77a.jpeg" alt="Pink gin bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>PINK GIN</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
+  <figure class="real-top-drink"><img src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
 </div><div class="pub-drink-display photographic-drink-shelf" aria-label="Real drinks on the Live Wire Bar shelf">
   <figure class="real-bottle">
@@ -1135,11 +1175,11 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
   <figure class="real-bottle wide-photo">
-    <img class="remove-photo-bg" src="https://digitalcontent.api.tesco.com/v2/media/ghs/92de2822-ea49-459d-a487-2848547ce255/83b3e2b0-3632-4335-a538-6a50e6f28141_524731649.jpeg?h=960&w=960" alt="Guinness bottle" loading="lazy">
+    <img src="https://digitalcontent.api.tesco.com/v2/media/ghs/92de2822-ea49-459d-a487-2848547ce255/83b3e2b0-3632-4335-a538-6a50e6f28141_524731649.jpeg?h=960&w=960" alt="Guinness bottle" loading="eager" decoding="async" fetchpriority="high">
     <figcaption>GUINNESS</figcaption>
   </figure>
   <figure class="real-bottle">
-    <img class="remove-photo-bg" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Strongbow_Gold_Apple.jpg" alt="Strongbow cider" loading="lazy">
+    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Strongbow_Gold_Apple.jpg" alt="Strongbow cider" loading="eager" decoding="async" fetchpriority="high">
     <figcaption>STRONGBOW</figcaption>
   </figure>
   <figure class="real-bottle">
@@ -1359,16 +1399,5 @@ setInterval(refreshBarLiveStatus,15000);
  render();
 })();
 </script>
-<svg class="lw-image-filters" aria-hidden="true" width="0" height="0" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="lwRemoveWhiteBg" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0 0" result="rgb"/><feColorMatrix in="rgb" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -1 -1 -1 0 3" result="cut"/><feComponentTransfer in="cut"><feFuncA type="table" tableValues="0 0 0 0 .15 .45 1 1 1 1 1"/></feComponentTransfer></filter></defs></svg><style>
-/* Remove the rectangular studio backgrounds from the seven photographed shelf products. */
-.lw-image-filters{pointer-events:none}
-.real-top-drink img.remove-photo-bg,
-.real-bottle img.remove-photo-bg{
-  filter:url(#lwRemoveWhiteBg) saturate(.98) contrast(1.04) !important;
-  mix-blend-mode:normal !important;
-  background:transparent !important;
-  border:0 !important;
-  box-shadow:none !important;
-}
-</style></body>
+<svg class="lw-image-filters" aria-hidden="true" width="0" height="0" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="lwRemoveWhiteBg" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0 0" result="rgb"/><feColorMatrix in="rgb" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -1 -1 -1 0 3" result="cut"/><feComponentTransfer in="cut"><feFuncA type="table" tableValues="0 0 0 0 .15 .45 1 1 1 1 1"/></feComponentTransfer></filter></defs></svg></body>
 </html>
