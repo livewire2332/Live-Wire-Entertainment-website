@@ -3592,3 +3592,55 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+
+<style id="lw-drink-shelf-final-readability">
+/* Final drink shelf pass:
+   - make Pink Gin noticeably larger on the upper shelf
+   - visually remove the Guinness white source canvas
+   - make every drink name easier to read
+*/
+.real-top-drink img.shelf-gin-cutout{
+  transform:scale(1.24)!important;
+  transform-origin:center bottom!important;
+  z-index:3!important;
+}
+.real-top-drink figcaption,
+.real-bottle figcaption{
+  font-size:clamp(10px,1.25vw,14px)!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:.35px!important;
+  color:#ffe7bf!important;
+  text-shadow:0 1px 2px #000,0 0 6px rgba(255,212,59,.38)!important;
+  white-space:nowrap!important;
+}
+.real-bottle img.shelf-guinness-cutout{
+  /* The replacement Guinness raster still carries a white canvas.
+     Multiply makes that white canvas disappear into the dark shelf while
+     leaving the dark bottle artwork visible. */
+  mix-blend-mode:multiply!important;
+  clip-path:none!important;
+  transform:scale(1.24)!important;
+  transform-origin:center bottom!important;
+  background:transparent!important;
+  filter:saturate(1.05) contrast(1.08) drop-shadow(0 4px 5px rgba(0,0,0,.75))!important;
+}
+@media(max-width:600px){
+  .real-top-drink img.shelf-gin-cutout{
+    transform:scale(1.22)!important;
+  }
+  .real-top-drink figcaption,
+  .real-bottle figcaption{
+    font-size:8px!important;
+    line-height:1!important;
+    letter-spacing:.15px!important;
+    text-shadow:0 1px 2px #000,0 0 5px rgba(255,212,59,.35)!important;
+  }
+  .real-bottle img.shelf-guinness-cutout{
+    mix-blend-mode:multiply!important;
+    transform:scale(1.24)!important;
+  }
+}
+</style>
