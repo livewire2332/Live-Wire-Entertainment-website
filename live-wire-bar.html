@@ -442,6 +442,107 @@ box-shadow:0 9px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,210,150,.08),0 0 14
 @media(prefers-reduced-motion:reduce){
  .proper-jukebox::after,.proper-jukebox.live-stream .juke-side-column i,.proper-jukebox.live-stream .juke-speaker{animation:none}
 }
+
+/* Photorealistic drink refinement — natural glass, liquid and bar-light reflections */
+.pub-drink-display{
+  background:linear-gradient(180deg,rgba(7,5,4,.05),rgba(18,9,5,.92));
+  border-bottom-color:#24120b;
+  box-shadow:inset 0 -18px 24px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,224,175,.08);
+}
+.pub-glass{
+  filter:drop-shadow(0 7px 8px rgba(0,0,0,.72));
+}
+.pub-glass .glass-body{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.20),rgba(255,255,255,.035) 18%,rgba(255,255,255,.11) 38%,rgba(255,255,255,.025) 68%,rgba(255,255,255,.16)),
+    linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.015));
+  border-color:rgba(226,242,244,.48);
+  box-shadow:inset 6px 0 9px rgba(255,255,255,.10),inset -7px 0 10px rgba(0,0,0,.22),inset 0 -8px 10px rgba(0,0,0,.12),0 0 2px rgba(255,255,255,.2);
+}
+.pub-glass .glass-body::after{
+  content:"";
+  position:absolute;
+  left:7px;
+  top:7px;
+  width:5px;
+  height:68%;
+  border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.06));
+  opacity:.5;
+  filter:blur(.4px);
+}
+.pub-glass .liquid{
+  box-shadow:inset 5px 0 8px rgba(255,235,170,.20),inset -6px 0 9px rgba(52,18,4,.38),inset 0 5px 5px rgba(255,238,180,.18),0 1px 2px rgba(0,0,0,.5);
+}
+.pub-glass .liquid::before{
+  content:"";
+  position:absolute;
+  left:7px;
+  right:7px;
+  top:2px;
+  height:3px;
+  border-radius:50%;
+  background:rgba(255,238,182,.35);
+  filter:blur(.5px);
+}
+.pub-glass .foam{
+  background:
+    radial-gradient(circle at 18% 42%,#fffdf4 0 9%,transparent 10%),
+    radial-gradient(circle at 45% 55%,#eee4cc 0 14%,transparent 15%),
+    radial-gradient(circle at 72% 42%,#fffaf0 0 11%,transparent 12%),
+    linear-gradient(180deg,#fffdf4,#ded2b9);
+  box-shadow:0 1px 5px rgba(255,239,195,.55),inset 0 -3px 4px rgba(126,95,51,.12);
+}
+.pub-glass .rim{
+  border-color:rgba(235,246,246,.62);
+  box-shadow:0 1px 3px rgba(255,255,255,.25),inset 0 1px 1px rgba(255,255,255,.35);
+}
+.pub-glass.pint .liquid{
+  background:linear-gradient(180deg,#f1c45c 0,#d9952f 35%,#9d4c12 78%,#65270b 100%);
+}
+.pub-glass.red .liquid{
+  background:linear-gradient(180deg,#bd4650 0,#8b2730 40%,#5c101b 78%,#2d070d 100%);
+  box-shadow:inset 5px 0 8px rgba(255,170,170,.12),inset -6px 0 9px rgba(25,0,5,.4),inset 0 5px 4px rgba(255,190,190,.1);
+}
+.pub-glass.whisky .glass-body{
+  background:linear-gradient(90deg,rgba(255,255,255,.17),rgba(255,255,255,.025) 22%,rgba(255,255,255,.10) 48%,rgba(255,255,255,.02) 75%,rgba(255,255,255,.13));
+}
+.pub-glass.whisky .liquid{
+  background:linear-gradient(180deg,#dda34a,#a85b19 52%,#682b0b 100%);
+}
+.pub-glass.whisky .ice{
+  width:14px;height:11px;
+  background:linear-gradient(135deg,rgba(255,255,255,.34),rgba(184,215,224,.07));
+  border-color:rgba(235,248,250,.35);
+  box-shadow:12px 3px 0 -1px rgba(211,237,244,.16),0 1px 4px rgba(255,255,255,.12);
+}
+.pub-glass.cocktail .liquid{
+  background:linear-gradient(180deg,#ff9cb0,#d23f78 54%,#741840 100%);
+}
+.pub-glass.cocktail .garnish{
+  font-size:0;
+  width:19px;height:19px;
+  border:3px solid #e8a82e;
+  border-radius:50%;
+  background:radial-gradient(circle,#ffd866 0 26%,#fff0a4 27% 38%,#e59b24 39% 100%);
+  box-shadow:0 1px 3px rgba(0,0,0,.5);
+}
+.pub-glass.cocktail .garnish::after{
+  content:"";
+  position:absolute;
+  width:7px;height:7px;
+  left:3px;top:3px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.42);
+}
+.pub-glass .stem{
+  background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(225,240,247,.72),rgba(255,255,255,.12));
+  box-shadow:0 0 2px rgba(255,255,255,.22);
+}
+.pub-glass .base{
+  background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03));
+}
+.pub-label{color:#9f9186;text-shadow:0 1px 2px #000}
 </style><style>
 /* Live Wire venue-to-venue transition portals */
 .lw-transition-portal{position:relative;max-width:920px;margin:10px auto 8px;padding:5px;border-radius:28px;background:linear-gradient(90deg,rgba(255,174,69,.18),rgba(255,43,214,.16),rgba(0,234,255,.18));box-shadow:0 0 18px rgba(0,234,255,.12),0 0 30px rgba(255,43,214,.08)}
