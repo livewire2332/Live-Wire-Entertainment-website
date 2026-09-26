@@ -570,7 +570,29 @@ box-shadow:0 9px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,210,150,.08),0 0 14
 @media(max-width:600px){.lw-page-nav{padding:8px 8px}.lw-page-nav-inner{gap:6px}.lw-page-nav a{font-size:12px;padding:6px 9px}.lw-page-nav .lw-nav-divider{display:none}}
 @media(prefers-reduced-motion:reduce){.lw-page-nav a{transition:none}}
 </style>
-</head>
+
+<style>
+/* REALISM PASS — warmer materials, believable pub lighting, glass/bottle/furniture depth */
+body{background:#090705}
+.bar-hero{background:radial-gradient(ellipse at 50% 5%,rgba(255,150,70,.11),transparent 48%),linear-gradient(180deg,#18100c,#080604 100%);border-bottom-color:rgba(183,126,66,.42);box-shadow:0 18px 55px rgba(0,0,0,.6),inset 0 -25px 45px rgba(255,145,65,.035)}
+.bar-hero::before{background:linear-gradient(90deg,transparent,#d08a46,transparent);box-shadow:0 0 10px rgba(208,138,70,.35)}
+.bar-hero::after{background:radial-gradient(circle,rgba(255,166,91,.10),transparent 68%);filter:blur(12px)}
+.bar-hero h1{ text-shadow:0 2px 8px #000,0 0 14px rgba(255,95,50,.25)}
+section:not(.back)::before{background:linear-gradient(90deg,transparent,rgba(180,125,70,.35),rgba(255,180,90,.45),rgba(180,125,70,.35),transparent);box-shadow:none}
+section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255,150,70,.025),transparent 25%),radial-gradient(ellipse at 88% 50%,rgba(255,100,55,.025),transparent 25%)}
+.grid .card{background:linear-gradient(145deg,rgba(39,25,18,.96),rgba(17,11,8,.96));border-color:rgba(170,116,61,.38);box-shadow:0 12px 30px rgba(0,0,0,.38),inset 0 1px rgba(255,215,150,.05)}
+.grid .card::before{background:#b8783d;box-shadow:0 0 7px rgba(184,120,61,.45)}
+.grid .card:hover{border-color:rgba(215,155,83,.65);box-shadow:0 16px 34px rgba(0,0,0,.5)}
+.player{background:linear-gradient(145deg,#241812,#0d0907);border-color:rgba(185,126,65,.55);box-shadow:0 15px 38px rgba(0,0,0,.55),inset 0 0 28px rgba(255,180,100,.025)}
+.request-zone{background:radial-gradient(circle at 50% 0,rgba(161,71,35,.12),rgba(31,18,11,.94) 70%);border-color:rgba(184,119,59,.55);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.request-card{background:rgba(21,13,9,.82);border-color:rgba(181,125,67,.42);box-shadow:inset 0 1px rgba(255,215,150,.04),0 10px 25px rgba(0,0,0,.28)}
+.request-card:hover{border-color:rgba(215,155,83,.7);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.bar-pub-card{position:relative}
+.bar-pub-card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(115deg,rgba(255,220,160,.035),transparent 22%,transparent 78%,rgba(0,0,0,.16))}
+.lw-toilets{filter:drop-shadow(0 18px 35px rgba(0,0,0,.4))}
+.bar-lower-panel{background:linear-gradient(145deg,#25170f,#0f0906)!important;box-shadow:0 18px 42px rgba(0,0,0,.55),inset 0 1px rgba(255,220,160,.05)!important;border-color:rgba(180,122,62,.4)!important}
+@media(max-width:600px){.bar-hero{padding-top:48px}.grid .card{box-shadow:0 9px 22px rgba(0,0,0,.4)}}
+</style>\n</head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
   <div class="lw-page-nav-inner">
