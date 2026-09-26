@@ -54,6 +54,33 @@ body::before{content:"";position:fixed;inset:0;z-index:-3;background:radial-grad
 @media(max-width:800px){.dj-decks{grid-template-columns:1fr}.deck{min-height:205px}.mixer{min-height:245px}.platter{width:125px;height:125px}.speaker-wall{gap:12px}.big-speaker{height:125px}.dj-chairs{gap:45px}.chair{width:92px}.dj-room{padding:18px 12px 25px}}
 @media(max-width:500px){.dj-chairs{gap:25px}.chair{width:78px;height:78px}.chair:before{top:-55px;height:70px}.chair:after{top:-33px;font-size:12px}.big-speaker{height:105px}.vu-bank{height:120px;gap:3px}.mixer-sliders{gap:5px}.dj-hero{padding-top:35px}}
 @media(prefers-reduced-motion:reduce){.dj-hero:before,.dj-ceiling,.dj-onair.live,.deck .platter,.vu,.big-speaker{animation:none!important}}
+
+/* DJ BOOTH V2 — full club environment */
+.dj-room{background:radial-gradient(circle at 50% 18%,rgba(255,43,214,.16),transparent 28%),linear-gradient(180deg,#17111b,#090a10 42%,#05060a)}
+.dj-backwall{position:relative;height:110px;margin:14px 0 8px;border:3px solid #242735;border-radius:16px;background:linear-gradient(180deg,#0c0d15,#030408);overflow:hidden;box-shadow:inset 0 0 35px #000}
+.dj-backwall:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 48px,rgba(0,234,255,.045) 49px 51px)}
+.dj-neon-sign{position:absolute;left:50%;top:16px;transform:translateX(-50%);padding:8px 25px;border:3px solid #ff2bd6;border-radius:12px;color:#fff;font-size:22px;font-weight:1000;letter-spacing:4px;white-space:nowrap;text-shadow:0 0 8px #00eaff,0 0 18px #ff2bd6;box-shadow:0 0 12px #ff2bd6,inset 0 0 12px rgba(255,43,214,.25);animation:neonFlicker 3.5s infinite}
+.dj-lightbar{position:absolute;left:5%;right:5%;bottom:12px;height:7px;border-radius:8px;background:linear-gradient(90deg,#00eaff,#ff2bd6,#ffd43b,#00eaff);box-shadow:0 0 14px #00eaff;animation:djGlow 1.8s infinite}
+.dj-equip-grid{position:relative;z-index:5;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:10px}
+.equip-strip{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.equip-led{width:8px;height:8px;border-radius:50%;background:#30333b;box-shadow:0 0 0 transparent}.equip-led.on{background:#00eaff;box-shadow:0 0 9px #00eaff}.equip-led.hot{background:#ff304f;box-shadow:0 0 9px #ff304f}
+.deck-screen{margin:8px auto;padding:5px 8px;width:78%;border:2px solid #272a35;border-radius:5px;background:#020307;color:#58eaff;font:900 10px monospace;text-align:center;letter-spacing:2px;box-shadow:inset 0 0 10px #000}
+.deck-actions{display:flex;justify-content:center;gap:7px;margin-top:8px}
+.action-btn{border:2px solid #444;border-radius:6px;background:#11141c;color:#ddd;padding:5px 8px;font-weight:900;font-size:10px;cursor:pointer;transition:.15s}
+.action-btn:hover,.action-btn.active{border-color:#00eaff;color:#00eaff;box-shadow:0 0 10px rgba(0,234,255,.45);transform:translateY(-1px)}
+.knob-row{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:8px 5px}
+.knob{width:22px;height:22px;margin:auto;border-radius:50%;border:2px solid #555;background:conic-gradient(#00eaff 0 45deg,#252831 46deg 360deg);box-shadow:inset 0 0 5px #000;cursor:pointer}
+.knob:hover{box-shadow:0 0 9px #ff2bd6}
+.fader{cursor:ns-resize}
+.dj-mic{position:relative;z-index:4;width:150px;height:18px;margin:18px auto 0;border-radius:20px;background:linear-gradient(90deg,#161820,#777,#191b22);box-shadow:0 0 0 2px #111,0 0 10px rgba(0,234,255,.2)}
+.dj-mic:before{content:"";position:absolute;left:-14px;top:-9px;width:32px;height:36px;border-radius:50%;background:radial-gradient(circle,#aaa 0 18%,#333 19% 55%,#090a0d 56%);border:3px solid #17191f}
+.dj-mic:after{content:"MIC";position:absolute;right:-32px;top:2px;color:#ffd43b;font-size:9px;font-weight:1000}
+.dj-floor{position:relative;z-index:1;height:80px;margin:8px -5px -5px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(0,0,0,.45)),repeating-linear-gradient(90deg,#0b0c12 0 48px,#11131a 49px 96px);border-top:2px solid #252733;box-shadow:inset 0 20px 35px #000}
+.dj-floor:after{content:"LIVE WIRE • DJ BOOTH • LIVE WIRE • DJ BOOTH";position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#262a35;letter-spacing:6px;font-size:11px;font-weight:1000}
+.dj-room.interact .dj-neon-sign{animation:neonFlicker .7s infinite}
+.dj-room.interact .big-speaker{animation:speakerLive .45s infinite alternate}
+@keyframes neonFlicker{0%,92%,100%{filter:brightness(1)}94%{filter:brightness(.45)}96%{filter:brightness(1.6)}}
+@media(max-width:800px){.dj-equip-grid{grid-template-columns:1fr}.dj-backwall{height:95px}.dj-neon-sign{font-size:15px;letter-spacing:2px}.dj-mic{margin-top:12px}}
 </style>
 </head>
 <body>
@@ -61,15 +88,18 @@ body::before{content:"";position:fixed;inset:0;z-index:-3;background:radial-grad
 <header class="dj-hero"><div class="dj-kicker">⚡ LIVE WIRE ENTERTAINMENT</div><h1>🎧 THE DJ BOOTH</h1><p>Behind the bar, behind the decks — this is where the Live Wire sound gets turned up.</p></header>
 <main class="dj-room" id="djRoom">
 <div class="dj-ceiling"></div>
+<div class="dj-backwall"><div class="dj-neon-sign">⚡ LIVE WIRE DJ BOOTH ⚡</div><div class="dj-lightbar"></div></div>
 <div class="dj-status-row"><div class="dj-onair" id="djOnAir">⚫ OFF AIR</div><div class="dj-show" id="djShow">Checking Live Wire schedule…</div></div>
 <div class="dj-decks">
-<section class="deck" id="deckDan"><div class="deck-title">⚡ DJ DISCO DAN</div><div class="tonearm"></div><div class="platter"></div><div class="deck-controls"><i class="deck-btn"></i><i class="deck-btn"></i><i class="deck-btn"></i></div></section>
-<section class="mixer" id="djMixer"><div class="mixer-title">🎚️ LIVE WIRE MIXER</div><div class="vu-bank" aria-label="Animated VU meters"><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span></div><div class="mixer-sliders"><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span></div><div class="crossfader"></div></section>
-<section class="deck" id="deckPhoenix"><div class="deck-title">🔥 MR PHOENIX</div><div class="tonearm"></div><div class="platter"></div><div class="deck-controls"><i class="deck-btn"></i><i class="deck-btn"></i><i class="deck-btn"></i></div></section>
+<section class="deck" id="deckDan"><div class="deck-title">⚡ DJ DISCO DAN</div><div class="tonearm"></div><div class="platter"></div><div class="deck-screen" id="danScreen">CHANNEL 1 • READY</div><div class="deck-controls"><i class="deck-btn"></i><i class="deck-btn"></i><i class="deck-btn"></i></div><div class="deck-actions"><button class="action-btn" data-deck="dan">▶ PLAY</button><button class="action-btn" data-deck="dan">CUE</button></div><div class="equip-strip"><i class="equip-led on"></i><i class="equip-led"></i><i class="equip-led"></i><i class="equip-led hot"></i><i class="equip-led"></i></div></section>
+<section class="mixer" id="djMixer"><div class="mixer-title">🎚️ LIVE WIRE MIXER</div><div class="vu-bank" aria-label="Animated VU meters"><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span></div><div class="knob-row"><i class="knob"></i><i class="knob"></i><i class="knob"></i><i class="knob"></i><i class="knob"></i><i class="knob"></i></div><div class="mixer-sliders"><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span></div><div class="crossfader"></div><div class="equip-strip"><i class="equip-led on"></i><i class="equip-led on"></i><i class="equip-led"></i><i class="equip-led hot"></i><i class="equip-led on"></i><i class="equip-led"></i></div></section>
+<section class="deck" id="deckPhoenix"><div class="deck-title">🔥 MR PHOENIX</div><div class="tonearm"></div><div class="platter"></div><div class="deck-screen" id="phoenixScreen">CHANNEL 2 • READY</div><div class="deck-controls"><i class="deck-btn"></i><i class="deck-btn"></i><i class="deck-btn"></i></div><div class="deck-actions"><button class="action-btn" data-deck="phoenix">▶ PLAY</button><button class="action-btn" data-deck="phoenix">CUE</button></div><div class="equip-strip"><i class="equip-led hot"></i><i class="equip-led"></i><i class="equip-led on"></i><i class="equip-led"></i><i class="equip-led hot"></i></div></section>
 </div>
+<div class="dj-mic"></div>
 <div class="speaker-wall"><div class="big-speaker"></div><div class="big-speaker"></div></div>
 <div class="dj-chairs"><div class="chair"></div><div class="chair"></div></div>
 <div class="dj-nameplates"><div class="dj-nameplate">⚡ DAN'S DECK</div><div class="dj-nameplate phoenix">🔥 PHOENIX'S DECK</div></div>
+<div class="dj-floor"></div>
 <p class="dj-note">🎶 When the stream is live, the booth wakes up — decks spin, meters move, speakers pulse and the ON AIR sign comes alive.</p>
 </main>
 <div class="dj-back"><a class="btn" href="live-wire-bar.html">🍻 Back to the Live Wire Bar</a></div>
@@ -103,6 +133,8 @@ async function refresh(){
  if(online===null){try{const r=await fetch(BAR_WORKER_STATUS+'?t='+Date.now(),{cache:'no-store'});online=!!(await r.json()).online}catch(e){online=false}}
  applyStatus(online);
 }
+document.querySelectorAll('.action-btn').forEach(btn=>btn.addEventListener('click',()=>{const deck=btn.dataset.deck,screen=document.getElementById(deck==='dan'?'danScreen':'phoenixScreen');btn.classList.toggle('active');document.getElementById('djRoom').classList.add('interact');if(btn.textContent.includes('PLAY')){screen.textContent=btn.classList.contains('active')?'▶ PLAYING • LIVE WIRE':'CHANNEL '+(deck==='dan'?'1':'2')+' • READY';}else{screen.textContent='CUE • '+(deck==='dan'?'DAN':'PHOENIX');}setTimeout(()=>document.getElementById('djRoom').classList.remove('interact'),900);}));
+document.querySelectorAll('.knob').forEach(k=>k.addEventListener('click',()=>{k.style.transform='rotate('+((Math.random()*240)-120)+'deg)';document.getElementById('djRoom').classList.add('interact');setTimeout(()=>document.getElementById('djRoom').classList.remove('interact'),500);}));
 applyStatus(false);refresh();setInterval(refresh,15000);
 </script>
 </body>
