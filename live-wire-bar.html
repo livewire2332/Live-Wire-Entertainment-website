@@ -1367,11 +1367,11 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 <div class="bar-edge-lights" aria-hidden="true"><div class="bar-edge-top"></div></div>
 <div class="bar-hero"><div class="bar-pub-lights"></div><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🍹 The Live Wire Bar</h1><p class="bar-intro"><strong>Welcome to the Live Wire Bar — a fun place where everyone can enjoy the company, music, laughs and vibes from TikTok, all from the comfort of their own home.</strong></p><p class="bar-intro">It's like one big community bar without needing to be in the same room. People come together through music and banter, share the moment, have a laugh and enjoy the Live Wire experience wherever they are.</p></div></div>
 <section><div class="bar-pub-wall"><div class="pub-neon-sign">🍺 LIVE WIRE BAR • OPEN FOR BANter • MUSIC • LAUGHS ⚡</div><div class="pub-shelf real-top-shelf" aria-label="Real drinks on the upper bar shelf">
-  <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.pngkey.com/png/detail/910-9108096_strongbow-gold-apple-strongbow-apple-cider-png.png" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-madri-cutout" src="https://www.madriexcepcional.com/sites/madri/files/2022-02/Madri%20Bottle%20Glass%20%26%20Medals.png" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-gin-cutout" src="https://www.kindpng.com/picc/m/236-2368093_gordons-pink-gin-70cl-gordons-pink-gin-png.png" alt="Pink gin bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>PINK GIN</figcaption></figure>
-  <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.pngkey.com/png/detail/910-9108096_strongbow-gold-apple-strongbow-apple-cider-png.png alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713 alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout shelf-madri-cutout" src="https://www.madriexcepcional.com/sites/madri/files/2022-02/Madri%20Bottle%20Glass%20%26%20Medals.png alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
 </div><div class="pub-drink-display photographic-drink-shelf" aria-label="Real drinks on the Live Wire Bar shelf">
@@ -1388,7 +1388,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>GUINNESS</figcaption>
   </figure>
   <figure class="real-bottle">
-    <img class="photo-cutout shelf-can-cutout" src="https://www.pngkey.com/png/detail/910-9108096_strongbow-gold-apple-strongbow-apple-cider-png.png alt="Strongbow cider" loading="eager" decoding="async" fetchpriority="high">
+    <img class="photo-cutout shelf-can-cutout" src="https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713 alt="Strongbow cider" loading="eager" decoding="async" fetchpriority="high">
     <figcaption>STRONGBOW</figcaption>
   </figure>
   <figure class="real-bottle">
@@ -2400,3 +2400,47 @@ setInterval(refreshBarLiveStatus,15000);
   }
 }
 </style>
+<style id="lw-drink-final-loading-fix">
+/* Final drink-image pass: use live manufacturer artwork and crop the transparent composition to the bottle. */
+.real-top-drink img.shelf-can-cutout{
+  mix-blend-mode:normal!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  clip-path:polygon(43% 2%,79% 2%,82% 10%,84% 88%,79% 97%,48% 97%,43% 89%,44% 10%)!important;
+  filter:saturate(1.04) contrast(1.04) drop-shadow(0 3px 3px rgba(0,0,0,.62))!important;
+}
+.real-top-drink img.shelf-madri-cutout{
+  mix-blend-mode:normal!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  clip-path:polygon(46% 1%,78% 1%,82% 8%,84% 92%,79% 98%,47% 98%,42% 92%,44% 8%)!important;
+  filter:saturate(1.04) contrast(1.05) drop-shadow(0 3px 3px rgba(0,0,0,.62))!important;
+}
+@media(max-width:600px){
+  .real-top-drink img.shelf-can-cutout{clip-path:polygon(43% 2%,79% 2%,82% 10%,84% 88%,79% 97%,48% 97%,43% 89%,44% 10%)!important}
+  .real-top-drink img.shelf-madri-cutout{clip-path:polygon(46% 1%,78% 1%,82% 8%,84% 92%,79% 98%,47% 98%,42% 92%,44% 8%)!important}
+}
+</style>
+<script>
+/* If a remote product image ever fails, retry with the official product artwork rather than leaving a broken-image icon. */
+document.querySelectorAll('.shelf-can-cutout').forEach(function(img){
+  img.addEventListener('error',function(){
+    if(this.dataset.lwFallback)return;
+    this.dataset.lwFallback='1';
+    this.src='https://www.strongbow.com/media/0adnme3g/gold-apple-product.png?height=1069&quality=85&v=1dbce1c80cc2430&width=713';
+  });
+});
+document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
+  img.addEventListener('error',function(){
+    if(this.dataset.lwFallback)return;
+    this.dataset.lwFallback='1';
+    this.src='https://www.madriexcepcional.com/sites/madri/files/styles/image_625ht/public/2025-03/Madri-bottle%201.png?itok=8iEwZjGD';
+  });
+});
+</script>
