@@ -1711,7 +1711,304 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   .real-top-drink img.shelf-madri-cutout{clip-path:polygon(45% 1%,59% 1%,61% 8%,61% 29%,64% 35%,66% 42%,66% 93%,61% 98%,43% 98%,39% 93%,39% 42%,41% 35%,44% 29%)!important}
   .real-bottle img.shelf-guinness-cutout{transform:scale(1.32)!important}
 }
-</style></head>
+</style>
+<style id="lw-jukebox-clean-neon-final">
+/* CLEAN LIVE WIRE JUKEBOX — one cabinet, one reactive edge, one player. */
+.player{
+  padding:22px 14px 24px!important;
+  margin:25px 0!important;
+  border:0!important;
+  border-radius:18px!important;
+  background:rgba(4,6,13,.72)!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.player::before{display:none!important}
+
+.player > .proper-jukebox{
+  width:min(100%,680px)!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0 auto!important;
+  padding:18px 16px 20px!important;
+  position:relative!important;
+  border:1px solid rgba(0,234,255,.78)!important;
+  border-radius:24px!important;
+  background:
+    linear-gradient(180deg,rgba(8,11,20,.98),rgba(4,7,14,.98))!important;
+  box-shadow:
+    0 0 0 1px rgba(255,43,214,.24),
+    0 0 14px rgba(0,234,255,.30),
+    0 0 28px rgba(255,43,214,.16),
+    inset 0 0 24px rgba(0,234,255,.035)!important;
+  overflow:visible!important;
+}
+.player > .proper-jukebox::before,
+.player > .proper-jukebox::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  pointer-events:none!important;
+}
+.player > .proper-jukebox::before{
+  left:18px!important;
+  right:18px!important;
+  top:-1px!important;
+  bottom:-1px!important;
+  border:1px solid transparent!important;
+  border-radius:23px!important;
+  background:linear-gradient(90deg,rgba(0,234,255,.8),rgba(255,43,214,.75),rgba(255,212,59,.65),rgba(0,234,255,.8)) border-box!important;
+  -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;
+  mask-composite:exclude!important;
+  animation:lwCleanEdge 4s linear infinite!important;
+  opacity:.8!important;
+}
+.player > .proper-jukebox::after{
+  left:14%!important;
+  right:14%!important;
+  top:8px!important;
+  height:1px!important;
+  background:linear-gradient(90deg,transparent,#00eaff,#ff2bd6,#00eaff,transparent)!important;
+  box-shadow:0 0 8px rgba(0,234,255,.7)!important;
+  animation:lwCleanSweep 3.5s ease-in-out infinite!important;
+}
+
+/* Strip away the old cabinet layers. */
+.player > .proper-jukebox .jukebox-crown,
+.player > .proper-jukebox .juke-curtain,
+.player > .proper-jukebox .juke-side-column,
+.player > .proper-jukebox .juke-grille,
+.player > .proper-jukebox .jukebox-eq,
+.player > .proper-jukebox .jukebox-speakers,
+.player > .proper-jukebox .jukebox-controls,
+.player > .proper-jukebox .jukebox-note,
+.player > .proper-jukebox .juke-bottom-grille{
+  display:none!important;
+}
+
+.player > .proper-jukebox .jukebox-arch{
+  width:100%!important;
+  max-width:none!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:4px 0 0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.player > .proper-jukebox .jukebox-arch::before{display:none!important}
+
+.player > .proper-jukebox .jukebox-header{
+  padding:2px 4px 12px!important;
+}
+.player > .proper-jukebox .jukebox-kicker{
+  font-size:10px!important;
+  letter-spacing:3px!important;
+  color:#ffd43b!important;
+  text-shadow:0 0 7px rgba(255,212,59,.45)!important;
+}
+.player > .proper-jukebox .jukebox-title{
+  margin:3px 0 0!important;
+  font-size:clamp(28px,7vw,40px)!important;
+  line-height:1!important;
+  color:#fff!important;
+  text-shadow:0 0 7px rgba(255,255,255,.75),0 0 16px rgba(0,234,255,.65),0 0 26px rgba(255,43,214,.28)!important;
+}
+
+.player > .proper-jukebox .jukebox-window{
+  width:100%!important;
+  max-width:none!important;
+  min-height:0!important;
+  height:auto!important;
+  margin:0!important;
+  padding:12px 0 0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.player > .proper-jukebox .jukebox-window::before{display:none!important}
+.player > .proper-jukebox .juke-console{
+  width:100%!important;
+  max-width:560px!important;
+  margin:0 auto!important;
+}
+
+/* The live reaction/status stays above the player, but loses the extra boxes. */
+.player > .proper-jukebox #barLiveStatus{
+  margin:0 auto 9px!important;
+  padding:8px 18px!important;
+  border:1px solid rgba(0,234,255,.85)!important;
+  border-radius:999px!important;
+  background:rgba(0,234,255,.055)!important;
+  color:#fff!important;
+  box-shadow:0 0 9px rgba(0,234,255,.32),0 0 18px rgba(255,43,214,.10)!important;
+}
+.player > .proper-jukebox #barLiveShow{
+  margin:0 auto 12px!important;
+  max-width:560px!important;
+  font-size:15px!important;
+  line-height:1.35!important;
+  color:#ffdca0!important;
+  text-shadow:0 0 6px rgba(255,212,59,.28)!important;
+}
+
+.player > .proper-jukebox .jukebox-window h2{
+  margin:0 0 10px!important;
+  font-size:22px!important;
+  color:#fff!important;
+  text-shadow:0 0 8px rgba(0,234,255,.55)!important;
+}
+.player > .proper-jukebox .jukebox-window>p{
+  display:none!important;
+}
+
+/* Flatten the Live Wire Audio shell so it reads as one clean line above Caster. */
+.player > .proper-jukebox .lw-native-player{
+  width:100%!important;
+  max-width:560px!important;
+  min-height:0!important;
+  height:auto!important;
+  margin:0 auto!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.player > .proper-jukebox .lw-player-screen{
+  margin:0!important;
+  padding:0 0 10px!important;
+  text-align:center!important;
+  overflow:visible!important;
+}
+.player > .proper-jukebox .lw-player-label{
+  display:inline-block!important;
+  font-size:14px!important;
+  line-height:1.2!important;
+  font-weight:900!important;
+  letter-spacing:1px!important;
+  color:#ffd43b!important;
+  text-shadow:0 0 7px rgba(255,212,59,.42)!important;
+}
+.player > .proper-jukebox .lw-player-state{
+  display:block!important;
+  margin:4px 0 0!important;
+  font-size:12px!important;
+  color:#c9c9d2!important;
+  text-shadow:none!important;
+}
+
+/* Caster itself is the single visual player in the middle. */
+.player > .proper-jukebox .lw-caster-player{
+  width:100%!important;
+  max-width:520px!important;
+  height:285px!important;
+  min-height:285px!important;
+  max-height:285px!important;
+  margin:0 auto!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:#15171b!important;
+  box-shadow:0 0 10px rgba(0,234,255,.14)!important;
+  overflow:hidden!important;
+}
+.player > .proper-jukebox .lw-caster-player iframe{
+  width:100%!important;
+  height:285px!important;
+  min-height:285px!important;
+  max-height:285px!important;
+  border:0!important;
+  margin:0!important;
+}
+
+/* Caption becomes a quiet footer rather than another neon layer. */
+.player > .coming{
+  width:auto!important;
+  max-width:680px!important;
+  margin:13px auto 0!important;
+  padding:0 8px!important;
+  font-size:14px!important;
+  line-height:1.35!important;
+  color:#ffd43b!important;
+  text-shadow:0 0 6px rgba(255,212,59,.28)!important;
+}
+.player > .coming::before{display:none!important}
+
+@keyframes lwCleanEdge{
+  0%,100%{filter:brightness(.9);opacity:.55}
+  50%{filter:brightness(1.35);opacity:1}
+}
+@keyframes lwCleanSweep{
+  0%,100%{transform:scaleX(.65);opacity:.45}
+  50%{transform:scaleX(1);opacity:1}
+}
+@media(max-width:600px){
+  .player{
+    padding:16px 7px 18px!important;
+  }
+  .player > .proper-jukebox{
+    width:100%!important;
+    padding:15px 10px 16px!important;
+    border-radius:20px!important;
+  }
+  .player > .proper-jukebox::before{
+    left:12px!important;
+    right:12px!important;
+    border-radius:19px!important;
+  }
+  .player > .proper-jukebox .jukebox-header{
+    padding-bottom:10px!important;
+  }
+  .player > .proper-jukebox .jukebox-title{
+    font-size:31px!important;
+  }
+  .player > .proper-jukebox .jukebox-window{
+    padding-top:9px!important;
+  }
+  .player > .proper-jukebox #barLiveStatus{
+    padding:7px 15px!important;
+    font-size:14px!important;
+    margin-bottom:8px!important;
+  }
+  .player > .proper-jukebox #barLiveShow{
+    font-size:14px!important;
+    margin-bottom:10px!important;
+  }
+  .player > .proper-jukebox .jukebox-window h2{
+    font-size:20px!important;
+    margin-bottom:8px!important;
+  }
+  .player > .proper-jukebox .lw-player-screen{
+    padding-bottom:8px!important;
+  }
+  .player > .proper-jukebox .lw-player-label{
+    font-size:13px!important;
+  }
+  .player > .proper-jukebox .lw-caster-player,
+  .player > .proper-jukebox .lw-caster-player iframe{
+    height:275px!important;
+    min-height:275px!important;
+    max-height:275px!important;
+  }
+  .player > .coming{
+    font-size:13px!important;
+    margin-top:11px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox::before,
+  .player > .proper-jukebox::after{animation:none!important}
+}
+</style>
+
+</head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
   <div class="lw-page-nav-inner">
