@@ -3034,3 +3034,48 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   .proper-jukebox .jukebox-window h2{font-size:21px!important}
 }
 </style>
+
+
+<style id="lw-final-two-drink-silhouette-fix">
+/* Final two shelf drinks: tighter bottle silhouettes so the white source canvas is not visible. */
+.real-top-drink img.shelf-gin-cutout{
+  width:100%!important;
+  height:155px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  clip-path:polygon(
+    43% 4%,57% 4%,
+    58% 10%,60% 15%,65% 19%,
+    68% 27%,68% 92%,
+    64% 98%,36% 98%,32% 92%,
+    32% 27%,35% 19%,40% 15%,42% 10%
+  )!important;
+  filter:saturate(1.04) contrast(1.04) drop-shadow(0 4px 4px rgba(0,0,0,.7))!important;
+}
+.real-bottle img.shelf-guinness-cutout{
+  width:100%!important;
+  height:155px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  transform:scale(1.85)!important;
+  transform-origin:center bottom!important;
+  clip-path:polygon(
+    43% 5%,57% 5%,
+    58% 13%,60% 18%,64% 25%,
+    64% 92%,60% 98%,40% 98%,36% 92%,
+    36% 25%,40% 18%,42% 13%
+  )!important;
+  filter:saturate(1.04) contrast(1.04) drop-shadow(0 4px 4px rgba(0,0,0,.72))!important;
+}
+@media(max-width:600px){
+  .real-top-drink img.shelf-gin-cutout{
+    height:112px!important;
+    clip-path:polygon(43% 4%,57% 4%,58% 10%,60% 15%,65% 19%,68% 27%,68% 92%,64% 98%,36% 98%,32% 92%,32% 27%,35% 19%,40% 15%,42% 10%)!important;
+  }
+  .real-bottle img.shelf-guinness-cutout{
+    height:112px!important;
+    transform:scale(1.85)!important;
+    clip-path:polygon(43% 5%,57% 5%,58% 13%,60% 18%,64% 25%,64% 92%,60% 98%,40% 98%,36% 92%,36% 25%,40% 18%,42% 13%)!important;
+  }
+}
+</style>
