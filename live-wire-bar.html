@@ -3338,3 +3338,96 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   text-shadow:0 0 7px #fff,0 0 14px #ff365c,0 0 22px #ff2bd6!important;
 }
 </style>
+
+
+<style id="lw-compact-shelves-final">
+/* Compact the drink display so the bar stays the star of the page. */
+.real-top-shelf{
+  height:132px!important;
+  padding:7px 5px 6px!important;
+  gap:2px!important;
+}
+.real-top-drink{
+  height:116px!important;
+  width:clamp(48px,6.8vw,68px)!important;
+  flex-basis:68px!important;
+}
+.real-top-drink img{
+  height:104px!important;
+}
+.photographic-drink-shelf,
+.pub-drink-display{
+  min-height:142px!important;
+  height:142px!important;
+  padding:10px 7px 9px!important;
+  gap:5px!important;
+  border-bottom-width:7px!important;
+}
+.real-bottle{
+  width:clamp(50px,7vw,68px)!important;
+  height:123px!important;
+  flex-basis:68px!important;
+}
+.real-bottle img{
+  height:112px!important;
+}
+/* The two remaining source images have white canvases. Multiply removes the white
+   canvas visually against the dark shelf while preserving the real bottle artwork. */
+.real-top-drink img.shelf-gin-cutout{
+  mix-blend-mode:multiply!important;
+  clip-path:polygon(
+    13% 4%,87% 4%,
+    87% 13%,91% 20%,94% 30%,
+    94% 91%,88% 98%,12% 98%,6% 91%,
+    6% 30%,9% 20%,13% 13%
+  )!important;
+  transform:scale(1.04)!important;
+  transform-origin:center bottom!important;
+}
+.real-bottle img.shelf-guinness-cutout{
+  mix-blend-mode:multiply!important;
+  transform:scale(1.48)!important;
+  transform-origin:center bottom!important;
+  clip-path:polygon(
+    17% 2%,83% 2%,
+    83% 14%,88% 21%,92% 30%,
+    92% 92%,86% 98%,14% 98%,8% 92%,
+    8% 30%,12% 21%,17% 14%
+  )!important;
+}
+@media(max-width:600px){
+  .real-top-shelf{
+    height:96px!important;
+    padding:5px 2px 5px!important;
+    gap:0!important;
+  }
+  .real-top-drink{
+    width:40px!important;
+    height:83px!important;
+    flex-basis:40px!important;
+  }
+  .real-top-drink img{height:75px!important}
+  .real-top-drink figcaption{font-size:3.7px!important}
+  .photographic-drink-shelf,
+  .pub-drink-display{
+    min-height:106px!important;
+    height:106px!important;
+    padding:7px 2px 7px!important;
+    gap:1px!important;
+    border-bottom-width:6px!important;
+  }
+  .real-bottle{
+    width:40px!important;
+    height:92px!important;
+    flex-basis:40px!important;
+  }
+  .real-bottle img{height:82px!important}
+  .real-bottle figcaption{font-size:3.8px!important}
+  .real-top-drink img.shelf-gin-cutout{
+    transform:scale(1.02)!important;
+  }
+  .real-bottle img.shelf-guinness-cutout{
+    transform:scale(1.48)!important;
+  }
+}
+</style>
