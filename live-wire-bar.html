@@ -812,6 +812,62 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 }
 @media(prefers-reduced-motion:reduce){.proper-jukebox.live-stream .juke-live-lights i{animation:none;opacity:1}}
 </style>
+<style>
+/* Final jukebox realism fit: real front-facing Wurlitzer, blended into the pub wall rather than stretched as a room photo. */
+.proper-jukebox{
+  min-height:760px;
+  background-color:#3a1d10 !important;
+  background-image:url("https://upload.wikimedia.org/wikipedia/commons/4/41/Wurlitzer_1015.jpg") !important;
+  background-repeat:no-repeat !important;
+  background-position:center 12px !important;
+  background-size:auto 94% !important;
+  background-blend-mode:multiply !important;
+  box-shadow:0 22px 45px rgba(0,0,0,.78),0 0 0 2px #090705,0 0 0 5px #7b512d, inset 0 0 55px rgba(0,0,0,.35) !important;
+}
+.proper-jukebox::before{
+  background:linear-gradient(180deg,rgba(18,8,4,.06),rgba(20,9,5,.12) 48%,rgba(8,5,3,.38)) !important;
+}
+.proper-jukebox .jukebox-crown{
+  margin:16px auto 0 !important;
+  width:58% !important;
+  min-height:38px !important;
+  padding:6px 10px !important;
+  background:rgba(25,12,7,.72) !important;
+  border:2px solid rgba(214,161,83,.72) !important;
+  box-shadow:0 5px 14px rgba(0,0,0,.55),inset 0 0 14px rgba(255,205,115,.08) !important;
+  backdrop-filter:blur(2px);
+}
+.proper-jukebox .jukebox-brand{font-size:clamp(17px,3.2vw,24px) !important;letter-spacing:2.5px !important}
+.proper-jukebox .juke-crown-bolt{font-size:15px !important;color:#f1c46c !important;text-shadow:0 0 6px rgba(241,196,108,.55) !important}
+.proper-jukebox .jukebox-arch{
+  margin:250px auto 0 !important;
+  width:min(100%,56%) !important;
+  max-width:none !important;
+  padding:0 !important;
+  min-height:0 !important;
+}
+.proper-jukebox .jukebox-window{
+  padding:15px 14px 13px !important;
+  border:2px solid rgba(224,177,100,.82) !important;
+  border-radius:12px !important;
+  background:rgba(8,5,4,.84) !important;
+  box-shadow:0 9px 24px rgba(0,0,0,.72),inset 0 0 20px rgba(0,0,0,.82),0 0 0 1px rgba(255,225,160,.12) !important;
+}
+.proper-jukebox .juke-live-lights{inset:5% 19% !important}
+.proper-jukebox .juke-live-lights i{width:10px !important;height:10px !important;opacity:.28 !important;background:#e9c77d !important;box-shadow:0 0 4px rgba(233,199,125,.55) !important}
+.proper-jukebox .juke-live-lights i:nth-child(1){left:4%;top:31%}.proper-jukebox .juke-live-lights i:nth-child(2){left:4%;top:43%}.proper-jukebox .juke-live-lights i:nth-child(3){left:4%;top:55%}
+.proper-jukebox .juke-live-lights i:nth-child(4){right:4%;top:31%}.proper-jukebox .juke-live-lights i:nth-child(5){right:4%;top:43%}.proper-jukebox .juke-live-lights i:nth-child(6){right:4%;top:55%}
+.proper-jukebox .juke-live-lights i:nth-child(7){left:24%;top:9%}.proper-jukebox .juke-live-lights i:nth-child(8){left:39%;top:6%}.proper-jukebox .juke-live-lights i:nth-child(9){right:39%;top:6%}.proper-jukebox .juke-live-lights i:nth-child(10){right:24%;top:9%}
+.proper-jukebox.live-stream .juke-live-lights i{opacity:1 !important}
+@media(max-width:600px){
+  .proper-jukebox{min-height:570px !important;background-size:auto 94% !important;background-position:center 8px !important}
+  .proper-jukebox .jukebox-crown{margin:12px auto 0 !important;width:66% !important}
+  .proper-jukebox .jukebox-arch{margin:182px auto 0 !important;width:62% !important}
+  .proper-jukebox .jukebox-window{padding:10px 8px 9px !important}
+  .proper-jukebox .juke-live-lights{inset:5% 16% !important}
+  .proper-jukebox .juke-live-lights i{width:8px !important;height:8px !important}
+}
+</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
