@@ -1144,6 +1144,113 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   .proper-jukebox{min-height:620px !important}
   .proper-jukebox .juke-live-lights i{width:9px !important;height:9px !important}
 }</style>
+
+<style id="live-wire-bar-shelf-final">
+/* Final Live Wire Bar shelf polish: tighter spacing + clean product-photo blending */
+.bar-pub-wall{
+  padding:22px 14px 26px !important;
+}
+.real-top-shelf{
+  height:158px !important;
+  min-height:0 !important;
+  padding:10px 7px 9px !important;
+  gap:4px !important;
+  justify-content:space-around !important;
+}
+.real-top-drink{
+  width:clamp(52px,7.2vw,72px) !important;
+  height:136px !important;
+  flex:0 1 72px !important;
+}
+.real-top-drink img{
+  width:100% !important;
+  height:122px !important;
+  object-fit:contain !important;
+  object-position:center bottom !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  mix-blend-mode:multiply !important;
+  filter:saturate(.96) contrast(1.07) brightness(1.03) !important;
+}
+.real-top-drink figcaption{
+  bottom:-1px !important;
+  font-size:5.5px !important;
+  letter-spacing:.45px !important;
+}
+.real-top-shelf::before{
+  left:3% !important;
+  right:3% !important;
+  bottom:6px !important;
+  height:5px !important;
+}
+
+.photographic-drink-shelf,
+.pub-drink-display{
+  min-height:168px !important;
+  height:168px !important;
+  padding:17px 10px 15px !important;
+  gap:8px !important;
+  justify-content:space-evenly !important;
+  border-bottom-width:9px !important;
+}
+.real-bottle{
+  width:clamp(54px,8vw,72px) !important;
+  height:145px !important;
+  flex:0 1 72px !important;
+}
+.real-bottle img{
+  width:100% !important;
+  height:132px !important;
+  object-fit:contain !important;
+  object-position:center bottom !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  mix-blend-mode:multiply !important;
+  filter:saturate(.96) contrast(1.06) brightness(1.02) !important;
+}
+.real-bottle figcaption{
+  bottom:-1px !important;
+  font-size:5.5px !important;
+  letter-spacing:.5px !important;
+}
+.real-bottle.wide-photo img{
+  mix-blend-mode:multiply !important;
+  border-radius:0 !important;
+}
+@media(max-width:600px){
+  .bar-pub-wall{padding:18px 7px 21px !important}
+  .real-top-shelf{
+    height:112px !important;
+    padding:7px 3px 7px !important;
+    gap:1px !important;
+  }
+  .real-top-drink{
+    width:43px !important;
+    height:96px !important;
+    flex:0 1 43px !important;
+  }
+  .real-top-drink img{height:86px !important}
+  .real-top-drink figcaption{font-size:4px !important;letter-spacing:.2px !important}
+  .photographic-drink-shelf,
+  .pub-drink-display{
+    min-height:122px !important;
+    height:122px !important;
+    padding:11px 3px 10px !important;
+    gap:2px !important;
+    border-bottom-width:7px !important;
+  }
+  .real-bottle{
+    width:43px !important;
+    height:108px !important;
+    flex:0 1 43px !important;
+  }
+  .real-bottle img{height:98px !important}
+  .real-bottle figcaption{font-size:4px !important;letter-spacing:.2px !important}
+}
+</style>
+
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
