@@ -1313,6 +1313,46 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   }
 }
 </style>
+<style id="live-wire-shelf-cutout-final">
+/* Make the remaining studio photos read as individual bottles/cans, not square photos. */
+.real-top-drink img.shelf-can-cutout,
+.real-top-drink img.shelf-madri-cutout,
+.real-top-drink img.shelf-gin-cutout,
+.real-bottle img.shelf-guinness-cutout,
+.real-bottle img.shelf-can-cutout{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  mix-blend-mode:normal !important;
+  filter:saturate(1.02) contrast(1.04) drop-shadow(0 3px 3px rgba(0,0,0,.62)) !important;
+}
+/* Strongbow can: clean rounded can silhouette. */
+.real-top-drink img.shelf-can-cutout{
+  clip-path:polygon(31% 1%,69% 1%,74% 5%,76% 14%,76% 90%,71% 97%,29% 97%,24% 90%,24% 14%,26% 5%) !important;
+}
+/* Madrí: narrow shoulders/neck and wider beer-bottle body. */
+.real-top-drink img.shelf-madri-cutout{
+  clip-path:polygon(39% 1%,61% 1%,62% 14%,69% 19%,75% 27%,78% 87%,73% 96%,27% 96%,22% 87%,25% 27%,31% 19%,38% 14%) !important;
+}
+/* Pink gin: tall bottle with shoulders and a defined neck. */
+.real-top-drink img.shelf-gin-cutout{
+  clip-path:polygon(42% 1%,58% 1%,59% 15%,68% 21%,75% 30%,78% 87%,72% 96%,28% 96%,22% 87%,25% 30%,32% 21%,41% 15%) !important;
+}
+/* Guinness: stout-bottle silhouette rather than the source image's square. */
+.real-bottle img.shelf-guinness-cutout{
+  clip-path:polygon(39% 1%,61% 1%,62% 17%,69% 22%,76% 31%,79% 87%,73% 96%,27% 96%,21% 87%,24% 31%,31% 22%,38% 17%) !important;
+}
+@media(max-width:600px){
+  .real-top-drink img.shelf-can-cutout{clip-path:polygon(28% 1%,72% 1%,77% 8%,78% 90%,72% 98%,28% 98%,22% 90%,23% 8%) !important}
+  .real-top-drink img.shelf-madri-cutout,
+  .real-top-drink img.shelf-gin-cutout{
+    clip-path:polygon(39% 1%,61% 1%,62% 15%,70% 22%,77% 31%,80% 87%,73% 97%,27% 97%,20% 87%,23% 31%,30% 22%,38% 15%) !important
+  }
+  .real-bottle img.shelf-guinness-cutout{
+    clip-path:polygon(39% 1%,61% 1%,62% 16%,70% 22%,77% 31%,80% 87%,73% 97%,27% 97%,20% 87%,23% 31%,30% 22%,38% 16%) !important
+  }
+}
+</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
@@ -1327,10 +1367,10 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 <div class="bar-edge-lights" aria-hidden="true"><div class="bar-edge-top"></div></div>
 <div class="bar-hero"><div class="bar-pub-lights"></div><div class="wrap"><img class="logo" src="live-wire-logo.jpg" alt="Live Wire Entertainment logo"><div class="bolt">⚡</div><h1>🍹 The Live Wire Bar</h1><p class="bar-intro"><strong>Welcome to the Live Wire Bar — a fun place where everyone can enjoy the company, music, laughs and vibes from TikTok, all from the comfort of their own home.</strong></p><p class="bar-intro">It's like one big community bar without needing to be in the same room. People come together through music and banter, share the moment, have a laugh and enjoy the Live Wire experience wherever they are.</p></div></div>
 <section><div class="bar-pub-wall"><div class="pub-neon-sign">🍺 LIVE WIRE BAR • OPEN FOR BANter • MUSIC • LAUGHS ⚡</div><div class="pub-shelf real-top-shelf" aria-label="Real drinks on the upper bar shelf">
-  <figure class="real-top-drink"><img class="photo-cutout" src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
-  <figure class="real-top-drink"><img class="photo-cutout" src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-can-cutout" src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-madri-cutout" src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
-  <figure class="real-top-drink"><img class="photo-cutout" src="https://www.lidl.de/assets/gcp67dbde3109e54f4e9dfe1fb94119d77a.jpeg" alt="Pink gin bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>PINK GIN</figcaption></figure>
+  <figure class="real-top-drink"><img class="photo-cutout shelf-gin-cutout" src="https://www.lidl.de/assets/gcp67dbde3109e54f4e9dfe1fb94119d77a.jpeg" alt="Pink gin bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>PINK GIN</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout" src="https://storage.googleapis.com/onelife-public/8934822111298.jpg" alt="Strongbow Gold Apple can" loading="eager" decoding="async" fetchpriority="high"><figcaption>STRONGBOW</figcaption></figure>
   <figure class="real-top-drink"><img class="photo-cutout" src="https://cdn.freshful.ro/media/cache/sylius_shop_product_original/e0/7a/1992402462f1710f1d96ca6ff577.jpg" alt="Madri Excepcional bottle" loading="eager" decoding="async" fetchpriority="high"><figcaption>MADRI</figcaption></figure>
   <figure class="real-top-drink"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Botella-de-budweiser-cerveza-colombiana.png" alt="Budweiser bottle" loading="lazy"><figcaption>BUDWEISER</figcaption></figure>
@@ -1344,7 +1384,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
   <figure class="real-bottle wide-photo">
-    <img class="photo-cutout" src="https://digitalcontent.api.tesco.com/v2/media/ghs/92de2822-ea49-459d-a487-2848547ce255/83b3e2b0-3632-4335-a538-6a50e6f28141_524731649.jpeg?h=960&w=960" alt="Guinness bottle" loading="eager" decoding="async" fetchpriority="high">
+    <img class="photo-cutout shelf-guinness-cutout" src="https://digitalcontent.api.tesco.com/v2/media/ghs/92de2822-ea49-459d-a487-2848547ce255/83b3e2b0-3632-4335-a538-6a50e6f28141_524731649.jpeg?h=960&w=960" alt="Guinness bottle" loading="eager" decoding="async" fetchpriority="high">
     <figcaption>GUINNESS</figcaption>
   </figure>
   <figure class="real-bottle">
