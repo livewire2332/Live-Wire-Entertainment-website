@@ -1863,9 +1863,10 @@ function getNextScheduledShow(){
 }
 
 let currentLiveShow=null;
+// Master schedule pause: keep every scheduled show paused until Dan explicitly says Live Wire is ready to resume.
+const LIVE_WIRE_SCHEDULE_PAUSED=true;
 const isPausePeriod=()=>{
-  const iso=new Date().toISOString().slice(0,10);
-  return iso>='2026-09-21'&&iso<='2026-09-27';
+  return LIVE_WIRE_SCHEDULE_PAUSED;
 };
 
 function setBarLiveStatus(online){
