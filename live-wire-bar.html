@@ -2008,6 +2008,135 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 }
 </style>
 
+
+<style id="lw-jukebox-reactive-curve-final">
+/* Slightly stronger clean neon edge with slow idle pulse and faster live pulse. */
+.player > .proper-jukebox{
+  border-width:2px!important;
+  box-shadow:
+    0 0 0 1px rgba(255,43,214,.34),
+    0 0 18px rgba(0,234,255,.42),
+    0 0 34px rgba(255,43,214,.20),
+    inset 0 0 24px rgba(0,234,255,.045)!important;
+  animation:lwJukeboxIdlePulse 4.8s ease-in-out infinite!important;
+}
+.player > .proper-jukebox::before{
+  border-width:2px!important;
+  opacity:.9!important;
+  animation:lwCleanEdge 4.8s ease-in-out infinite!important;
+}
+.player > .proper-jukebox::after{
+  top:7px!important;
+  height:2px!important;
+  box-shadow:0 0 10px rgba(0,234,255,.8),0 0 14px rgba(255,43,214,.35)!important;
+  animation:lwCleanSweep 4.8s ease-in-out infinite!important;
+}
+
+/* A simple curved neon crown — no extra cabinet layer. */
+.player > .proper-jukebox .jukebox-header{
+  position:relative!important;
+  padding:12px 8px 15px!important;
+}
+.player > .proper-jukebox .jukebox-header::before{
+  content:""!important;
+  position:absolute!important;
+  left:10%!important;
+  right:10%!important;
+  top:-2px!important;
+  height:24px!important;
+  border-top:3px solid #00eaff!important;
+  border-radius:50% 50% 0 0!important;
+  box-shadow:
+    0 0 7px rgba(0,234,255,.9),
+    0 0 15px rgba(255,43,214,.42)!important;
+  opacity:.9!important;
+  animation:lwJukeboxCrownPulse 4.8s ease-in-out infinite!important;
+  pointer-events:none!important;
+}
+.player > .proper-jukebox .jukebox-header::after{
+  content:""!important;
+  position:absolute!important;
+  left:19%!important;
+  right:19%!important;
+  top:7px!important;
+  height:13px!important;
+  border-top:1px solid rgba(255,43,214,.8)!important;
+  border-radius:50% 50% 0 0!important;
+  box-shadow:0 0 7px rgba(255,43,214,.65)!important;
+  opacity:.65!important;
+  animation:lwJukeboxCrownPulse 4.8s ease-in-out infinite!important;
+  pointer-events:none!important;
+}
+
+.player > .proper-jukebox.live-stream{
+  animation:lwJukeboxLivePulse 1.35s ease-in-out infinite!important;
+}
+.player > .proper-jukebox.live-stream::before{
+  animation:lwCleanEdgeLive .9s ease-in-out infinite!important;
+}
+.player > .proper-jukebox.live-stream::after{
+  animation:lwCleanSweepLive .75s ease-in-out infinite!important;
+}
+.player > .proper-jukebox.live-stream .jukebox-header::before,
+.player > .proper-jukebox.live-stream .jukebox-header::after{
+  animation:lwJukeboxCrownLive .8s ease-in-out infinite!important;
+}
+
+@keyframes lwJukeboxIdlePulse{
+  0%,100%{filter:brightness(.94)}
+  50%{filter:brightness(1.08)}
+}
+@keyframes lwJukeboxLivePulse{
+  0%,100%{filter:brightness(.98)}
+  35%{filter:brightness(1.16)}
+  55%{filter:brightness(1.28)}
+  75%{filter:brightness(1.08)}
+}
+@keyframes lwCleanEdgeLive{
+  0%,100%{opacity:.65;filter:brightness(.9)}
+  50%{opacity:1;filter:brightness(1.7)}
+}
+@keyframes lwCleanSweepLive{
+  0%,100%{transform:scaleX(.62);opacity:.45}
+  50%{transform:scaleX(1.05);opacity:1}
+}
+@keyframes lwJukeboxCrownPulse{
+  0%,100%{opacity:.45;filter:brightness(.85)}
+  50%{opacity:1;filter:brightness(1.35)}
+}
+@keyframes lwJukeboxCrownLive{
+  0%,100%{opacity:.6;filter:brightness(1)}
+  50%{opacity:1;filter:brightness(1.8)}
+}
+@media(max-width:600px){
+  .player > .proper-jukebox{
+    border-width:2px!important;
+  }
+  .player > .proper-jukebox .jukebox-header{
+    padding-top:12px!important;
+  }
+  .player > .proper-jukebox .jukebox-header::before{
+    left:8%!important;
+    right:8%!important;
+    height:20px!important;
+  }
+  .player > .proper-jukebox .jukebox-header::after{
+    left:17%!important;
+    right:17%!important;
+    top:6px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox,
+  .player > .proper-jukebox::before,
+  .player > .proper-jukebox::after,
+  .player > .proper-jukebox .jukebox-header::before,
+  .player > .proper-jukebox .jukebox-header::after{
+    animation:none!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
