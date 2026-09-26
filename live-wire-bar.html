@@ -357,6 +357,91 @@ box-shadow:0 9px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,210,150,.08),0 0 14
 @keyframes jukeMusicSpeaker{0%{transform:scale(.965);filter:brightness(.82)}45%{transform:scale(1.015);filter:brightness(1.08)}100%{transform:scale(1.035);filter:brightness(1.22)}}
 @keyframes jukeGrillePulse{0%{filter:brightness(.82);opacity:.72}100%{filter:brightness(1.18);opacity:1}}
 @media(prefers-reduced-motion:reduce){.proper-jukebox.live-stream .juke-side-column i,.proper-jukebox.live-stream .juke-speaker,.proper-jukebox.live-stream .juke-bottom-grille,.proper-jukebox.live-stream::after{animation:none}}
+
+/* Retro-modern jukebox refinement — classic cabinet with a contemporary Live Wire finish */
+.proper-jukebox{
+  background:
+    linear-gradient(90deg,#120b08 0%,#3a1b10 7%,#1b100c 16%,#29150d 50%,#1b100c 84%,#3a1b10 93%,#120b08 100%);
+  border-color:#090706;
+  box-shadow:0 14px 0 #050403,0 0 0 2px #17100c,0 0 0 4px #b98242,0 0 24px rgba(0,0,0,.85),inset 0 0 34px rgba(0,0,0,.9);
+}
+.proper-jukebox::before{
+  background:linear-gradient(90deg,#090706,#8c5828 10%,#f0c36b 50%,#8c5828 90%,#090706);
+  box-shadow:0 1px 5px rgba(255,220,145,.45);
+}
+.proper-jukebox::after{
+  background:linear-gradient(90deg,transparent,#58eaff 20%,#d7b15b 38%,#ff5bcb 62%,#58eaff 80%,transparent);
+  opacity:.65;
+  filter:blur(.2px);
+}
+.jukebox-crown{
+  background:linear-gradient(180deg,#100b08,#5b2b18 45%,#1a0d09 100%);
+  border-color:#090706;
+  box-shadow:0 0 0 2px #c18b4b,0 4px 10px rgba(0,0,0,.7),inset 0 -8px 15px #070403;
+}
+.jukebox-brand{
+  color:#f4e5bd;
+  text-shadow:0 1px 0 #3c1b0e,0 0 5px rgba(255,212,107,.55);
+}
+.juke-crown-bolt{color:#58eaff;text-shadow:0 0 6px rgba(88,234,255,.8)}
+.jukebox-arch{
+  background:linear-gradient(90deg,#2b140d,#714022 8%,#24110b 18%,#17100c 50%,#24110b 82%,#714022 92%,#2b140d);
+  border-color:#0a0705;
+  box-shadow:0 0 0 2px #bd8444,0 0 0 5px #120a07,0 12px 22px rgba(0,0,0,.7),inset 0 0 34px #050302;
+}
+.jukebox-arch::before{
+  border-color:#d0a05c;
+  box-shadow:inset 0 0 0 4px #110907,inset 0 0 22px rgba(255,212,107,.12);
+}
+.juke-curtain{
+  background:radial-gradient(ellipse at 50% 0,#6f2922 0,#30110f 58%,#100605 100%);
+  box-shadow:inset 0 -20px 25px rgba(255,74,38,.12),0 4px 12px rgba(0,0,0,.6);
+}
+.jukebox-window{
+  background:linear-gradient(145deg,#12100e,#050505 72%,#17100b);
+  border-color:#0a0705;
+  box-shadow:0 0 0 2px #b77b3c,0 0 0 4px #20100a,0 8px 18px rgba(0,0,0,.8),inset 0 0 25px #000;
+}
+.jukebox-window::after{
+  content:"";
+  position:absolute;
+  left:10%;
+  top:7%;
+  width:42%;
+  height:22%;
+  border-radius:50%;
+  background:linear-gradient(115deg,rgba(255,255,255,.16),transparent 65%);
+  transform:rotate(-8deg);
+  pointer-events:none;
+}
+.juke-grille{
+  background:repeating-linear-gradient(90deg,#28140c 0 7px,#9e6330 8px 10px,#35180e 11px 17px);
+  box-shadow:inset 0 1px 2px rgba(255,225,170,.25),0 3px 8px rgba(0,0,0,.65);
+}
+.juke-speaker{
+  border-color:#95602f;
+  background:radial-gradient(circle,rgba(231,171,85,.55) 0 1px,transparent 2px) 0 0/7px 7px,linear-gradient(180deg,#080605,#21100a);
+  box-shadow:inset 0 0 10px #000,0 3px 8px rgba(0,0,0,.7);
+}
+.juke-side-column{
+  box-shadow:0 0 0 2px #78401f,0 5px 12px rgba(0,0,0,.7),inset 0 0 14px rgba(255,241,170,.25);
+}
+.juke-side-column.right{
+  background:linear-gradient(90deg,#17152c,#37306e 38%,#172c50 72%,#090e1d);
+  box-shadow:0 0 0 2px #373568,0 5px 12px rgba(0,0,0,.7),inset 0 0 14px rgba(88,234,255,.2);
+}
+.juke-side-column.right i{
+  background:#58eaff;
+  box-shadow:0 0 5px #58eaff,0 0 11px rgba(88,234,255,.65);
+}
+.juke-side-column i{box-shadow:0 0 5px #ffd43b,0 0 10px rgba(255,212,59,.55)}
+.juke-bottom-grille{
+  background:repeating-linear-gradient(90deg,#170b07 0 5px,#9e6330 6px 8px);
+  box-shadow:inset 0 1px 2px rgba(255,220,160,.25),0 3px 8px rgba(0,0,0,.6);
+}
+@media(prefers-reduced-motion:reduce){
+ .proper-jukebox::after,.proper-jukebox.live-stream .juke-side-column i,.proper-jukebox.live-stream .juke-speaker{animation:none}
+}
 </style><style>
 /* Live Wire venue-to-venue transition portals */
 .lw-transition-portal{position:relative;max-width:920px;margin:10px auto 8px;padding:5px;border-radius:28px;background:linear-gradient(90deg,rgba(255,174,69,.18),rgba(255,43,214,.16),rgba(0,234,255,.18));box-shadow:0 0 18px rgba(0,234,255,.12),0 0 30px rgba(255,43,214,.08)}
