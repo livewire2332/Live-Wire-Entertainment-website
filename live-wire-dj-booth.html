@@ -111,7 +111,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-3;background:radial-grad
 <main class="dj-room" id="djRoom">
 <div class="dj-ceiling"></div>
 <div class="dj-backwall"><div class="dj-neon-sign">⚡ LIVE WIRE DJ BOOTH ⚡</div><div class="dj-lightbar"></div></div>
-<div class="dj-status-row"><div class="dj-onair" id="djOnAir">⚫ OFF AIR</div><div class="dj-show" id="djShow">Checking Live Wire schedule…</div></div>
+<div class="dj-status-row"><div class="dj-onair" id="djOnAir">⚫ OFF AIR</div></div>
 <div class="dj-decks">
 <section class="deck" id="deckDan"><div class="deck-title">⚡ DJ DISCO DAN</div><div class="tonearm"></div><div class="platter"></div><div class="deck-screen" id="danScreen">CHANNEL 1 • READY</div><div class="deck-controls"><i class="deck-btn"></i><i class="deck-btn"></i><i class="deck-btn"></i></div><div class="deck-actions"><button class="action-btn" data-deck="dan">▶ PLAY</button><button class="action-btn" data-deck="dan">CUE</button></div><div class="equip-strip"><i class="equip-led on"></i><i class="equip-led"></i><i class="equip-led"></i><i class="equip-led hot"></i><i class="equip-led"></i></div></section>
 <section class="mixer" id="djMixer"><div class="mixer-title">🎚️ LIVE WIRE MIXER</div><div class="vu-bank" aria-label="Animated VU meters"><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span><span class="vu"></span></div><div class="knob-row"><i class="knob"></i><i class="knob"></i><i class="knob"></i><i class="knob"></i><i class="knob"></i><i class="knob"></i></div><div class="mixer-sliders"><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span><span class="fader"></span></div><div class="crossfader"></div><div class="equip-strip"><i class="equip-led on"></i><i class="equip-led on"></i><i class="equip-led"></i><i class="equip-led hot"></i><i class="equip-led on"></i><i class="equip-led"></i></div></section>
@@ -142,10 +142,10 @@ function nextShow(){
  const n=scheduledShow(); return n?n:['⚡ Live Wire Radio','Waiting for the next scheduled show'];
 }
 function applyStatus(online){
- const room=document.getElementById('djRoom'),on=document.getElementById('djOnAir'),show=document.getElementById('djShow');
+ const room=document.getElementById('djRoom'),on=document.getElementById('djOnAir');
  room.classList.toggle('live',online);document.getElementById('djMixer').classList.toggle('live',online);document.getElementById('deckDan').classList.toggle('live',online);document.getElementById('deckPhoenix').classList.toggle('live',online);
  on.textContent=online?'🔴 ON AIR':'⚫ OFF AIR';on.classList.toggle('live',online);
- const s=scheduledShow()||nextShow();show.textContent=online?'🎧 '+s[0]+' • '+s[1]:'📅 '+s[0]+' • '+s[1];
+ 
 }
 async function casterOnline(){
  try{const r=await fetch(CASTER_STATUS_URL,{cache:'no-store',headers:{Accept:'application/json'}});if(!r.ok)throw 0;const d=await r.json();const src=Array.isArray(d)?(d.find(x=>x?.source)?.source||{}):(d?.source||{});return Object.keys(src).some(m=>m.replace(/^\//,'')===CASTER_MOUNT.replace(/^\//,''));}catch(e){return null}
