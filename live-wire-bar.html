@@ -3431,3 +3431,38 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-status-pulse-speed-final">
+/* Paused = calm breathing pulse. Live detection = fast reactive pulse. */
+.proper-jukebox.shows-paused .live-status{
+  animation:lwPausedGentlePulse 2.8s ease-in-out infinite!important;
+}
+.proper-jukebox.live-stream .live-status{
+  animation:lwLiveFastPulse .65s ease-in-out infinite!important;
+}
+@keyframes lwPausedGentlePulse{
+  0%,100%{
+    transform:scale(1);
+    filter:brightness(.96);
+    box-shadow:0 0 7px #00eaff,0 0 15px rgba(0,234,255,.35),0 0 22px rgba(255,43,214,.12);
+  }
+  50%{
+    transform:scale(1.018);
+    filter:brightness(1.06);
+    box-shadow:0 0 9px #00eaff,0 0 19px rgba(0,234,255,.42),0 0 25px rgba(255,43,214,.18);
+  }
+}
+@keyframes lwLiveFastPulse{
+  0%,100%{
+    transform:scale(1);
+    filter:brightness(1);
+    box-shadow:0 0 9px #ff365c,0 0 20px rgba(255,54,92,.6),0 0 30px rgba(255,43,214,.25);
+  }
+  50%{
+    transform:scale(1.055);
+    filter:brightness(1.22);
+    box-shadow:0 0 14px #ff365c,0 0 28px #ff2bd6,0 0 42px rgba(255,54,92,.58);
+  }
+}
+</style>
