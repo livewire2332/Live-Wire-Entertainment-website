@@ -1834,3 +1834,240 @@ setInterval(refreshBarLiveStatus,15000);
  .proper-jukebox .bar-live-show{font-size:15px!important;line-height:1.4!important;}
 }
 </style>
+
+<style id="live-wire-half-jukebox-final">
+/* Compact half-jukebox: shorter cabinet, larger readable controls, reactive neon when stream is detected. */
+.proper-jukebox{
+  width:min(92vw,560px)!important;
+  height:500px!important;
+  min-height:500px!important;
+  aspect-ratio:auto!important;
+  margin:18px auto 26px!important;
+  padding:0 10px 12px!important;
+  overflow:hidden!important;
+  border-radius:34px 34px 24px 24px!important;
+}
+.proper-jukebox::before{
+  inset:0!important;
+  background-position:center top!important;
+  background-size:100% 100%!important;
+  opacity:1!important;
+}
+.proper-jukebox::after{
+  left:5%!important;
+  right:5%!important;
+  top:20px!important;
+  height:4px!important;
+  background:linear-gradient(90deg,#00eaff,#ff2bd6,#ffd43b,#ff2bd6,#00eaff)!important;
+  box-shadow:0 0 10px #00eaff,0 0 20px #ff2bd6,0 0 28px #ffd43b!important;
+}
+.proper-jukebox .jukebox-crown{
+  width:76%!important;
+  min-height:42px!important;
+  padding:6px 12px!important;
+  margin:0 auto -3px!important;
+}
+.proper-jukebox .jukebox-arch{
+  min-height:0!important;
+  height:432px!important;
+  padding:32px 34px 10px!important;
+  max-width:610px!important;
+  overflow:hidden!important;
+}
+.proper-jukebox .juke-curtain{
+  top:12px!important;
+  height:65px!important;
+}
+.proper-jukebox .juke-side-column{
+  top:66px!important;
+  bottom:14px!important;
+  width:31px!important;
+}
+.proper-jukebox .juke-side-column.left{left:7px!important}
+.proper-jukebox .juke-side-column.right{right:7px!important}
+.proper-jukebox .juke-side-column i{
+  width:13px!important;
+  height:13px!important;
+  margin:18px auto!important;
+}
+.proper-jukebox .jukebox-header{
+  padding:0 6px 6px!important;
+}
+.proper-jukebox .jukebox-kicker{
+  font-size:10px!important;
+}
+.proper-jukebox .jukebox-title{
+  font-size:clamp(25px,7vw,34px)!important;
+  margin:1px 0!important;
+}
+.proper-jukebox .jukebox-window{
+  width:min(88%,470px)!important;
+  max-width:470px!important;
+  padding:10px 11px 9px!important;
+  margin:0 auto!important;
+  transform:none!important;
+  left:auto!important;
+  top:auto!important;
+  border-width:4px!important;
+}
+.proper-jukebox .juke-grille{
+  height:18px!important;
+  margin:-2px auto 6px!important;
+}
+.proper-jukebox .live-status{
+  font-size:clamp(14px,3.5vw,18px)!important;
+  line-height:1.1!important;
+  padding:8px 15px!important;
+  min-height:38px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.proper-jukebox .bar-live-show{
+  font-size:clamp(15px,3.8vw,19px)!important;
+  line-height:1.3!important;
+  margin:-1px auto 7px!important;
+}
+.proper-jukebox .jukebox-eq{
+  height:22px!important;
+  margin:3px auto 1px!important;
+}
+.proper-jukebox .jukebox-eq span{
+  width:7px!important;
+}
+.proper-jukebox .jukebox-window h2{
+  font-size:clamp(23px,5.5vw,30px)!important;
+  margin:2px 0 4px!important;
+}
+.proper-jukebox .jukebox-window>p{
+  font-size:clamp(12px,3vw,15px)!important;
+  line-height:1.35!important;
+  margin:0 auto 7px!important;
+  max-width:430px!important;
+}
+.proper-jukebox .cstrEmbed{
+  width:100%!important;
+  max-width:100%!important;
+}
+.proper-jukebox .jukebox-speakers{
+  margin-top:5px!important;
+  gap:6px!important;
+}
+.proper-jukebox .juke-speaker{
+  height:24px!important;
+}
+.proper-jukebox .jukebox-controls{
+  margin-top:5px!important;
+}
+.proper-jukebox .juke-light{
+  width:11px!important;
+  height:11px!important;
+}
+.proper-jukebox .jukebox-note{
+  display:none!important;
+}
+/* Full neon reaction when the stream is actually detected. */
+.proper-jukebox.live-stream{
+  animation:lwHalfJukeLive 1.8s ease-in-out infinite!important;
+}
+.proper-jukebox.live-stream::after{
+  animation:lwHalfJukeSweep .8s linear infinite!important;
+  filter:brightness(1.7)!important;
+}
+.proper-jukebox.live-stream .juke-side-column{
+  animation:lwHalfJukeColumn 1s ease-in-out infinite alternate!important;
+}
+.proper-jukebox.live-stream .juke-side-column.left{
+  box-shadow:0 0 0 2px #8d4d25,0 0 16px #ffd43b,0 0 30px rgba(255,137,42,.8),inset 0 0 18px rgba(255,241,170,.7)!important;
+}
+.proper-jukebox.live-stream .juke-side-column.right{
+  box-shadow:0 0 0 2px #57266f,0 0 18px #00eaff,0 0 32px rgba(255,43,214,.8),inset 0 0 18px rgba(255,255,255,.5)!important;
+}
+.proper-jukebox.live-stream .juke-side-column i{
+  animation:jukeLiveLamp .45s ease-in-out infinite!important;
+}
+.proper-jukebox.live-stream .jukebox-window{
+  box-shadow:0 0 0 3px #00eaff,0 0 0 6px #ff2bd6,0 0 28px #00eaff,0 0 45px rgba(255,43,214,.7),inset 0 0 24px #000!important;
+}
+@keyframes lwHalfJukeLive{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.08)}
+}
+@keyframes lwHalfJukeSweep{
+  0%{transform:translateX(-15%)}
+  100%{transform:translateX(15%)}
+}
+@keyframes lwHalfJukeColumn{
+  from{filter:brightness(.9)}
+  to{filter:brightness(1.35)}
+}
+@media(max-width:600px){
+  .proper-jukebox{
+    width:calc(100% - 10px)!important;
+    height:470px!important;
+    min-height:470px!important;
+    margin:12px auto 20px!important;
+    padding:0 5px 9px!important;
+  }
+  .proper-jukebox .jukebox-crown{
+    width:82%!important;
+    min-height:38px!important;
+    padding:5px 8px!important;
+  }
+  .proper-jukebox .jukebox-brand{
+    font-size:17px!important;
+  }
+  .proper-jukebox .jukebox-arch{
+    height:405px!important;
+    padding:27px 24px 8px!important;
+  }
+  .proper-jukebox .juke-curtain{
+    top:10px!important;
+    height:54px!important;
+  }
+  .proper-jukebox .juke-side-column{
+    top:56px!important;
+    bottom:12px!important;
+    width:24px!important;
+  }
+  .proper-jukebox .juke-side-column.left{left:5px!important}
+  .proper-jukebox .juke-side-column.right{right:5px!important}
+  .proper-jukebox .juke-side-column i{
+    width:10px!important;
+    height:10px!important;
+    margin:15px auto!important;
+  }
+  .proper-jukebox .jukebox-header{
+    padding:0 4px 5px!important;
+  }
+  .proper-jukebox .jukebox-title{
+    font-size:29px!important;
+  }
+  .proper-jukebox .jukebox-window{
+    width:88%!important;
+    max-width:none!important;
+    padding:9px 7px 8px!important;
+    border-width:3px!important;
+  }
+  .proper-jukebox .live-status{
+    font-size:14px!important;
+    min-height:36px!important;
+    padding:7px 12px!important;
+  }
+  .proper-jukebox .bar-live-show{
+    font-size:15px!important;
+    line-height:1.28!important;
+    margin:0 auto 5px!important;
+  }
+  .proper-jukebox .jukebox-window h2{
+    font-size:24px!important;
+  }
+  .proper-jukebox .jukebox-window>p{
+    font-size:12px!important;
+    line-height:1.3!important;
+  }
+  .proper-jukebox .juke-speaker{
+    height:20px!important;
+  }
+}
+</style>
