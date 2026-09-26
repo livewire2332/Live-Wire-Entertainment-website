@@ -4077,4 +4077,89 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
     max-height:275px!important;
   }
 }
+</style><style id="lw-caster-full-widget-final">
+/* Final: show the complete Caster player instead of clipping its lower controls. */
+.proper-jukebox{
+  height:610px!important;
+  min-height:610px!important;
+  overflow:visible!important;
+}
+.proper-jukebox .jukebox-arch{
+  height:555px!important;
+  min-height:555px!important;
+  overflow:visible!important;
+}
+.proper-jukebox .jukebox-window{
+  height:auto!important;
+  min-height:520px!important;
+  max-height:none!important;
+  overflow:visible!important;
+  width:96%!important;
+  max-width:560px!important;
+}
+.proper-jukebox .lw-native-player,
+.proper-jukebox .lw-player-screen{
+  height:auto!important;
+  min-height:390px!important;
+  overflow:visible!important;
+}
+.proper-jukebox .lw-caster-player,
+.proper-jukebox .jukebox-window .cstrEmbed{
+  display:block!important;
+  width:100%!important;
+  height:355px!important;
+  min-height:355px!important;
+  max-height:355px!important;
+  overflow:visible!important;
+  margin:10px auto!important;
+  position:relative!important;
+  z-index:30!important;
+}
+.proper-jukebox .lw-caster-player iframe,
+.proper-jukebox .jukebox-window .cstrEmbed iframe{
+  display:block!important;
+  width:100%!important;
+  height:355px!important;
+  min-height:355px!important;
+  max-height:355px!important;
+  overflow:visible!important;
+  margin:0!important;
+  border:0!important;
+  transform:none!important;
+}
+@media(max-width:600px){
+  .proper-jukebox{
+    height:650px!important;
+    min-height:650px!important;
+  }
+  .proper-jukebox .jukebox-arch{
+    height:595px!important;
+    min-height:595px!important;
+    overflow:visible!important;
+  }
+  .proper-jukebox .jukebox-window{
+    width:96%!important;
+    min-height:560px!important;
+    overflow:visible!important;
+  }
+  .proper-jukebox .lw-native-player,
+  .proper-jukebox .lw-player-screen{
+    min-height:410px!important;
+    overflow:visible!important;
+  }
+  .proper-jukebox .lw-caster-player,
+  .proper-jukebox .jukebox-window .cstrEmbed{
+    height:355px!important;
+    min-height:355px!important;
+    max-height:355px!important;
+    margin:9px auto!important;
+    overflow:visible!important;
+  }
+  .proper-jukebox .lw-caster-player iframe,
+  .proper-jukebox .jukebox-window .cstrEmbed iframe{
+    height:355px!important;
+    min-height:355px!important;
+    max-height:355px!important;
+  }
+}
 </style>
