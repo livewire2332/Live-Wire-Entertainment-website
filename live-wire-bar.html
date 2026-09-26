@@ -592,7 +592,28 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 .lw-toilets{filter:drop-shadow(0 18px 35px rgba(0,0,0,.4))}
 .bar-lower-panel{background:linear-gradient(145deg,#25170f,#0f0906)!important;box-shadow:0 18px 42px rgba(0,0,0,.55),inset 0 1px rgba(255,220,160,.05)!important;border-color:rgba(180,122,62,.4)!important}
 @media(max-width:600px){.bar-hero{padding-top:48px}.grid .card{box-shadow:0 9px 22px rgba(0,0,0,.4)}}
-</style>\n</head>
+</style>\n<style>
+/* Photographic drink shelf — replace CSS-drawn drink silhouettes with believable bottle/glass photography treatment */
+.pub-drink-display{min-height:180px;gap:clamp(10px,2vw,22px);padding:22px 18px 20px;align-items:flex-end;background:linear-gradient(180deg,rgba(22,13,8,.15),rgba(10,6,4,.94)),linear-gradient(90deg,#241209,#5a3018 12%,#2d150b 50%,#5a3018 88%,#241209);border-bottom:12px solid #241108;box-shadow:inset 0 18px 30px rgba(0,0,0,.45),inset 0 -15px 20px rgba(0,0,0,.65)}
+.pub-drink-display::before{content:"";position:absolute;left:3%;right:3%;top:9px;height:3px;background:rgba(255,210,145,.22);box-shadow:0 1px 5px rgba(0,0,0,.7)}
+.pub-glass{width:58px;height:112px;filter:drop-shadow(0 9px 7px rgba(0,0,0,.7));}
+.pub-glass .glass-body{left:3px;right:3px;bottom:17px;height:82px;border:1px solid rgba(235,248,255,.72);background:linear-gradient(90deg,rgba(255,255,255,.28),rgba(255,255,255,.025) 18%,rgba(255,255,255,.14) 44%,rgba(255,255,255,.015) 70%,rgba(255,255,255,.22));box-shadow:inset 7px 0 10px rgba(255,255,255,.12),inset -7px 0 10px rgba(0,0,0,.22),0 0 2px rgba(255,255,255,.3)}
+.pub-glass .liquid{left:7px;right:7px;bottom:20px;height:60px;background:linear-gradient(180deg,#e7b84e 0,#c77920 38%,#71300d 100%);box-shadow:inset 5px 0 8px rgba(255,224,142,.24),inset -5px 0 9px rgba(45,13,2,.38)}
+.pub-glass .liquid::after{content:"";position:absolute;left:9%;right:15%;top:12%;height:2px;background:rgba(255,235,175,.24);box-shadow:0 8px 0 rgba(255,235,175,.08),0 16px 0 rgba(255,235,175,.05)}
+.pub-glass .foam{top:1px;height:20px;background:radial-gradient(circle at 20% 45%,#fff 0 8%,#f5ead0 18%,#d8c39a 42%,#fff0ca 68%,#cdb98f 100%);filter:blur(.15px);box-shadow:0 2px 5px rgba(255,240,190,.5)}
+.pub-glass .rim{top:-1px;height:8px;border:1px solid rgba(240,250,255,.9);box-shadow:0 1px 4px rgba(255,255,255,.35)}
+.pub-glass.pint{width:64px;height:126px}.pub-glass.pint .glass-body{height:99px;border-radius:3px 3px 8px 8px}.pub-glass.pint .liquid{height:73px;background:linear-gradient(180deg,#e6b84e,#ae5713 45%,#592109)}
+.pub-glass.cocktail{width:70px;height:120px}.pub-glass.cocktail .glass-body{height:67px;bottom:27px}.pub-glass.cocktail .liquid{height:57px;bottom:30px;background:linear-gradient(180deg,#ffb1bf,#d43c78 58%,#661536);box-shadow:inset 5px 0 8px rgba(255,220,230,.22),inset -5px 0 8px rgba(68,6,35,.3)}
+.pub-glass.cocktail .garnish{font-size:0;width:24px;height:24px;right:0;top:0;border-radius:50%;border:3px solid #d99727;background:radial-gradient(circle,#f6d76a 0 30%,#e6a928 32% 45%,#c67b13 47% 100%);box-shadow:0 1px 4px #000}
+.pub-glass.whisky{width:58px;height:103px}.pub-glass.whisky .glass-body{height:65px;bottom:16px}.pub-glass.whisky .liquid{height:43px;bottom:19px;background:linear-gradient(180deg,#d8a042,#995016 60%,#512006)}
+.pub-glass.whisky .ice{width:17px;height:14px;bottom:31px;background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(190,220,235,.08));box-shadow:17px 3px 0 -1px rgba(218,239,255,.16)}
+.pub-label{bottom:-18px;font-size:8px;letter-spacing:1px;color:#d0b89e;text-shadow:0 1px 2px #000}
+.pub-bottle{width:34px!important;height:92px!important;filter:drop-shadow(0 8px 6px rgba(0,0,0,.75)) saturate(.9);border-radius:7px 7px 5px 5px}
+.pub-bottle::before{box-shadow:inset 4px 0 5px rgba(255,255,255,.16),inset -4px 0 5px rgba(0,0,0,.28),0 0 0 1px rgba(255,210,140,.12)}
+.pub-bottle::after{height:22px!important;box-shadow:inset 3px 0 3px rgba(255,255,255,.12),inset -3px 0 3px rgba(0,0,0,.3)}
+.pub-drink-display .pub-bottle:nth-of-type(2){height:106px!important}.pub-drink-display .pub-bottle:nth-of-type(3){height:87px!important}
+</style>
+</head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
   <div class="lw-page-nav-inner">
