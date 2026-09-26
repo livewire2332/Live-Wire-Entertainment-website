@@ -4020,4 +4020,61 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
     transform:none!important;
   }
 }
+</style><style id="lw-jukebox-player-space-final">
+/* Final space pass: let the official Caster controls breathe inside the jukebox. */
+.proper-jukebox .jukebox-window{
+  width:min(96%,540px)!important;
+  max-width:540px!important;
+  min-height:430px!important;
+  height:auto!important;
+  overflow:hidden!important;
+}
+.proper-jukebox .lw-native-player{
+  width:100%!important;
+  height:auto!important;
+  min-height:335px!important;
+  overflow:visible!important;
+}
+.proper-jukebox .lw-player-screen{
+  overflow:visible!important;
+}
+.proper-jukebox .lw-caster-player{
+  width:100%!important;
+  height:285px!important;
+  min-height:285px!important;
+  max-height:285px!important;
+  overflow:hidden!important;
+  flex:0 0 285px!important;
+}
+.proper-jukebox .lw-caster-player iframe{
+  width:100%!important;
+  height:285px!important;
+  min-height:285px!important;
+  max-height:285px!important;
+  margin:0!important;
+  transform:none!important;
+}
+@media(max-width:600px){
+  .proper-jukebox .jukebox-window{
+    width:96%!important;
+    max-width:none!important;
+    min-height:410px!important;
+    padding:10px 7px 12px!important;
+  }
+  .proper-jukebox .lw-native-player{
+    min-height:325px!important;
+  }
+  .proper-jukebox .lw-caster-player{
+    height:275px!important;
+    min-height:275px!important;
+    max-height:275px!important;
+    flex-basis:275px!important;
+    margin-top:7px!important;
+  }
+  .proper-jukebox .lw-caster-player iframe{
+    height:275px!important;
+    min-height:275px!important;
+    max-height:275px!important;
+  }
+}
 </style>
