@@ -911,8 +911,8 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
   pointer-events:none !important;
   background-image:url("https://upload.wikimedia.org/wikipedia/commons/4/41/Wurlitzer_1015.jpg") !important;
   background-repeat:no-repeat !important;
-  background-position:center 14px !important;
-  background-size:auto 94% !important;
+  background-position:center 0 !important;
+  background-size:auto 100% !important;
   background-color:transparent !important;
   background-blend-mode:normal !important;
   mix-blend-mode:multiply !important;
@@ -958,13 +958,15 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 .proper-jukebox .jukebox-window{
   position:absolute !important;
   left:50% !important;
-  top:40.5% !important;
+  top:49% !important;
   transform:translate(-50%,-50%) !important;
-  width:min(62%,390px) !important;
-  max-width:390px !important;
+  width:min(84%,430px) !important;
+  max-width:430px !important;
   margin:0 !important;
   padding:12px 12px 11px !important;
   z-index:8 !important;
+  transform:translate(-50%,-50%) scale(.66) !important;
+  transform-origin:center center !important;
   border:2px solid rgba(224,177,100,.78) !important;
   border-radius:12px !important;
   background:rgba(10,6,4,.78) !important;
@@ -1083,11 +1085,12 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 /* Mobile keeps the same physical proportions rather than shrinking the cabinet into a card. */
 @media(max-width:600px){
   .proper-jukebox{min-height:600px !important;border-radius:20px !important}
-  .proper-jukebox::before{background-size:auto 94% !important;background-position:center 8px !important}
+  .proper-jukebox::before{background-size:auto 100% !important;background-position:center 0 !important}
   .proper-jukebox .jukebox-window{
-    top:40.5% !important;
-    width:min(76%,330px) !important;
+    top:49% !important;
+    width:min(90%,430px) !important;
     padding:9px 8px 9px !important;
+    transform:translate(-50%,-50%) scale(.62) !important;
   }
   .proper-jukebox .jukebox-window h2{font-size:18px !important}
   .proper-jukebox .jukebox-window>p{font-size:9.5px !important}
