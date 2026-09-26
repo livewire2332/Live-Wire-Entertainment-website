@@ -3300,3 +3300,41 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-neon-status-button-colour">
+/* Replace the warm gold status button with a stronger Live Wire cyan/pink neon reaction. */
+.proper-jukebox .live-status,
+.proper-jukebox.shows-paused .live-status{
+  color:#fff!important;
+  border:1px solid #00eaff!important;
+  background:linear-gradient(90deg,rgba(0,234,255,.16),rgba(255,43,214,.18),rgba(0,234,255,.16))!important;
+  text-shadow:0 0 6px #fff,0 0 12px #00eaff!important;
+}
+.proper-jukebox.shows-paused .live-status{
+  animation:lwNeonStatusPulse 1.05s ease-in-out infinite!important;
+}
+@keyframes lwNeonStatusPulse{
+  0%,100%{
+    transform:scale(1);
+    filter:brightness(.95);
+    border-color:#00eaff;
+    box-shadow:0 0 7px #00eaff,0 0 15px rgba(0,234,255,.48),0 0 22px rgba(255,43,214,.2);
+  }
+  45%{
+    transform:scale(1.055);
+    filter:brightness(1.2);
+    border-color:#ff2bd6;
+    box-shadow:0 0 10px #ff2bd6,0 0 22px #00eaff,0 0 38px rgba(255,43,214,.55);
+  }
+  55%{
+    transform:scale(1.045);
+    filter:brightness(1.12);
+  }
+}
+.proper-jukebox.live-stream .live-status{
+  border-color:#ff365c!important;
+  background:linear-gradient(90deg,rgba(255,54,92,.16),rgba(255,43,214,.18),rgba(255,54,92,.16))!important;
+  text-shadow:0 0 7px #fff,0 0 14px #ff365c,0 0 22px #ff2bd6!important;
+}
+</style>
