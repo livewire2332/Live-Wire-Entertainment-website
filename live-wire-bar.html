@@ -3228,3 +3228,75 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   .proper-jukebox .bar-live-show{font-size:16px!important;line-height:1.35!important}
 }
 </style>
+
+
+<style id="lw-jukebox-extra-reactive-neon">
+/* Extra reactive neon: stronger status pulse and animated LIVE WIRE signage. */
+.proper-jukebox .jukebox-crown{
+  animation:lwSignagePulse 1.65s ease-in-out infinite!important;
+}
+.proper-jukebox .jukebox-brand{
+  animation:lwBrandGlow 1.25s ease-in-out infinite!important;
+}
+.proper-jukebox .juke-crown-bolt{
+  animation:lwBoltFlash .8s ease-in-out infinite alternate!important;
+}
+.proper-jukebox.shows-paused .live-status{
+  animation:lwPausedButtonPulse 1.05s ease-in-out infinite!important;
+}
+.proper-jukebox .jukebox-title{
+  animation:lwTitleGlow 2s ease-in-out infinite!important;
+}
+@keyframes lwPausedButtonPulse{
+  0%,100%{
+    transform:scale(1);
+    filter:brightness(.92);
+    box-shadow:0 0 9px #ffd43b,0 0 18px rgba(255,212,59,.3);
+  }
+  45%{
+    transform:scale(1.055);
+    filter:brightness(1.18);
+    box-shadow:0 0 15px #ffd43b,0 0 30px rgba(255,212,59,.62),0 0 44px rgba(255,43,214,.22);
+  }
+  55%{
+    transform:scale(1.045);
+    filter:brightness(1.1);
+  }
+}
+@keyframes lwSignagePulse{
+  0%,100%{
+    box-shadow:0 0 8px rgba(0,234,255,.28),inset 0 0 12px rgba(255,43,214,.05);
+    border-color:rgba(0,234,255,.62);
+  }
+  50%{
+    box-shadow:0 0 16px rgba(0,234,255,.62),0 0 28px rgba(255,43,214,.32),inset 0 0 18px rgba(0,234,255,.08);
+    border-color:rgba(255,43,214,.9);
+  }
+}
+@keyframes lwBrandGlow{
+  0%,100%{filter:brightness(.95);text-shadow:0 0 7px #00eaff,0 0 14px rgba(255,43,214,.55)}
+  50%{filter:brightness(1.22);text-shadow:0 0 10px #00eaff,0 0 22px #ff2bd6,0 0 32px rgba(255,212,59,.3)}
+}
+@keyframes lwBoltFlash{
+  from{filter:brightness(.8);transform:scale(.9)}
+  to{filter:brightness(1.45);transform:scale(1.12)}
+}
+@keyframes lwTitleGlow{
+  0%,100%{filter:brightness(.96);text-shadow:0 0 6px #fff,0 0 12px #00eaff,0 0 20px rgba(255,43,214,.55)}
+  50%{filter:brightness(1.12);text-shadow:0 0 8px #fff,0 0 18px #00eaff,0 0 32px #ff2bd6}
+}
+@media(max-width:600px){
+  .proper-jukebox .jukebox-crown{animation-duration:1.4s!important}
+  .proper-jukebox .jukebox-title{animation-duration:1.7s!important}
+  .proper-jukebox.shows-paused .live-status{animation-duration:.95s!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .proper-jukebox .jukebox-crown,
+  .proper-jukebox .jukebox-brand,
+  .proper-jukebox .juke-crown-bolt,
+  .proper-jukebox .jukebox-title,
+  .proper-jukebox.shows-paused .live-status{
+    animation:none!important;
+  }
+}
+</style>
