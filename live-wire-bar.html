@@ -1401,3 +1401,18 @@ setInterval(refreshBarLiveStatus,15000);
 </script>
 <svg class="lw-image-filters" aria-hidden="true" width="0" height="0" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="lwRemoveWhiteBg" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0 0" result="rgb"/><feColorMatrix in="rgb" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -1 -1 -1 0 3" result="cut"/><feComponentTransfer in="cut"><feFuncA type="table" tableValues="0 0 0 0 .15 .45 1 1 1 1 1"/></feComponentTransfer></filter></defs></svg></body>
 </html>
+/* Final mobile jukebox alignment */
+@media(max-width:600px){
+  .proper-jukebox{min-height:650px !important}
+  .proper-jukebox::before{
+    background-position:center 100% !important;
+    background-size:min(98%,620px) auto !important;
+  }
+  .proper-jukebox .jukebox-window{
+    top:43% !important;
+    width:min(82%,430px) !important;
+    transform:translate(-50%,-50%) scale(.68) !important;
+  }
+}
+/* Above-the-fold bar products should load immediately rather than waiting for lazy loading. */
+.real-top-drink img,.real-bottle img{loading:auto}
