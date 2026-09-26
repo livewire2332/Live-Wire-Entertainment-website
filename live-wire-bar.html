@@ -4278,3 +4278,72 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-coming-caption-smooth-final">
+/* Final polish: keep the audio caption visually attached to the jukebox, but never over it. */
+.player{
+  overflow:visible!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  padding:28px 22px 24px!important;
+}
+.player > .proper-jukebox{
+  order:1!important;
+  display:block!important;
+  position:relative!important;
+  width:min(100%,730px)!important;
+  flex:none!important;
+  margin:0 auto!important;
+}
+.player > .coming{
+  order:2!important;
+  position:relative!important;
+  display:block!important;
+  float:none!important;
+  clear:both!important;
+  inset:auto!important;
+  width:100%!important;
+  max-width:730px!important;
+  margin:18px auto 2px!important;
+  padding:0 14px!important;
+  text-align:center!important;
+  font-size:clamp(14px,2.15vw,18px)!important;
+  line-height:1.35!important;
+  font-weight:800!important;
+  letter-spacing:.15px!important;
+  color:#ffd43b!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  text-shadow:0 0 6px rgba(255,212,59,.35),0 0 14px rgba(255,43,214,.12)!important;
+  z-index:3!important;
+}
+.player > .coming::before{
+  content:"";
+  display:block;
+  width:min(180px,38%);
+  height:1px;
+  margin:0 auto 9px;
+  background:linear-gradient(90deg,transparent,rgba(0,234,255,.75),rgba(255,212,59,.9),rgba(255,43,214,.75),transparent);
+  box-shadow:0 0 7px rgba(0,234,255,.35),0 0 9px rgba(255,43,214,.25);
+}
+@media(max-width:600px){
+  .player{
+    padding:20px 10px 20px!important;
+  }
+  .player > .proper-jukebox{
+    width:100%!important;
+  }
+  .player > .coming{
+    margin:14px auto 0!important;
+    padding:0 8px!important;
+    font-size:14px!important;
+    line-height:1.4!important;
+  }
+  .player > .coming::before{
+    width:150px;
+    margin-bottom:8px;
+  }
+}
+</style>
