@@ -89,6 +89,12 @@ body::before{content:"";position:fixed;inset:0;z-index:-3;background:radial-grad
 .dj-room.live .equip-led.hot{animation:redPulse .35s infinite alternate}
 .dj-room.live .chair{box-shadow:0 0 0 2px #ff2bd6,0 0 24px rgba(255,43,214,.35),0 0 40px rgba(0,234,255,.15)}
 .dj-room.live .dj-mic{box-shadow:0 0 0 2px #111,0 0 16px #00eaff,0 0 28px rgba(255,43,214,.45)}
+.dj-room.live .dj-ceiling{animation:liveCeiling .7s linear infinite}
+.dj-room.live .dj-floor{box-shadow:inset 0 20px 35px #000,0 -5px 28px rgba(0,234,255,.16);animation:floorPulse 1.2s ease-in-out infinite alternate}
+.dj-room.live .dj-nameplate{animation:nameGlow 1s ease-in-out infinite alternate}
+@keyframes liveCeiling{0%{filter:hue-rotate(0deg);box-shadow:0 0 18px #00eaff,0 0 28px #ff2bd6}50%{filter:hue-rotate(80deg);box-shadow:0 0 28px #ff2bd6,0 0 40px #ffd43b}100%{filter:hue-rotate(160deg);box-shadow:0 0 18px #00eaff,0 0 32px #ff2bd6}}
+@keyframes floorPulse{to{filter:brightness(1.28)}}
+@keyframes nameGlow{to{filter:brightness(1.35);transform:translateY(-2px)}}
 .dj-room.interact .big-speaker{animation:speakerLive .45s infinite alternate}
 @keyframes clubWash{from{opacity:.55;filter:hue-rotate(0deg)}to{opacity:1;filter:hue-rotate(25deg)}}
 @keyframes liveLights{0%{filter:hue-rotate(0deg);transform:scaleX(.97)}50%{filter:hue-rotate(55deg);transform:scaleX(1)}100%{filter:hue-rotate(110deg);transform:scaleX(.97)}}
