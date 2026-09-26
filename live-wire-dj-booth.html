@@ -127,7 +127,9 @@ body::before{content:"";position:fixed;inset:0;z-index:-3;background:radial-grad
 @keyframes partyWall{0%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(100deg) brightness(1.4)}100%{filter:hue-rotate(200deg) brightness(1)}}@keyframes partyBar{0%{filter:hue-rotate(0deg);transform:scaleX(.8)}50%{filter:hue-rotate(180deg);transform:scaleX(1)}100%{filter:hue-rotate(360deg);transform:scaleX(.8)}}
 @media(max-width:500px){.party-button{width:100%;font-size:13px}.bar-call{left:12px;right:12px;bottom:12px;text-align:center}}
 @media(prefers-reduced-motion:reduce){.party-mode .dj-backwall,.party-mode .dj-lightbar,.party-mode .dj-neon-sign,.party-mode .dj-spotlights i{animation:none!important}}
-</style>
+
+/* V5 interaction safety */
+.action-btn,.record,.booth-btn,.party-button,.knob,.fader,.crossfader,.platter{position:relative;z-index:12;pointer-events:auto;touch-action:manipulation}.deck-actions,.record-crates,.mic-controls,.knob-row,.mixer-sliders,.crossfader,.party-control{position:relative;z-index:11}.dj-room.interact .dj-neon-sign{pointer-events:none}.cf-cap{pointer-events:none}.button-flash{animation:buttonFlash .22s ease-out!important}@keyframes buttonFlash{50%{filter:brightness(2);transform:scale(1.04)}}</style>
 </head>
 <body>
 <nav class="lw-site-nav"><a href="live-wire-bar.html">🍻 Live Wire Bar</a><a href="live-wire-extras.html">🎮 Fun & Extras</a></nav>
@@ -213,6 +215,9 @@ const party=document.getElementById('partyBtn'),partyMsg=document.getElementById
 // Bar call
 const barCall=document.getElementById('barCall'),barText=document.getElementById('barCallText');let barTimer;function showBarCall(msg){barText.textContent=msg;barCall.classList.add('show');clearTimeout(barTimer);barTimer=setTimeout(()=>barCall.classList.remove('show'),4200)}
 setTimeout(()=>showBarCall('The bar has sent something to the booth. Keep it moving!'),9000);
+
+// Make every booth control visibly acknowledge taps/clicks.
+document.querySelectorAll('.action-btn,.record,.booth-btn,.party-button,.knob,.fader,.crossfader').forEach(el=>{el.addEventListener('pointerdown',()=>{el.classList.remove('button-flash');void el.offsetWidth;el.classList.add('button-flash');setTimeout(()=>el.classList.remove('button-flash'),240)},{passive:true})});
 </script>
 </body>
 </html>
