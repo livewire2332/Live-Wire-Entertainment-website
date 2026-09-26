@@ -3975,16 +3975,17 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
 </style>
 
 <style id="lw-caster-widget-live-wire-shell">
-/* Keep the Caster player neatly inside our own Live Wire audio window. */
-.proper-jukebox .lw-native-player{position:relative;z-index:12}
-.proper-jukebox .lw-player-screen{overflow:hidden}
+/* Fit the Caster player naturally inside the Live Wire audio panel. */
+.proper-jukebox .lw-native-player{position:relative!important;z-index:12!important}
+.proper-jukebox .lw-player-screen{overflow:hidden!important}
 .proper-jukebox .lw-caster-player{
+  display:block!important;
   position:relative!important;
   width:100%!important;
   max-width:430px!important;
-  height:145px!important;
-  min-height:145px!important;
-  margin:8px auto 0!important;
+  height:170px!important;
+  min-height:170px!important;
+  margin:9px auto 0!important;
   padding:0!important;
   background:transparent!important;
   border:0!important;
@@ -3994,27 +3995,29 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
 }
 .proper-jukebox .lw-caster-player iframe{
   display:block!important;
-  width:238%!important;
-  height:345px!important;
-  min-height:345px!important;
-  max-height:none!important;
-  margin:0 0 0 -69%!important;
+  position:relative!important;
+  width:100%!important;
+  height:170px!important;
+  min-height:170px!important;
+  max-height:170px!important;
+  margin:0!important;
+  padding:0!important;
   border:0!important;
-  transform:scale(.42)!important;
-  transform-origin:top center!important;
+  transform:none!important;
 }
 @media(max-width:600px){
   .proper-jukebox .lw-caster-player{
-    height:128px!important;
-    min-height:128px!important;
-    margin:6px auto 0!important;
+    height:160px!important;
+    min-height:160px!important;
+    margin:8px auto 0!important;
   }
   .proper-jukebox .lw-caster-player iframe{
-    width:238%!important;
-    height:305px!important;
-    min-height:305px!important;
-    margin-left:-69%!important;
-    transform:scale(.42)!important;
+    width:100%!important;
+    height:160px!important;
+    min-height:160px!important;
+    max-height:160px!important;
+    margin:0!important;
+    transform:none!important;
   }
 }
 </style>
