@@ -543,6 +543,86 @@ box-shadow:0 9px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,210,150,.08),0 0 14
   background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03));
 }
 .pub-label{color:#9f9186;text-shadow:0 1px 2px #000}
+
+/* REAL-PUB REALISM PASS — materials, lighting and furniture */
+body{background:#100b08;color:#eee}
+body::after{opacity:.34;mix-blend-mode:soft-light}
+.bar-hero{background:linear-gradient(180deg,rgba(36,20,13,.96),rgba(12,8,6,.98)),radial-gradient(ellipse at 50% 0,rgba(255,177,74,.12),transparent 58%);border-bottom:1px solid rgba(176,117,57,.5);box-shadow:0 14px 45px rgba(0,0,0,.55),inset 0 -25px 45px rgba(0,0,0,.3)}
+.bar-hero::before{height:2px;background:linear-gradient(90deg,transparent,#b87835,transparent,#f0c36a,transparent);box-shadow:0 0 8px rgba(240,195,106,.35);opacity:.65}
+.bar-hero::after{background:radial-gradient(circle,rgba(255,180,75,.12),transparent 68%);filter:blur(14px)}
+.bar-hero h1{text-shadow:0 2px 5px #000,0 0 12px rgba(255,183,76,.25)}
+section:not(.back)::before{background:linear-gradient(90deg,transparent,rgba(171,112,53,.42),rgba(224,167,86,.5),rgba(171,112,53,.42),transparent);box-shadow:none}
+section:not(.back)::after{background:radial-gradient(ellipse at 10% 50%,rgba(255,176,72,.025),transparent 25%),radial-gradient(ellipse at 90% 50%,rgba(255,111,45,.018),transparent 25%)}
+section h1{text-shadow:0 2px 4px #000,0 0 8px rgba(255,193,96,.2)}
+.grid .card,.bar-pub-card{background:linear-gradient(145deg,#2a1b13,#17100c 52%,#0e0907);border:1px solid rgba(174,119,65,.5);box-shadow:0 10px 24px rgba(0,0,0,.45),inset 0 1px rgba(255,220,160,.08),inset 0 -12px 24px rgba(0,0,0,.22);border-radius:12px}
+.grid .card::before{height:1px;background:#c18a4a!important;box-shadow:0 0 6px rgba(193,138,74,.35)!important;opacity:.55}
+.grid .card:hover{transform:translateY(-2px);border-color:rgba(211,161,91,.72);box-shadow:0 12px 28px rgba(0,0,0,.52),inset 0 1px rgba(255,220,160,.12)}
+.show-time{color:#e3b66c;text-shadow:none}.show-kicker{color:#d4a65e;text-shadow:none}
+.request-zone{border:1px solid rgba(177,119,61,.65);background:linear-gradient(145deg,#302017,#17100c 65%,#0e0907);box-shadow:0 14px 32px rgba(0,0,0,.48),inset 0 1px rgba(255,220,160,.08)}
+.request-card{border:1px solid rgba(170,115,60,.5);background:linear-gradient(145deg,#241710,#100b08);box-shadow:inset 0 1px rgba(255,220,160,.07),0 8px 20px rgba(0,0,0,.35)}
+.request-card:hover{border-color:#c99654;box-shadow:0 10px 24px rgba(0,0,0,.45),inset 0 1px rgba(255,220,160,.1)}
+.request-note{color:#d4aa69}
+.player{border:1px solid rgba(171,119,63,.65);background:linear-gradient(145deg,#21160f,#0e0907);box-shadow:0 12px 28px rgba(0,0,0,.5),inset 0 1px rgba(255,220,160,.08)}
+.player::before{opacity:.2;animation:none;background:linear-gradient(90deg,transparent,rgba(221,170,91,.5),transparent);-webkit-mask:none;mask:none}
+.live-status{border-color:#b87835;box-shadow:0 4px 14px rgba(0,0,0,.35);animation:none}
+.bar-live-show{color:#dfb36b;text-shadow:none}
+
+/* Make the information areas resemble framed pub boards */
+.bar-lower-panel,.guestbook-zone,.bar-pub-card{background:linear-gradient(145deg,#2a1b13,#15100c 55%,#0d0907)!important;border-color:rgba(176,119,60,.55)!important;box-shadow:0 12px 28px rgba(0,0,0,.48),inset 0 1px rgba(255,225,175,.08),inset 0 -18px 30px rgba(0,0,0,.22)!important}
+.bar-pub-card .card-icon{filter:drop-shadow(0 2px 2px #000)}
+.guestbook-title,.bar-lower-title{color:#f0d29a;text-shadow:0 2px 4px #000!important}
+
+/* Realistic transition doors */
+.lw-transition-portal{background:transparent!important;padding:14px 0!important}
+.lw-transition-door{position:relative;overflow:hidden!important;border:1px solid rgba(185,127,68,.7)!important;border-radius:8px!important;background:linear-gradient(90deg,#27150d,#4b2918 16%,#24140d 48%,#432317 82%,#1a0e09)!important;box-shadow:0 12px 28px rgba(0,0,0,.58),inset 0 1px rgba(255,220,160,.12),inset 0 -18px 25px rgba(0,0,0,.28)!important}
+.lw-transition-door::before{content:"";position:absolute;inset:8px;border:1px solid rgba(226,180,108,.18);pointer-events:none}
+.lw-transition-door:hover{transform:translateY(-2px);box-shadow:0 15px 32px rgba(0,0,0,.65),inset 0 1px rgba(255,220,160,.16)!important}
+.lw-transition-icon{filter:drop-shadow(0 2px 2px #000)}
+.lw-transition-arrow{color:#d4a15e!important;text-shadow:none!important}
+
+/* Photographic-looking bar shelf */
+.photographic-drink-shelf{background:linear-gradient(180deg,#1c120d,#0d0907)!important;border-color:rgba(176,119,60,.65)!important;box-shadow:0 12px 30px rgba(0,0,0,.55),inset 0 1px rgba(255,225,170,.08)!important}
+.real-bottle{filter:drop-shadow(0 8px 7px rgba(0,0,0,.7));transition:transform .25s ease,filter .25s ease}
+.real-bottle:hover{transform:translateY(-4px) scale(1.025);filter:drop-shadow(0 12px 10px rgba(0,0,0,.78))}
+
+/* Proper pub toilets: replace emoji-like objects with physical-looking fixtures */
+.lw-toilets{background:linear-gradient(145deg,#211711,#0d0907)!important;border:1px solid rgba(167,112,57,.55)!important;box-shadow:0 15px 34px rgba(0,0,0,.58),inset 0 1px rgba(255,225,175,.08)!important}
+.lw-toilet-sign{background:linear-gradient(180deg,#352217,#17100c)!important;border-color:rgba(192,137,74,.55)!important;box-shadow:0 8px 18px rgba(0,0,0,.4)!important}
+.lw-tile-wall{background:linear-gradient(90deg,#b5a99b 0,#ddd6ca 4%,#aaa095 4.5%,#d8d0c3 9%,#aaa095 9.5%,#d8d0c3 100%)!important;background-size:68px 68px!important;box-shadow:inset 0 0 45px rgba(0,0,0,.2)!important}
+.lw-tile-wall::after{background:linear-gradient(90deg,rgba(255,255,255,.14),transparent 22%,transparent 78%,rgba(0,0,0,.16))!important}
+.lw-mirror{background:linear-gradient(145deg,#dfe7eb,#71808a 42%,#eef4f5 65%,#5e6c74)!important;border:6px solid #33302d!important;box-shadow:0 8px 20px rgba(0,0,0,.45),inset 0 0 16px rgba(255,255,255,.35)!important}
+.lw-mirror-light{background:linear-gradient(90deg,#fff6d2,#c7a96a,#fff6d2)!important;box-shadow:0 0 9px rgba(255,236,173,.5)!important}
+.lw-sink{background:linear-gradient(180deg,#f3f1eb,#a9aaa8 70%,#6e706e)!important;border:3px solid #555!important;box-shadow:0 9px 16px rgba(0,0,0,.45),inset 0 2px rgba(255,255,255,.7)!important}
+.lw-tap{font-size:0!important;width:38px;height:48px;background:linear-gradient(90deg,#777,#ddd,#666);border-radius:12px 12px 6px 6px;box-shadow:0 4px 8px rgba(0,0,0,.4)!important}
+.lw-tap::before{content:"";position:absolute;width:28px;height:13px;border:5px solid #888;border-bottom:0;border-radius:16px 16px 0 0;left:5px;top:-8px}
+.lw-toilet{font-size:0!important;width:112px;height:90px;position:relative;background:linear-gradient(145deg,#fff,#c9c9c5 65%,#8e8e8a);border-radius:18px 18px 28px 28px;box-shadow:0 9px 13px rgba(0,0,0,.48),inset 5px 5px 10px rgba(255,255,255,.8)}
+.lw-toilet::before{content:"";position:absolute;left:18px;right:18px;top:-12px;height:38px;border-radius:50%;background:radial-gradient(ellipse,#eef1ef 0 35%,#777 37% 43%,#ddd 45%);border:3px solid #aaa}
+.lw-toilet::after{content:"";position:absolute;right:-3px;top:-33px;width:45px;height:55px;border-radius:8px;background:linear-gradient(90deg,#eee,#aaa);box-shadow:inset 3px 0 #fff}
+.lw-door{background:linear-gradient(90deg,#6b5748,#8e7762 8%,#4b392e 52%,#806954 92%,#38291f)!important;border:2px solid #33251d!important;box-shadow:inset 0 0 20px rgba(0,0,0,.35),5px 8px 15px rgba(0,0,0,.4)!important}
+.lw-door-handle{background:radial-gradient(circle at 35% 35%,#f5d58c,#9b6b31 55%,#4e331b)!important;box-shadow:0 2px 4px #000!important}
+.lw-door-sign{background:#e8e0cf!important;color:#24201c!important;border:2px solid #555!important;box-shadow:0 2px 5px rgba(0,0,0,.35)!important}
+.lw-brush-holder{background:linear-gradient(180deg,#7d756c,#3f3934)!important;border-color:#292521!important;box-shadow:0 5px 9px rgba(0,0,0,.45)!important}
+.lw-soap{font-size:0!important;width:45px;height:58px;border-radius:8px;background:linear-gradient(90deg,#dfe5e2,#fff,#b5c0bd);box-shadow:0 5px 8px rgba(0,0,0,.4)!important}
+.lw-soap::after{content:"SOAP";display:block;font-size:8px;text-align:center;padding-top:27px;color:#68706d;font-weight:800}
+.lw-dryer{font-size:0!important;width:55px;height:72px;border-radius:9px;background:linear-gradient(145deg,#f4f2ed,#aaa9a5);box-shadow:0 6px 10px rgba(0,0,0,.4)!important}
+.lw-dryer::after{content:"";display:block;width:28px;height:7px;background:#444;border-radius:6px;margin:28px auto}
+.lw-flush{font-size:0!important;width:58px;height:18px;border-radius:10px;background:linear-gradient(#e8e7e2,#999);box-shadow:0 4px 7px rgba(0,0,0,.4)!important}
+.lw-flush::after{content:"FLUSH";font-size:7px;display:block;text-align:center;color:#555;padding-top:4px}
+.lw-phone{font-size:0!important;width:52px;height:70px;border-radius:8px;background:linear-gradient(145deg,#222,#090909);box-shadow:0 5px 9px rgba(0,0,0,.5)!important}
+.lw-phone::after{content:"☎";font-size:24px;color:#ddd;display:block;text-align:center;padding-top:19px}
+.lw-knock{font-size:0!important;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b98a62,#70462d 65%,#3a2115);box-shadow:0 5px 8px rgba(0,0,0,.45)!important}
+.lw-knock::after{content:"KNOCK";font-size:7px;color:#ead3b4;display:block;text-align:center;padding-top:21px;font-weight:800}
+.lw-roll{background:radial-gradient(circle,#fff 0 35%,#ddd 37% 65%,#aaa 67%)!important;box-shadow:0 5px 8px rgba(0,0,0,.4)!important}
+.lw-toilet-queue span{filter:grayscale(1) drop-shadow(0 3px 2px rgba(0,0,0,.4));opacity:.72}
+
+/* Reduce cartoon neon on the toilet controls while retaining interaction */
+.lw-neon-dot{opacity:.4!important;filter:saturate(.5)!important}
+.lw-alert-lamp{box-shadow:0 0 7px rgba(180,40,25,.4)!important}
+@media(max-width:600px){.lw-tile-wall{background-size:48px 48px!important}.lw-toilet{transform:scale(.86)}}
+
+/* Real-world pub feel: restrained ambient glow */
+.bar-lower-glow{opacity:.2!important;filter:blur(18px)}
+@media(prefers-reduced-motion:reduce){.bar-hero::before,.bar-hero::after,.grid .card::before{animation:none}}
 </style><style>
 /* Live Wire venue-to-venue transition portals */
 .lw-transition-portal{position:relative;max-width:920px;margin:10px auto 8px;padding:5px;border-radius:28px;background:linear-gradient(90deg,rgba(255,174,69,.18),rgba(255,43,214,.16),rgba(0,234,255,.18));box-shadow:0 0 18px rgba(0,234,255,.12),0 0 30px rgba(255,43,214,.08)}
