@@ -648,6 +648,81 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
  .real-bottle figcaption{font-size:5.5px;letter-spacing:.45px}
 }
 </style>
+<style>
+/* Real photographed jukebox surround — player remains live/interactive */
+.proper-jukebox{
+  position:relative;
+  width:min(100%,700px);
+  min-height:760px;
+  padding:0;
+  border:0;
+  border-radius:26px;
+  background:#090705 url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Wurlitzer_1080_Jukebox_%281947%29.jpg") center top/cover no-repeat;
+  box-shadow:0 22px 45px rgba(0,0,0,.72),0 0 0 2px #090705,0 0 0 5px #8b5b31;
+  overflow:hidden;
+  filter:saturate(.94) contrast(1.04);
+}
+.proper-jukebox::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.18) 45%,rgba(0,0,0,.52));
+}
+.proper-jukebox::after{
+  content:"";position:absolute;inset:4% 7%;z-index:2;pointer-events:none;border-radius:30px;
+  box-shadow:inset 0 0 45px rgba(0,0,0,.65);
+  transition:box-shadow .4s ease;
+}
+.proper-jukebox .jukebox-crown,
+.proper-jukebox .jukebox-arch{position:relative;z-index:4}
+.proper-jukebox .jukebox-crown{margin:24px auto 0;width:70%;background:rgba(28,13,7,.82);backdrop-filter:blur(2px)}
+.proper-jukebox .jukebox-arch{
+  margin:120px auto 0;
+  min-height:0;
+  padding:0;
+  width:min(78%,550px);
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  overflow:visible;
+}
+.proper-jukebox .juke-curtain,
+.proper-jukebox .juke-side-column,
+.proper-jukebox .juke-bottom-grille,
+.proper-jukebox .jukebox-arch::before{display:none}
+.proper-jukebox .jukebox-header{display:none}
+.proper-jukebox .jukebox-window{
+  max-width:none;
+  padding:18px 18px 16px;
+  border:3px solid rgba(224,177,100,.8);
+  border-radius:16px;
+  background:rgba(8,5,4,.78);
+  backdrop-filter:blur(3px);
+  box-shadow:0 10px 28px rgba(0,0,0,.7),inset 0 0 25px rgba(0,0,0,.7),0 0 0 1px rgba(255,225,160,.18);
+}
+.proper-jukebox .jukebox-window h2{color:#ffe5a6;text-shadow:0 2px 4px #000}
+.proper-jukebox .jukebox-window>p{color:#eee4d7;text-shadow:0 1px 3px #000}
+.proper-jukebox .jukebox-window .live-status{background:rgba(20,8,5,.8)}
+/* Photographic light-bulb rig */
+.proper-jukebox .juke-live-lights{position:absolute;z-index:3;inset:5% 8%;pointer-events:none}
+.proper-jukebox .juke-live-lights i{position:absolute;width:13px;height:13px;border-radius:50%;background:#f4c76a;box-shadow:0 0 5px #ffd36a;opacity:.38;transition:opacity .3s,transform .3s,box-shadow .3s}
+.proper-jukebox .juke-live-lights i:nth-child(1){left:2%;top:27%}.proper-jukebox .juke-live-lights i:nth-child(2){left:2%;top:43%}.proper-jukebox .juke-live-lights i:nth-child(3){left:2%;top:59%}
+.proper-jukebox .juke-live-lights i:nth-child(4){right:2%;top:27%}.proper-jukebox .juke-live-lights i:nth-child(5){right:2%;top:43%}.proper-jukebox .juke-live-lights i:nth-child(6){right:2%;top:59%}
+.proper-jukebox .juke-live-lights i:nth-child(7){left:20%;top:7%}.proper-jukebox .juke-live-lights i:nth-child(8){left:40%;top:5%}.proper-jukebox .juke-live-lights i:nth-child(9){right:40%;top:5%}.proper-jukebox .juke-live-lights i:nth-child(10){right:20%;top:7%}
+.proper-jukebox.live-stream::before{background:linear-gradient(180deg,rgba(255,194,85,.04),rgba(0,0,0,.12) 45%,rgba(0,0,0,.45))}
+.proper-jukebox.live-stream::after{box-shadow:inset 0 0 48px rgba(255,166,61,.18),0 0 35px rgba(255,166,61,.15)}
+.proper-jukebox.live-stream .juke-live-lights i{animation:realJukeLamp 1s ease-in-out infinite alternate}
+.proper-jukebox.live-stream .juke-live-lights i:nth-child(2n){animation-delay:.22s}
+.proper-jukebox.live-stream .juke-live-lights i:nth-child(3n){animation-delay:.44s}
+.proper-jukebox.live-stream .juke-live-lights i:nth-child(4n){background:#f3e0a0}
+@keyframes realJukeLamp{0%{opacity:.35;transform:scale(.8);box-shadow:0 0 5px #ffd36a}50%{opacity:1;transform:scale(1.25);box-shadow:0 0 12px #ffd36a,0 0 25px rgba(255,170,55,.75)}100%{opacity:.6;transform:scale(.95);box-shadow:0 0 7px #ffd36a}}
+@media(max-width:600px){
+ .proper-jukebox{min-height:570px;border-radius:20px}
+ .proper-jukebox .jukebox-crown{margin-top:15px;width:78%}
+ .proper-jukebox .jukebox-arch{margin-top:82px;width:82%}
+ .proper-jukebox .jukebox-window{padding:13px 10px 12px}
+ .proper-jukebox .juke-live-lights i{width:9px;height:9px}
+}
+@media(prefers-reduced-motion:reduce){.proper-jukebox.live-stream .juke-live-lights i{animation:none;opacity:1}}
+</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
@@ -683,6 +758,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
     <figcaption>JACK DANIEL'S</figcaption>
   </figure>
 </div><div class="pub-bar-top"></div></div><div class="wrap"><div class="player"><div class="jukebox-wrap proper-jukebox">
+<div class="juke-live-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 <div class="jukebox-crown"><span class="juke-crown-bolt">⚡</span><span class="jukebox-brand">LIVE WIRE</span><span class="juke-crown-bolt">⚡</span></div>
 <div class="jukebox-arch">
   <div class="juke-curtain" aria-hidden="true"><span></span><span></span><span></span></div>
