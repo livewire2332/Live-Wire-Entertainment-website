@@ -2137,6 +2137,50 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 }
 </style>
 
+
+<style id="lw-jukebox-top-smooth-final">
+/* Keep the curved neon crown clear of the LIVE WIRE ENTERTAINMENT line. */
+.player > .proper-jukebox .jukebox-header{
+  padding:25px 8px 13px!important;
+}
+.player > .proper-jukebox .jukebox-header::before{
+  left:14%!important;
+  right:14%!important;
+  top:3px!important;
+  height:13px!important;
+  border-top-width:2px!important;
+  opacity:.72!important;
+}
+.player > .proper-jukebox .jukebox-header::after{
+  left:22%!important;
+  right:22%!important;
+  top:8px!important;
+  height:8px!important;
+  opacity:.45!important;
+}
+.player > .proper-jukebox .jukebox-kicker{
+  position:relative!important;
+  z-index:2!important;
+  display:block!important;
+  margin-top:0!important;
+}
+@media(max-width:600px){
+  .player > .proper-jukebox .jukebox-header{
+    padding:23px 6px 11px!important;
+  }
+  .player > .proper-jukebox .jukebox-header::before{
+    left:12%!important;
+    right:12%!important;
+    top:3px!important;
+  }
+  .player > .proper-jukebox .jukebox-header::after{
+    left:20%!important;
+    right:20%!important;
+    top:7px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
