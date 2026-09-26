@@ -1410,7 +1410,7 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
       <div class="jukebox-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <h2>📻 Listen Live</h2>
       <p>When the Live Wire show is live, drop the needle and listen along directly from the website.</p>
-      <div data-type="newStreamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="light" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
+      <div data-type="streamPlayer" data-publicToken="b4191823-4974-4ee2-9be8-7020f818c7d7" data-theme="dark" data-color="e81e4d" data-channelId="a2c674bd-afe5-498d-8ecc-022a659c47fb" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
       <div class="jukebox-speakers" aria-hidden="true"><div class="juke-speaker"></div><div class="juke-speaker"></div></div>
       <div class="jukebox-controls" aria-hidden="true"><span class="juke-light"></span><span class="juke-light"></span><span class="juke-light"></span></div>
       <div class="jukebox-note">🎵 Turn it up, pull up a virtual bar stool and enjoy the music. ⚡</div>
@@ -2327,5 +2327,76 @@ setInterval(refreshBarLiveStatus,15000);
   .lw-knock{width:36px!important;height:36px!important}
   .lw-knock::after{padding-top:14px!important;font-size:6px!important}
   .lw-toilet-queue{font-size:15px!important}
+}
+</style>
+<style id="lw-caster-real-player-fit">
+/* Final Caster.fm fit: the player itself gets the usable space inside the jukebox. */
+.proper-jukebox .juke-console>p{
+  display:none!important;
+}
+.proper-jukebox .jukebox-window{
+  overflow:hidden!important;
+}
+.proper-jukebox .juke-console{
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+}
+.proper-jukebox .cstrEmbed{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  height:150px!important;
+  min-height:150px!important;
+  margin:4px auto 0!important;
+  overflow:hidden!important;
+  position:relative!important;
+  z-index:20!important;
+  flex:0 0 150px!important;
+}
+.proper-jukebox .cstrEmbed iframe{
+  display:block!important;
+  width:100%!important;
+  height:150px!important;
+  min-height:150px!important;
+  max-height:150px!important;
+  border:0!important;
+  margin:0!important;
+}
+.proper-jukebox .jukebox-speakers,
+.proper-jukebox .jukebox-controls,
+.proper-jukebox .jukebox-note{
+  display:none!important;
+}
+@media(max-width:600px){
+  .proper-jukebox .jukebox-window{
+    padding:6px 5px 6px!important;
+  }
+  .proper-jukebox .live-status{
+    margin-bottom:2px!important;
+  }
+  .proper-jukebox .bar-live-show{
+    margin-bottom:1px!important;
+  }
+  .proper-jukebox .jukebox-eq{
+    height:13px!important;
+    margin:0!important;
+  }
+  .proper-jukebox .jukebox-window h2{
+    font-size:21px!important;
+    margin:0!important;
+  }
+  .proper-jukebox .cstrEmbed{
+    height:145px!important;
+    min-height:145px!important;
+    flex-basis:145px!important;
+    margin-top:2px!important;
+  }
+  .proper-jukebox .cstrEmbed iframe{
+    height:145px!important;
+    min-height:145px!important;
+    max-height:145px!important;
+  }
 }
 </style>
