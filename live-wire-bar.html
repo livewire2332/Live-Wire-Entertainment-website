@@ -6093,3 +6093,84 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   .player > .proper-jukebox::before{animation:none!important}
 }
 </style>
+
+
+<style id="lw-jukebox-physical-side-tubes-final">
+/* Physical-looking light tubes mounted down both sides of the cabinet.
+   These are separate cabinet elements; text and Caster.fm are untouched. */
+.player > .proper-jukebox .juke-side-column{
+  display:block!important;
+  position:absolute!important;
+  top:82px!important;
+  bottom:26px!important;
+  width:18px!important;
+  border:2px solid rgba(35,45,55,.95)!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,#59636b 0%,#f8ffff 22%,#ffffff 48%,#b7f5ff 70%,#39434b 100%)!important;
+  box-shadow:
+    0 0 2px #fff,
+    0 0 7px rgba(220,252,255,.98),
+    0 0 15px rgba(0,234,255,.75),
+    0 0 27px rgba(0,234,255,.34),
+    inset 2px 0 3px rgba(255,255,255,.95),
+    inset -2px 0 4px rgba(0,0,0,.42)!important;
+  overflow:visible!important;
+  z-index:5!important;
+}
+.player > .proper-jukebox .juke-side-column::before{
+  content:""!important;
+  position:absolute!important;
+  inset:5px 3px!important;
+  border-radius:999px!important;
+  background:linear-gradient(180deg,#00eaff,#fff,#ff2bd6,#ffd43b,#00eaff)!important;
+  background-size:100% 240px!important;
+  box-shadow:0 0 8px rgba(255,255,255,.95),0 0 18px rgba(0,234,255,.6)!important;
+  animation:lwTubeColourFlow 6s linear infinite!important;
+}
+.player > .proper-jukebox .juke-side-column::after{
+  content:""!important;
+  position:absolute!important;
+  left:50%!important;
+  top:7px!important;
+  bottom:7px!important;
+  width:3px!important;
+  transform:translateX(-50%)!important;
+  border-radius:999px!important;
+  background:#fff!important;
+  box-shadow:0 0 4px #fff,0 0 9px #00eaff!important;
+  opacity:.95!important;
+}
+.player > .proper-jukebox .juke-side-column i{
+  display:none!important;
+}
+.player > .proper-jukebox .juke-side-column.left{left:8px!important}
+.player > .proper-jukebox .juke-side-column.right{right:8px!important}
+.player > .proper-jukebox .juke-side-column.right::before{
+  animation-delay:-3s!important;
+}
+.player > .proper-jukebox.live-stream .juke-side-column::before{
+  animation-duration:1.35s!important;
+}
+@keyframes lwTubeColourFlow{
+  0%{background-position:0 0;filter:hue-rotate(0deg) brightness(.95)}
+  50%{filter:hue-rotate(18deg) brightness(1.15)}
+  100%{background-position:0 240px;filter:hue-rotate(0deg) brightness(1)}
+}
+@media(max-width:600px){
+  .player > .proper-jukebox .juke-side-column{
+    top:64px!important;
+    bottom:18px!important;
+    width:12px!important;
+    left:5px!important;
+  }
+  .player > .proper-jukebox .juke-side-column.right{
+    left:auto!important;
+    right:5px!important;
+  }
+  .player > .proper-jukebox .juke-side-column::before{inset:4px 2px!important}
+  .player > .proper-jukebox.live-stream .juke-side-column::before{animation-duration:1.25s!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox .juke-side-column::before{animation:none!important}
+}
+</style>
