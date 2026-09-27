@@ -5377,3 +5377,69 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+<style id="lw-jukebox-realistic-frame-lights-final">
+/* Realistic fluorescent-tube frame lighting — cabinet only, Caster.fm untouched. */
+.player > .proper-jukebox{
+  border:3px solid rgba(225,250,255,.96)!important;
+  box-shadow:
+    0 0 0 1px rgba(0,234,255,.95),
+    0 0 5px rgba(255,255,255,.95),
+    0 0 12px rgba(0,234,255,.95),
+    0 0 24px rgba(0,234,255,.72),
+    0 0 38px rgba(255,43,214,.38),
+    inset 0 0 16px rgba(0,234,255,.08)!important;
+}
+.player > .proper-jukebox::before{
+  left:4px!important;
+  right:4px!important;
+  top:4px!important;
+  bottom:4px!important;
+  border:3px solid #f5ffff!important;
+  border-radius:inherit!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(0,234,255,.95),
+    inset 0 0 7px rgba(0,234,255,.65),
+    0 0 4px #fff,
+    0 0 10px #00eaff,
+    0 0 22px rgba(0,234,255,.78),
+    0 0 34px rgba(255,43,214,.34)!important;
+  animation:lwRealTube 3.6s ease-in-out infinite!important;
+}
+.player > .proper-jukebox::after{
+  left:9%!important;
+  right:9%!important;
+  top:5px!important;
+  height:3px!important;
+  background:#fff!important;
+  box-shadow:
+    0 0 3px #fff,
+    0 0 8px #00eaff,
+    0 0 16px rgba(0,234,255,.85),
+    0 0 24px rgba(255,43,214,.3)!important;
+  animation:lwRealTopTube 3.1s ease-in-out infinite!important;
+}
+@keyframes lwRealTube{
+  0%,100%{opacity:.88;filter:brightness(.94)}
+  50%{opacity:1;filter:brightness(1.16)}
+}
+@keyframes lwRealTopTube{
+  0%,100%{opacity:.78;filter:brightness(.9)}
+  50%{opacity:1;filter:brightness(1.28)}
+}
+@media(max-width:600px){
+  .player > .proper-jukebox{
+    border-width:3px!important;
+    box-shadow:
+      0 0 0 1px rgba(0,234,255,.95),
+      0 0 5px #fff,
+      0 0 11px #00eaff,
+      0 0 25px rgba(255,43,214,.38)!important;
+  }
+  .player > .proper-jukebox::before{border-width:3px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox::before,
+  .player > .proper-jukebox::after{animation:none!important}
+}
+</style>
