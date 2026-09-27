@@ -5991,3 +5991,62 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-jukebox-real-moving-frame-lights-final">
+/* Real light chase around the jukebox frame — text and Caster.fm player untouched. */
+.player > .proper-jukebox::before{
+  left:4px!important;
+  right:4px!important;
+  top:4px!important;
+  bottom:4px!important;
+  border:6px solid transparent!important;
+  border-radius:inherit!important;
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(255,255,255,.72) 0deg,
+      rgba(220,249,255,.9) 22deg,
+      rgba(0,234,255,.42) 42deg,
+      rgba(255,255,255,.14) 78deg,
+      rgba(255,255,255,.14) 125deg,
+      rgba(255,255,255,.7) 150deg,
+      rgba(0,234,255,.34) 174deg,
+      rgba(255,255,255,.12) 220deg,
+      rgba(255,255,255,.12) 275deg,
+      rgba(255,255,255,.72) 300deg,
+      rgba(0,234,255,.38) 326deg,
+      rgba(255,255,255,.72) 360deg
+    ) border-box!important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;
+  mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0)!important;
+  mask-composite:exclude!important;
+  box-shadow:
+    0 0 3px rgba(255,255,255,.95),
+    0 0 8px rgba(190,247,255,.9),
+    0 0 17px rgba(0,210,235,.5),
+    inset 0 0 7px rgba(150,238,255,.35)!important;
+  animation:lwRealLightChase 4.8s linear infinite!important;
+  pointer-events:none!important;
+}
+@keyframes lwRealLightChase{
+  0%{transform:rotate(0deg);filter:brightness(.9)}
+  50%{filter:brightness(1.08)}
+  100%{transform:rotate(360deg);filter:brightness(.96)}
+}
+@media(max-width:600px){
+  .player > .proper-jukebox::before{
+    border-width:5px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox::before{
+    animation:none!important;
+  }
+}
+</style>
