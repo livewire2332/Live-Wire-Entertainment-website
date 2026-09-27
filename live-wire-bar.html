@@ -5870,3 +5870,82 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-jukebox-layer-footer-final">
+/* Final layer repair: let the cabinet contain the full Caster player, then place the footer below it. */
+.player > .proper-jukebox{
+  height:auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+  margin-bottom:0!important;
+}
+.player > .proper-jukebox .jukebox-arch{
+  height:auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+.player > .proper-jukebox .jukebox-window{
+  min-height:445px!important;
+  height:auto!important;
+  overflow:hidden!important;
+}
+.player > .proper-jukebox .lw-native-player,
+.player > .proper-jukebox .lw-player-screen{
+  min-height:365px!important;
+  height:auto!important;
+}
+
+/* The footer is a separate polished strip — never allowed to sit over Caster.fm. */
+.player > .coming{
+  position:relative!important;
+  z-index:20!important;
+  order:2!important;
+  width:min(100%,680px)!important;
+  box-sizing:border-box!important;
+  margin:14px auto 2px!important;
+  padding:9px 16px!important;
+  border-top:1px solid rgba(0,234,255,.38)!important;
+  border-bottom:1px solid rgba(255,43,214,.25)!important;
+  border-radius:0 0 12px 12px!important;
+  background:linear-gradient(180deg,rgba(5,10,18,.72),rgba(5,7,13,.9))!important;
+  color:#f7df75!important;
+  font-size:14px!important;
+  line-height:1.35!important;
+  font-weight:800!important;
+  letter-spacing:.15px!important;
+  text-align:center!important;
+  text-shadow:0 0 5px rgba(255,212,59,.32),0 0 12px rgba(0,234,255,.12)!important;
+  box-shadow:0 5px 16px rgba(0,0,0,.28),inset 0 1px 8px rgba(0,234,255,.035)!important;
+}
+.player > .coming::before{
+  content:""!important;
+  display:block!important;
+  width:min(150px,32%)!important;
+  height:1px!important;
+  margin:0 auto 7px!important;
+  background:linear-gradient(90deg,transparent,rgba(0,234,255,.8),rgba(255,212,59,.9),rgba(255,43,214,.7),transparent)!important;
+  box-shadow:0 0 7px rgba(0,234,255,.28)!important;
+}
+@media(max-width:600px){
+  .player > .proper-jukebox .jukebox-window{
+    min-height:435px!important;
+  }
+  .player > .proper-jukebox .lw-native-player,
+  .player > .proper-jukebox .lw-player-screen{
+    min-height:360px!important;
+  }
+  .player > .coming{
+    width:100%!important;
+    margin:12px auto 0!important;
+    padding:8px 10px!important;
+    font-size:13px!important;
+    line-height:1.35!important;
+    border-radius:0 0 10px 10px!important;
+  }
+  .player > .coming::before{
+    width:120px!important;
+    margin-bottom:6px!important;
+  }
+}
+</style>
