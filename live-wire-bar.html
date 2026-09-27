@@ -5178,3 +5178,94 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+
+<style id="lw-jukebox-fluorescent-tubes-final">
+/* Thick fluorescent-tube edging around the jukebox cabinet only.
+   Caster.fm player is deliberately untouched. */
+.player > .proper-jukebox{
+  box-shadow:
+    0 0 0 4px rgba(0,234,255,.98),
+    0 0 0 8px rgba(255,255,255,.82),
+    0 0 0 11px rgba(255,43,214,.62),
+    0 0 18px rgba(0,234,255,1),
+    0 0 34px rgba(0,234,255,.72),
+    0 0 55px rgba(255,43,214,.48),
+    inset 0 0 26px rgba(0,234,255,.08)!important;
+}
+.player > .proper-jukebox::before{
+  left:2px!important;
+  right:2px!important;
+  top:2px!important;
+  bottom:2px!important;
+  border:7px solid #00eaff!important;
+  border-radius:25px!important;
+  background:transparent!important;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.96),
+    0 0 5px #fff,
+    0 0 12px #00eaff,
+    0 0 24px #00eaff,
+    0 0 38px rgba(255,43,214,.72)!important;
+  animation:lwFluoroTube 2.8s ease-in-out infinite!important;
+  pointer-events:none!important;
+}
+.player > .proper-jukebox::after{
+  left:10%!important;
+  right:10%!important;
+  top:4px!important;
+  height:6px!important;
+  border-radius:999px!important;
+  background:#fff!important;
+  box-shadow:
+    0 0 4px #fff,
+    0 0 9px #00eaff,
+    0 0 18px #00eaff,
+    0 0 28px #ff2bd6,
+    0 0 42px rgba(255,43,214,.6)!important;
+  animation:lwTubeTopGlow 2.2s ease-in-out infinite!important;
+}
+.player > .proper-jukebox.live-stream{
+  box-shadow:
+    0 0 0 4px #00eaff,
+    0 0 0 8px rgba(255,255,255,.95),
+    0 0 0 11px rgba(255,43,214,.82),
+    0 0 20px #00eaff,
+    0 0 40px #00eaff,
+    0 0 65px rgba(255,43,214,.68)!important;
+}
+.player > .proper-jukebox.live-stream::before{
+  animation:lwFluoroLive .48s ease-in-out infinite!important;
+}
+@keyframes lwFluoroTube{
+  0%,100%{filter:brightness(.92);opacity:.82}
+  50%{filter:brightness(1.3);opacity:1}
+}
+@keyframes lwFluoroLive{
+  0%,100%{filter:brightness(1);opacity:.88}
+  50%{filter:brightness(1.8);opacity:1}
+}
+@keyframes lwTubeTopGlow{
+  0%,100%{opacity:.72;filter:brightness(.9)}
+  50%{opacity:1;filter:brightness(1.5)}
+}
+@media(max-width:600px){
+  .player > .proper-jukebox{
+    box-shadow:
+      0 0 0 3px #00eaff,
+      0 0 0 6px rgba(255,255,255,.88),
+      0 0 0 9px rgba(255,43,214,.62),
+      0 0 16px #00eaff,
+      0 0 32px rgba(255,43,214,.55)!important;
+  }
+  .player > .proper-jukebox::before{
+    border-width:6px!important;
+    border-radius:22px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox::before,
+  .player > .proper-jukebox::after{animation:none!important}
+}
+</style>
