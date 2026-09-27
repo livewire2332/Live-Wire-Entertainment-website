@@ -6050,3 +6050,46 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-jukebox-colour-chase-stream-final">
+/* Smooth colour-changing cabinet lights. Faster when the existing live-stream class is detected. */
+.player > .proper-jukebox::before{
+  background:
+    conic-gradient(
+      from 0deg,
+      #00eaff 0deg,
+      #00eaff 35deg,
+      #ff2bd6 72deg,
+      #ffd43b 108deg,
+      #ff2bd6 145deg,
+      #00eaff 185deg,
+      #7b61ff 225deg,
+      #ff2bd6 265deg,
+      #ffd43b 305deg,
+      #00eaff 345deg,
+      #00eaff 360deg
+    ) border-box!important;
+  box-shadow:
+    0 0 3px rgba(255,255,255,.95),
+    0 0 8px rgba(0,234,255,.85),
+    0 0 16px rgba(255,43,214,.5),
+    0 0 24px rgba(255,212,59,.22)!important;
+  animation:lwColourChase 9s linear infinite!important;
+}
+.player > .proper-jukebox.live-stream::before{
+  animation-duration:2.4s!important;
+}
+@keyframes lwColourChase{
+  0%{transform:rotate(0deg);filter:hue-rotate(0deg) brightness(.94)}
+  50%{filter:hue-rotate(18deg) brightness(1.08)}
+  100%{transform:rotate(360deg);filter:hue-rotate(0deg) brightness(.98)}
+}
+@media(max-width:600px){
+  .player > .proper-jukebox::before{animation-duration:9.5s!important}
+  .player > .proper-jukebox.live-stream::before{animation-duration:2.3s!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox::before{animation:none!important}
+}
+</style>
