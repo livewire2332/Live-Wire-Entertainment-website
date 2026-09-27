@@ -5949,3 +5949,24 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-jukebox-shorter-final">
+/* Trim the overall jukebox height slightly while keeping the Caster player intact. */
+.player > .proper-jukebox .jukebox-window{
+  min-height:420px!important;
+}
+.player > .proper-jukebox .lw-native-player,
+.player > .proper-jukebox .lw-player-screen{
+  min-height:340px!important;
+}
+@media(max-width:600px){
+  .player > .proper-jukebox .jukebox-window{
+    min-height:410px!important;
+  }
+  .player > .proper-jukebox .lw-native-player,
+  .player > .proper-jukebox .lw-player-screen{
+    min-height:335px!important;
+  }
+}
+</style>
