@@ -5813,3 +5813,42 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   .player > .proper-jukebox .jukebox-window{border-width:6px!important}
 }
 </style>
+
+
+<style id="lw-jukebox-caption-tight-final">
+/* Tighten the area below the jukebox so the caption never overlaps or floats too far away. */
+.player{
+  padding-bottom:12px!important;
+}
+.player > .proper-jukebox{
+  margin-bottom:0!important;
+}
+.player > .coming{
+  margin:10px auto 0!important;
+  padding:0 10px!important;
+  max-width:680px!important;
+  line-height:1.25!important;
+}
+.player > .coming::before{
+  margin-bottom:6px!important;
+  width:min(140px,30%)!important;
+}
+@media(max-width:600px){
+  .player{
+    padding-bottom:10px!important;
+  }
+  .player > .proper-jukebox{
+    margin-bottom:0!important;
+  }
+  .player > .coming{
+    margin:8px auto 0!important;
+    padding:0 8px!important;
+    line-height:1.25!important;
+    font-size:13px!important;
+  }
+  .player > .coming::before{
+    width:120px!important;
+    margin-bottom:5px!important;
+  }
+}
+</style>
