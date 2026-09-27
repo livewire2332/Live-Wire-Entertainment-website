@@ -5269,3 +5269,67 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   .player > .proper-jukebox::after{animation:none!important}
 }
 </style>
+
+
+<style id="lw-jukebox-proper-rounded-top-final">
+/* Proper smooth jukebox arch: rounded fluorescent-tube crown while keeping the text curved. */
+.player > .proper-jukebox{
+  border-radius:50% 50% 30px 30px / 11% 11% 30px 30px!important;
+}
+.player > .proper-jukebox .jukebox-arch{
+  border-radius:46% 46% 22px 22px / 22% 22% 22px 22px!important;
+}
+.player > .proper-jukebox .jukebox-header{
+  padding:25px 8px 13px!important;
+  position:relative!important;
+  z-index:8!important;
+}
+.player > .proper-jukebox .jukebox-kicker{
+  display:block!important;
+  width:100%!important;
+  transform:none!important;
+  letter-spacing:2.8px!important;
+  text-shadow:0 0 6px #ffd43b,0 0 14px rgba(255,212,59,.75)!important;
+}
+.player > .proper-jukebox .jukebox-header::before{
+  content:""!important;
+  position:absolute!important;
+  left:11%!important;
+  right:11%!important;
+  top:4px!important;
+  height:25px!important;
+  border-top:3px solid rgba(0,234,255,.92)!important;
+  border-radius:50% 50% 0 0!important;
+  box-shadow:0 -2px 8px #00eaff,0 -4px 18px rgba(255,43,214,.55)!important;
+  pointer-events:none!important;
+}
+.player > .proper-jukebox .jukebox-header::after{
+  content:""!important;
+  position:absolute!important;
+  left:19%!important;
+  right:19%!important;
+  top:9px!important;
+  height:18px!important;
+  border-top:2px solid rgba(255,255,255,.82)!important;
+  border-radius:50% 50% 0 0!important;
+  box-shadow:0 -1px 6px #fff,0 -2px 12px #00eaff!important;
+  pointer-events:none!important;
+}
+@media(max-width:600px){
+  .player > .proper-jukebox{
+    border-radius:46% 46% 24px 24px / 9% 9% 24px 24px!important;
+  }
+  .player > .proper-jukebox .jukebox-arch{
+    border-radius:44% 44% 18px 18px / 17% 17% 18px 18px!important;
+  }
+  .player > .proper-jukebox .jukebox-header{
+    padding:22px 5px 12px!important;
+  }
+  .player > .proper-jukebox .jukebox-header::before{
+    left:8%!important;right:8%!important;top:4px!important;height:20px!important;
+  }
+  .player > .proper-jukebox .jukebox-header::after{
+    left:16%!important;right:16%!important;top:8px!important;height:14px!important;
+  }
+}
+</style>
