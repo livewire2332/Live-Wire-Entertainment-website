@@ -2478,6 +2478,70 @@ section:not(.back)::after{background:radial-gradient(ellipse at 12% 50%,rgba(255
 }
 </style>
 
+<style id="lw-jukebox-tube-neon-final">
+/* Thicker tube-style neon rails around the cabinet only — Caster player untouched. */
+.player > .proper-jukebox{
+  box-shadow:
+    0 0 0 3px rgba(0,234,255,.88),
+    0 0 0 6px rgba(255,43,214,.38),
+    0 0 18px rgba(0,234,255,.72),
+    0 0 34px rgba(255,43,214,.34),
+    inset 0 0 28px rgba(0,234,255,.05)!important;
+}
+.player > .proper-jukebox::before{
+  left:3px!important;
+  right:3px!important;
+  top:3px!important;
+  bottom:3px!important;
+  border:3px solid transparent!important;
+  border-radius:22px!important;
+  background:linear-gradient(135deg,#00eaff,#ff2bd6 38%,#ffd43b 58%,#00eaff) border-box!important;
+  -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;
+  mask-composite:exclude!important;
+  box-shadow:0 0 12px #00eaff,0 0 24px rgba(255,43,214,.8)!important;
+  animation:lwTubeBreathe 3.2s ease-in-out infinite!important;
+}
+.player > .proper-jukebox::after{
+  left:9%!important;
+  right:9%!important;
+  top:3px!important;
+  height:4px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,#00eaff,#ff2bd6,#ffd43b,#ff2bd6,#00eaff,transparent)!important;
+  box-shadow:0 0 8px #00eaff,0 0 18px #ff2bd6,0 0 28px rgba(255,212,59,.6)!important;
+}
+.player > .proper-jukebox.live-stream{
+  box-shadow:
+    0 0 0 3px rgba(0,234,255,1),
+    0 0 0 7px rgba(255,43,214,.72),
+    0 0 20px rgba(0,234,255,1),
+    0 0 42px rgba(255,43,214,.62)!important;
+}
+.player > .proper-jukebox.live-stream::before{
+  animation:lwTubeLive .55s ease-in-out infinite!important;
+}
+@keyframes lwTubeBreathe{
+  0%,100%{filter:brightness(.88);opacity:.72}
+  50%{filter:brightness(1.28);opacity:1}
+}
+@keyframes lwTubeLive{
+  0%,100%{filter:brightness(1);opacity:.8}
+  50%{filter:brightness(1.8);opacity:1}
+}
+@media(max-width:600px){
+  .player > .proper-jukebox{
+    box-shadow:
+      0 0 0 2px rgba(0,234,255,.9),
+      0 0 0 5px rgba(255,43,214,.42),
+      0 0 16px rgba(0,234,255,.72),
+      0 0 28px rgba(255,43,214,.32)!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox::before{animation:none!important}
+}
+</style>
 </head>
 <body>
 <nav class="lw-page-nav" aria-label="Live Wire pages">
