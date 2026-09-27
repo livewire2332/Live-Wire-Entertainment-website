@@ -5333,3 +5333,47 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+<style id="lw-jukebox-bottom-space-tight-final">
+/* Remove the unnecessary blank footer space beneath the Caster player. */
+.player > .proper-jukebox{
+  height:535px!important;
+  min-height:535px!important;
+}
+.player > .proper-jukebox .jukebox-arch{
+  height:480px!important;
+  min-height:480px!important;
+  padding-bottom:0!important;
+}
+.player > .proper-jukebox .jukebox-window{
+  min-height:445px!important;
+  padding-bottom:2px!important;
+}
+.player > .proper-jukebox .lw-native-player,
+.player > .proper-jukebox .lw-player-screen{
+  min-height:365px!important;
+}
+.player > .proper-jukebox .lw-caster-player,
+.player > .proper-jukebox .jukebox-window .cstrEmbed{
+  margin-bottom:0!important;
+}
+@media(max-width:600px){
+  .player > .proper-jukebox{
+    height:545px!important;
+    min-height:545px!important;
+  }
+  .player > .proper-jukebox .jukebox-arch{
+    height:490px!important;
+    min-height:490px!important;
+    padding-bottom:0!important;
+  }
+  .player > .proper-jukebox .jukebox-window{
+    min-height:435px!important;
+    padding-bottom:1px!important;
+  }
+  .player > .proper-jukebox .lw-native-player,
+  .player > .proper-jukebox .lw-player-screen{
+    min-height:360px!important;
+  }
+}
+</style>
