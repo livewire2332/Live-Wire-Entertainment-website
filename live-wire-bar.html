@@ -5970,3 +5970,24 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   }
 }
 </style>
+
+
+<style id="lw-jukebox-shorter-clean-final">
+/* Remove excess empty space below the Caster player — keep all jukebox text and controls intact. */
+.player > .proper-jukebox .jukebox-window{
+  min-height:380px!important;
+}
+.player > .proper-jukebox .lw-native-player,
+.player > .proper-jukebox .lw-player-screen{
+  min-height:310px!important;
+}
+@media(max-width:600px){
+  .player > .proper-jukebox .jukebox-window{
+    min-height:370px!important;
+  }
+  .player > .proper-jukebox .lw-native-player,
+  .player > .proper-jukebox .lw-player-screen{
+    min-height:305px!important;
+  }
+}
+</style>
