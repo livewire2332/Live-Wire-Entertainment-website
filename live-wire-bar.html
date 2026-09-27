@@ -5443,3 +5443,102 @@ document.querySelectorAll('.shelf-madri-cutout').forEach(function(img){
   .player > .proper-jukebox::after{animation:none!important}
 }
 </style>
+
+
+<style id="lw-jukebox-top-curve-and-text-pulse-final">
+/* Remove the separate flat top tube; keep the smooth curved crown lighting. */
+.player > .proper-jukebox::after{
+  display:none!important;
+}
+.player > .proper-jukebox .jukebox-header::before{
+  border-top-width:4px!important;
+  border-top-color:#dffcff!important;
+  box-shadow:
+    0 -1px 5px #fff,
+    0 -2px 12px #00eaff,
+    0 -4px 24px rgba(0,234,255,.72),
+    0 -6px 34px rgba(255,43,214,.24)!important;
+  animation:lwJukeCurveGlow 5.8s ease-in-out infinite!important;
+}
+.player > .proper-jukebox .jukebox-header::after{
+  border-top-color:rgba(255,255,255,.58)!important;
+  box-shadow:0 -1px 5px rgba(255,255,255,.75),0 -2px 11px rgba(0,234,255,.5)!important;
+  animation:lwJukeCurveGlowSoft 5.8s ease-in-out infinite!important;
+}
+.player > .proper-jukebox .jukebox-kicker{
+  position:relative!important;
+  z-index:10!important;
+  color:#ffe46b!important;
+  font-weight:1000!important;
+  letter-spacing:3.2px!important;
+  text-shadow:
+    0 0 4px #fff3a8,
+    0 0 9px #ffd43b,
+    0 0 18px rgba(255,212,59,.85),
+    0 0 30px rgba(255,43,214,.28)!important;
+  animation:lwJukeTextPulse 5.8s ease-in-out infinite!important;
+}
+.player > .proper-jukebox .jukebox-title{
+  position:relative!important;
+  z-index:10!important;
+  color:#ffffff!important;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 10px rgba(255,255,255,.95),
+    0 0 20px #00eaff,
+    0 0 34px rgba(255,43,214,.52)!important;
+  animation:lwJukeTitlePulse 5.8s ease-in-out infinite!important;
+}
+@keyframes lwJukeTextPulse{
+  0%,100%{
+    opacity:.82;
+    filter:brightness(.94);
+    text-shadow:
+      0 0 4px #fff3a8,
+      0 0 8px #ffd43b,
+      0 0 15px rgba(255,212,59,.68),
+      0 0 24px rgba(255,43,214,.2);
+  }
+  50%{
+    opacity:1;
+    filter:brightness(1.18);
+    text-shadow:
+      0 0 5px #fff,
+      0 0 11px #ffd43b,
+      0 0 23px rgba(255,212,59,.95),
+      0 0 38px rgba(255,43,214,.38);
+  }
+}
+@keyframes lwJukeTitlePulse{
+  0%,100%{
+    opacity:.9;
+    filter:brightness(.96);
+  }
+  50%{
+    opacity:1;
+    filter:brightness(1.12);
+  }
+}
+@keyframes lwJukeCurveGlow{
+  0%,100%{opacity:.72;filter:brightness(.9)}
+  50%{opacity:1;filter:brightness(1.2)}
+}
+@keyframes lwJukeCurveGlowSoft{
+  0%,100%{opacity:.45}
+  50%{opacity:.9}
+}
+@media(max-width:600px){
+  .player > .proper-jukebox .jukebox-kicker{
+    letter-spacing:2.4px!important;
+    text-shadow:0 0 4px #fff3a8,0 0 8px #ffd43b,0 0 16px rgba(255,212,59,.8)!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .player > .proper-jukebox .jukebox-header::before,
+  .player > .proper-jukebox .jukebox-header::after,
+  .player > .proper-jukebox .jukebox-kicker,
+  .player > .proper-jukebox .jukebox-title{
+    animation:none!important;
+  }
+}
+</style>
