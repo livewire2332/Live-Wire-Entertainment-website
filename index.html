@@ -55,6 +55,9 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
   const STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
   const MOUNT='/6W6zw';
 
+  // Master pause switch — keep all homepage live/schedule status boxes paused until Daniel confirms the schedule is resumed.
+  const LIVE_WIRE_SCHEDULE_PAUSED=true;
+
   const readDirectCasterStatus = async () => {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 5000);
@@ -132,7 +135,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     const mins=now.getHours()*60+now.getMinutes();
     const day=now.getDay();
     const iso=now.toISOString().slice(0,10);
-    const pauseActive=iso>='2026-09-21'&&iso<='2026-09-27';
+    const pauseActive=LIVE_WIRE_SCHEDULE_PAUSED;
     const today=showForDate(now);
 
     // Only treat a scheduled programme as LIVE when its actual window has started.
