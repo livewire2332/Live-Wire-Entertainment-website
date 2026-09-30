@@ -83,7 +83,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     if(iso>='2026-09-21'&&iso<='2026-09-27')return null;
     const day=date.getDay();
     if(day===3)return ['The Wednesday Wire with DJ Disco Dan','8:00pm',1200,1320];
-    if(day===5)return ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,1380];
+    if(day===5){ if(iso==='2026-10-02') return null; return ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,1380]; }
     if(day===6)return iso<'2026-10-03'
       ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm',1170,1380]
       : ['The Music Train with Mr Phoenix','7:30pm',1170,1380];
@@ -143,7 +143,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     // If a show overruns outside the pause, keep its name while the stream remains connected.
     let scheduledNow=null;
     if(day===3&&mins>=1200&&mins<1320) scheduledNow=['The Wednesday Wire with DJ Disco Dan','8:00pm'];
-    if(day===5&&mins>=1170&&mins<1380) scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
+    if(day===5&&iso!=='2026-10-02'&&mins>=1170&&mins<1380) scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
     if(day===6&&mins>=1170&&mins<1380){
       scheduledNow=now.toISOString().slice(0,10)<'2026-10-03'
         ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
