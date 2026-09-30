@@ -643,14 +643,14 @@ const songs={'50s':['Chuck Berry — Johnny B. Goode','Elvis Presley — Jailhou
 const banter=['WELCOME TO THE LIVE WIRE BAR. PLEASE LEAVE YOUR SERIOUS FACE AT THE DOOR. 😂⚡','ONE MORE TUNE? THAT’S HOW IT STARTS. THREE HOURS LATER… 😂','THE MUSIC IS LOUD, THE BANTER IS LOUDER. 🍹⚡','YOU’RE NOT LATE. YOU’RE JUST ARRIVING ON LIVE WIRE TIME. 😂','SOMEONE SAY NICKELBACK? MR PHOENIX HAS ENTERED THE CHAT. 🎸😂','PULL UP A STOOL, TURN IT UP AND ENJOY THE RIDE. 🍹🎶','LIVE WIRE RULE #1: THERE IS ALWAYS TIME FOR ONE MORE SONG. ⚡'];
 const destinations=['80s Avenue','90s Junction','70s Disco Street','60s Memory Lane','00s Boulevard','Rock ’n’ Roll Road','Dancefloor Central','Forgotten Gem Station','Singalong Square'];
 const fridayMoods=[['FEEL-GOOD MODE: ACTIVATED 🎧','You’re ready for big tunes, good vibes and a proper Friday night in the Live Wire Bar. 🍹⚡'],['NOSTALGIA MODE: ON 💿','Take a trip through the decades. Vinyl memories, Top of the Pops moments and tunes you forgot you loved.'],['FORGOTTEN GEM MODE 💎','Tonight calls for a tune that has been hiding in the musical cupboard for far too long. Ham Bag Tune Dig incoming!'],['SERIOUS JOCKIN MODE 🔥','It’s 11pm somewhere… time for an hour of non-stop music and absolutely NO TALKING.'],['MIDNIGHT MAGIC MODE 🌙','You’ve made it past midnight. Now the Friday night gets that little bit more magical.'],['LIVE WIRE BAR MODE 🍹','Pull up a stool, turn the music up and let the Live Wire Bar do what it does best.'],['SINGALONG MODE 🎤','You know the words. Everyone knows you know the words. BELTER O’CLOCK! 😂']];
-const getShowsForDate=(date)=>{const d=date.getDay();const iso=date.toISOString().slice(0,10);if(d===3)return [['The Wednesday Wire with DJ Disco Dan','8:00pm']];if(d===5)return [['Feel Good Friday with DJ Disco Dan','7:30pm']];if(d===6)return [iso<'2026-10-03'?['Saturday Floor Fillers with DJ Disco Dan','7:30pm']:['The Music Train with Mr Phoenix','7:30pm']];return [];};
+const getShowsForDate=(date)=>{const d=date.getDay();const iso=date.toISOString().slice(0,10);if(d===3)return [['The Wednesday Wire with DJ Disco Dan','8:00pm']];if(d===5){ if(iso==='2026-10-02') return []; return [['Feel Good Friday with DJ Disco Dan','7:30pm']]; }if(d===6)return [iso<'2026-10-03'?['Saturday Floor Fillers with DJ Disco Dan','7:30pm']:['The Music Train with Mr Phoenix','7:30pm']];return [];};
 const getScheduleWindow=(date)=>{const d=date.getDay();if(d===3)return [1200,1320];if(d===5||d===6)return [1170,1380];return null;};
 function nextScheduled(now){for(let i=1;i<=14;i++){const date=new Date(now);date.setDate(now.getDate()+i);const shows=getShowsForDate(date);if(shows.length)return {show:shows[0],days:i};}return null;}
 const CASTER_STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
 const CASTER_MOUNT='/6W6zw';
 
 // Master schedule pause — all active status boxes stay paused until Daniel confirms the schedule is ready.
-const LIVE_WIRE_SCHEDULE_PAUSED=true;
+const LIVE_WIRE_SCHEDULE_PAUSED=false;
 
 let streamOnline=false;
 let currentLiveShow=null;
@@ -697,7 +697,7 @@ return;
 
 let scheduledNow=null;
 if(day===3&&mins>=1200&&mins<1320)scheduledNow=['The Wednesday Wire with DJ Disco Dan','8:00pm'];
-if(day===5&&mins>=1170&&mins<1380)scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
+if(day===5&&iso!=='2026-10-02'&&mins>=1170&&mins<1380)scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
 if(day===6&&mins>=1170&&mins<1380){
 scheduledNow=now.toISOString().slice(0,10)<'2026-10-03'
   ? ['Saturday Floor Fillers with DJ Disco Dan','7:30pm']
