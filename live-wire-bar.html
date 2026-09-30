@@ -2659,11 +2659,21 @@ function getNextScheduledShow(){
   const base=new Date(now);
   base.setHours(0,0,0,0);
 
+  // IMPORTANT: build the date key in local time.
+  // Using toISOString() at UK local midnight can roll the date back to
+  // the previous UTC day and make Saturday 3 October look like 2 October.
+  const localDateKey=d=>{
+    const y=d.getFullYear();
+    const m=String(d.getMonth()+1).padStart(2,'0');
+    const day=String(d.getDate()).padStart(2,'0');
+    return y+'-'+m+'-'+day;
+  };
+
   // Use the exact same schedule source as the live-status box.
   for(let offset=0;offset<=14;offset++){
     const d=new Date(base);
     d.setDate(base.getDate()+offset);
-    const iso=d.toISOString().slice(0,10);
+    const iso=localDateKey(d);
     const day=d.getDay();
     const start=day===3||day===4?1200:1170;
 
