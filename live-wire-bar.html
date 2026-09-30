@@ -2630,7 +2630,9 @@ const BAR_WORKER_STATUS='https://live-wire-entertainment-website.dlyons184.worke
 
 function getScheduledShow(){
   const now=new Date();
-  const iso=now.toISOString().slice(0,10);
+  // Keep the schedule date in local UK time; ISO UTC can roll the date
+  // back by one day around local midnight.
+  const iso=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
   const day=now.getDay();
   const mins=now.getHours()*60+now.getMinutes();
 
