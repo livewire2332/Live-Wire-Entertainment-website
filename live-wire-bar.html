@@ -2678,7 +2678,7 @@ function getNextScheduledShow(){
     d.setDate(base.getDate()+offset);
     const iso=localDateKey(d);
     const day=d.getDay();
-    const start=day===3||day===4?1200:1170;
+    const start=day===3||day===4||day===6?1200:1170;
 
     if(iso<'2026-10-03')continue;
     if(iso>='2026-10-14'&&iso<='2026-10-26'&&(day===3||day===5))continue;
