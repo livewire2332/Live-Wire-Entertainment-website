@@ -2630,13 +2630,19 @@ const BAR_WORKER_STATUS='https://live-wire-entertainment-website.dlyons184.worke
 
 function getScheduledShow(){
   const now=new Date();
-  const day=now.getDay();
   const iso=now.toISOString().slice(0,10);
+  const day=now.getDay();
   const mins=now.getHours()*60+now.getMinutes();
 
-  // Resumed Live Wire schedule starts Saturday 3 October 2026.
+  return getLiveWireShowForDate(iso,day,mins);
+}
+
+function getLiveWireShowForDate(iso,day,mins){
+  // The resumed Live Wire schedule starts Saturday 3 October 2026.
   if(iso<'2026-10-03')return null;
-  // Daniel / DJ Disco Dan is away 14–26 October 2026; Phoenix's shows continue.
+
+  // Daniel / DJ Disco Dan is away 14–26 October 2026.
+  // Phoenix's Thursday and Saturday shows continue as normal.
   if(iso>='2026-10-14'&&iso<='2026-10-26'&&(day===3||day===5))return null;
 
   if(day===3&&mins>=1200&&mins<1320)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
@@ -2644,6 +2650,7 @@ function getScheduledShow(){
   if(day===5&&mins>=1170&&mins<1380)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
   if(day===6&&mins>=1170&&mins<1380)return ['The Music Train with Mr Phoenix','7:30pm'];
   if(day===6&&mins<450&&!(iso>='2026-10-14'&&iso<='2026-10-26'))return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+
   return null;
 }
 
@@ -2651,18 +2658,24 @@ function getNextScheduledShow(){
   const now=new Date();
   const base=new Date(now);
   base.setHours(0,0,0,0);
+
+  // Use the exact same schedule source as the live-status box.
   for(let offset=0;offset<=14;offset++){
     const d=new Date(base);
     d.setDate(base.getDate()+offset);
-    const day=d.getDay();
     const iso=d.toISOString().slice(0,10);
-    const mins=offset===0?now.getHours()*60+now.getMinutes():-1;
+    const day=d.getDay();
+    const start=day===3||day===4?1200:1170;
+
     if(iso<'2026-10-03')continue;
     if(iso>='2026-10-14'&&iso<='2026-10-26'&&(day===3||day===5))continue;
-    if(day===3&&mins<1200)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
-    if(day===4&&mins<1200)return ['Thursday Surprise Package with Mr Phoenix','8:00pm'];
-    if(day===5&&mins<1170)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
-    if(day===6&&mins<1170)return ['The Music Train with Mr Phoenix','7:30pm'];
+
+    const mins=offset===0?now.getHours()*60+now.getMinutes():-1;
+    const show=getLiveWireShowForDate(iso,day,mins);
+
+    // For future dates, ask using the actual programme start time.
+    const futureShow=offset>0?getLiveWireShowForDate(iso,day,start):show;
+    if(futureShow)return futureShow;
   }
   return null;
 }
