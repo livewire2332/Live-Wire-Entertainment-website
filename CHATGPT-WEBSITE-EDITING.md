@@ -38,3 +38,8 @@ or
 and ChatGPT should use this repository as the canonical project and inspect the current files before editing.
 
 If the GitHub connection is unavailable in a particular chat, do not pretend an edit was made. State that repository access is unavailable in that chat and ask the user to connect/enable GitHub access there.
+## Book project
+- Live Wire Banter book page: `live-wire-banter.html`
+- Homepage includes a compact Live Wire Banter promotion linking to the book page and Amazon.
+- Amazon UK book link: https://amzn.eu/d/04ablGbt
+- Keep the homepage promotion compact; the dedicated book page is the main sales/promotion page.
