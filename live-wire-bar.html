@@ -2641,8 +2641,7 @@ function getScheduledShow(){
 
 function getLiveWireShowForDate(iso,day,mins){
   // The resumed Live Wire schedule starts Saturday 3 October 2026.
-  if(iso==='2026-10-02'&&day===5&&mins>=1170&&mins<1380)return ['Feel Good Friday Vinyl Special with DJ Disco Dan','7:30pm'];
-  if(iso<'2026-10-03')return null;
+    if(iso<'2026-10-03')return null;
 
   // Daniel / DJ Disco Dan is away 14–26 October 2026.
   // Phoenix's Thursday and Saturday shows continue as normal.
