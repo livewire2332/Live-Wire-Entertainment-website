@@ -44,7 +44,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 .book-promo{max-width:620px;margin:0 auto;padding:16px 18px;border:1px solid #ff2bd6;border-radius:16px;background:linear-gradient(135deg,rgba(12,8,24,.97),rgba(7,15,28,.96));box-shadow:0 0 10px rgba(255,43,214,.24),0 0 20px rgba(0,234,255,.09);position:relative;overflow:hidden}
 .book-promo::before{content:"";position:absolute;top:0;left:-25%;width:25%;height:2px;background:#00eaff;box-shadow:0 0 8px #00eaff;animation:bookPromoRail 6s linear infinite}
 .book-promo-inner{display:grid;grid-template-columns:105px 1fr;gap:16px;align-items:center}
-.book-promo-cover{width:105px;height:auto;display:block;border-radius:7px;box-shadow:0 0 10px rgba(255,43,214,.35)}
+.book-promo-cover{width:105px;height:158px;object-fit:contain;object-position:center;display:block;border-radius:7px;box-shadow:0 0 10px rgba(255,43,214,.35)}
 .book-promo-copy{text-align:center}
 .book-promo .book-kicker{color:#ffd43b;font-weight:900;letter-spacing:1px;text-transform:uppercase;font-size:11px}
 .book-promo h2{margin:3px 0;font-size:clamp(21px,4vw,30px);text-transform:uppercase;text-shadow:0 0 7px #ff2bd6,0 0 12px #00eaff}
@@ -52,7 +52,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 .book-promo .book-meta{color:#58eaff;font-weight:800}
 .book-promo .book-btn{border-color:#ff2bd6;box-shadow:0 0 9px #ff2bd6;text-transform:uppercase;font-weight:900;padding:9px 15px;margin:5px 3px 0}
 @keyframes bookPromoRail{0%{left:-25%}55%,100%{left:110%}}
-@media(max-width:560px){.book-promo{max-width:520px;padding:13px 12px}.book-promo-inner{grid-template-columns:78px 1fr;gap:11px}.book-promo-cover{width:78px}.book-promo h2{font-size:20px}.book-promo p{font-size:12px}.book-promo .book-btn{padding:8px 10px;font-size:12px;margin-top:4px}}
+@media(max-width:560px){.book-promo{max-width:520px;padding:13px 12px}.book-promo-inner{grid-template-columns:78px 1fr;gap:11px}.book-promo-cover{width:78px;height:117px}.book-promo h2{font-size:20px}.book-promo p{font-size:12px}.book-promo .book-btn{padding:8px 10px;font-size:12px;margin-top:4px}}
 @media(prefers-reduced-motion:reduce){.book-promo::before{animation:none}}
 </style>
 </head>
@@ -132,7 +132,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 <section><div class="wrap">
 <div class="book-promo">
   <div class="book-promo-inner">
-    <img class="book-promo-cover" src="live-wire-banter-cover.jpg" alt="Live Wire Banter book cover">
+    <img class="book-promo-cover" src="live-wire-banter-cover.jpg?v=2" alt="Live Wire Banter book cover">
     <div class="book-promo-copy">
       <div class="book-kicker">⚡ New from Live Wire ⚡</div>
       <h2>LIVE WIRE BANTER</h2>
