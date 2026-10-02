@@ -40,16 +40,20 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 </style>
 
 <style>
+<style>
 /* Live Wire Banter — compact homepage promotion */
-.book-promo{max-width:760px;margin:0 auto;padding:22px 24px;border:1px solid #ff2bd6;border-radius:18px;background:linear-gradient(135deg,rgba(12,8,24,.97),rgba(7,15,28,.96));box-shadow:0 0 12px rgba(255,43,214,.3),0 0 28px rgba(0,234,255,.12),inset 0 0 24px rgba(255,43,214,.04);text-align:center;position:relative;overflow:hidden}
-.book-promo::before{content:"";position:absolute;top:0;left:-25%;width:25%;height:2px;background:#00eaff;box-shadow:0 0 10px #00eaff,0 0 22px #00eaff;animation:bookPromoRail 5s linear infinite}
-.book-promo .book-kicker{color:#ffd43b;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;font-size:13px}
-.book-promo h2{margin:5px 0 4px;font-size:clamp(25px,5vw,38px);text-transform:uppercase;text-shadow:0 0 8px #ff2bd6,0 0 16px #00eaff}
-.book-promo p{margin:5px auto;max-width:650px}
+.book-promo{max-width:620px;margin:0 auto;padding:16px 18px;border:1px solid #ff2bd6;border-radius:16px;background:linear-gradient(135deg,rgba(12,8,24,.97),rgba(7,15,28,.96));box-shadow:0 0 10px rgba(255,43,214,.24),0 0 20px rgba(0,234,255,.09);position:relative;overflow:hidden}
+.book-promo::before{content:"";position:absolute;top:0;left:-25%;width:25%;height:2px;background:#00eaff;box-shadow:0 0 8px #00eaff;animation:bookPromoRail 6s linear infinite}
+.book-promo-inner{display:grid;grid-template-columns:105px 1fr;gap:16px;align-items:center}
+.book-promo-cover{width:105px;height:auto;display:block;border-radius:7px;box-shadow:0 0 10px rgba(255,43,214,.35)}
+.book-promo-copy{text-align:center}
+.book-promo .book-kicker{color:#ffd43b;font-weight:900;letter-spacing:1px;text-transform:uppercase;font-size:11px}
+.book-promo h2{margin:3px 0;font-size:clamp(21px,4vw,30px);text-transform:uppercase;text-shadow:0 0 7px #ff2bd6,0 0 12px #00eaff}
+.book-promo p{margin:3px auto;font-size:14px}
 .book-promo .book-meta{color:#58eaff;font-weight:800}
-.book-promo .book-btn{border-color:#ff2bd6;box-shadow:0 0 12px #ff2bd6;text-transform:uppercase;font-weight:900}
-.book-promo .book-btn:hover{box-shadow:0 0 18px #ff2bd6,0 0 32px #00eaff}
+.book-promo .book-btn{border-color:#ff2bd6;box-shadow:0 0 9px #ff2bd6;text-transform:uppercase;font-weight:900;padding:9px 15px;margin:5px 3px 0}
 @keyframes bookPromoRail{0%{left:-25%}55%,100%{left:110%}}
+@media(max-width:560px){.book-promo{max-width:520px;padding:13px 12px}.book-promo-inner{grid-template-columns:78px 1fr;gap:11px}.book-promo-cover{width:78px}.book-promo h2{font-size:20px}.book-promo p{font-size:12px}.book-promo .book-btn{padding:8px 10px;font-size:12px;margin-top:4px}}
 @media(prefers-reduced-motion:reduce){.book-promo::before{animation:none}}
 </style>
 </head>
@@ -125,6 +129,22 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
   refresh();readStreamStatus();setInterval(readStreamStatus,15000);
 })();
 </script>
+
+<section><div class="wrap">
+<div class="book-promo">
+  <div class="book-promo-inner">
+    <img class="book-promo-cover" src="live-wire-banter-cover.svg" alt="Live Wire Banter book cover">
+    <div class="book-promo-copy">
+      <div class="book-kicker">⚡ New from Live Wire ⚡</div>
+      <h2>LIVE WIRE BANTER</h2>
+      <p class="book-meta">The Ultimate Book of One-Liners, Comebacks &amp; Cheeky Shit</p>
+      <p>Featuring <strong>DJ Disco Dan &amp; Mr Phoenix</strong> — 410 pieces of banter across 10 sections.</p>
+      <a class="btn book-btn" href="live-wire-banter.html">📖 Book Page</a>
+      <a class="btn book-btn" href="https://amzn.eu/d/04ablGbt">⚡ Order Now</a>
+    </div>
+  </div>
+</div>
+</div></section>
 
 <section><div class="wrap">
 <h1>⚡ Our Flagship Shows</h1>
