@@ -94,9 +94,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
   const showForDate = date => {
     const iso=date.toISOString().slice(0,10);
     const day=date.getDay();
-    // Resumed Live Wire schedule starts Saturday 3 October 2026.
     if(iso<'2026-10-03')return null;
-    // Daniel / DJ Disco Dan is away 14–26 October 2026; Phoenix's shows continue.
     if(iso>='2026-10-14'&&iso<='2026-10-26'&&(day===3||day===5))return null;
     if(day===3)return ['The Wednesday Wire with DJ Disco Dan','8:00pm',1200,1320];
     if(day===5)return ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,1380];
@@ -123,16 +121,12 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
   let currentLiveShow=null;
 
   const readStreamStatus = async () => {
-    // First ask Caster's own Icecast status endpoint directly from the visitor's
-    // browser. This is the authoritative source-level live check.
     const direct=await readDirectCasterStatus();
     if(direct.ok){
       streamOnline=direct.online;
       refresh();
       return;
     }
-
-    // Keep the existing Worker as a fallback if direct browser access is blocked.
     try{
       const r=await fetch('https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status?t='+Date.now(),{cache:'no-store'});
       if(!r.ok)throw new Error('status '+r.status);
@@ -152,16 +146,10 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     const pauseActive=LIVE_WIRE_SCHEDULE_PAUSED;
     const today=showForDate(now);
 
-    // Only treat a scheduled programme as LIVE when its actual window has started.
-    // During the temporary pause week, no scheduled show is considered active.
-    // If a show overruns outside the pause, keep its name while the stream remains connected.
     let scheduledNow=null;
     if(day===3&&iso>='2026-10-03'&&!(iso>='2026-10-14'&&iso<='2026-10-26')&&mins>=1200&&mins<1320) scheduledNow=['The Wednesday Wire with DJ Disco Dan','8:00pm'];
     if(day===5&&iso>='2026-10-03'&&!(iso>='2026-10-14'&&iso<='2026-10-26')&&mins>=1170&&mins<1380) scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
-    if(day===6&&iso>='2026-10-03'&&mins>=1200&&mins<1380){
-      scheduledNow=['The Music Train with Mr Phoenix','8:00pm'];
-    }
-    // Friday can run into Saturday morning if it is still connected.
+    if(day===6&&iso>='2026-10-03'&&mins>=1200&&mins<1380) scheduledNow=['The Music Train with Mr Phoenix','8:00pm'];
     if(day===6&&iso>='2026-10-03'&&mins<450&&!(iso>='2026-10-14'&&iso<='2026-10-26')) scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
 
     if(streamOnline&&scheduledNow&&!pauseActive){
@@ -215,10 +203,10 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 })();
 </script>
 
+<section><div class="wrap"><div class="book-promo"><div class="book-kicker">⚡ NEW FROM LIVE WIRE ⚡</div><h2>LIVE WIRE BANTER</h2><p class="book-meta">The Ultimate Book of One-Liners, Comebacks &amp; Cheeky Shit</p><p>Featuring <strong>DJ Disco Dan &amp; Mr Phoenix</strong> — 410 pieces of banter across 10 sections.</p><p><a class="btn book-btn" href="live-wire-banter.html">📖 BOOK PAGE</a> <a class="btn book-btn" href="https://amzn.eu/d/04ablGbt">⚡ ORDER NOW</a></p></div></div></section>
 <section id="shows"><div class="wrap"><div class="card show-card flagship"><div class="show-kicker">🚂 Saturday nights</div><h2>The Music Train with Mr Phoenix</h2><p class="show-time">🕢 Saturdays from 8pm</p><p><strong>Next stop... The Music Train!</strong> Mr Phoenix brings Live Wire's Saturday flagship show, taking the community on another musical journey through the decades.</p><p>Expect big tunes, nostalgia, banter and plenty of surprises as the Music Train rolls into another Saturday night. And then there's Mr Phoenix himself — wicked, always ready to wind someone up in the guest boxes, armed with plenty of wit and cheeky charm, and never far away from a Nickelback reference. 😂🔥</p><p>It's all part of what makes the Music Train what it is: great music, plenty of laughs, a bit of mischief and the unmistakable Mr Phoenix personality.</p><ul><li>🚂 A musical journey through the decades</li><li>🎵 Classic favourites and memorable tunes</li><li>😂 Live Wire banter, guest-box winding-up and cheeky charm</li><li>🎸 A healthy love of Nickelback</li></ul></div>
 </div></section>
 <section><div class="wrap"><h1>🍬 Werther’s Originals</h1><p>A new Wednesday feature on <strong>The Wednesday Wire with DJ Disco Dan</strong>, celebrating classic 60s &amp; 70s tunes — proper oldies, proper memories and definitely <strong>NOT Care Home FM!</strong> 😂⚡</p><p><strong>THE TUNES YOUR NAN STILL KNOWS!</strong> 🎶</p></div></section>
-<section><div class="wrap"><div class="book-promo"><div class="book-kicker">⚡ NEW FROM LIVE WIRE ⚡</div><h2>LIVE WIRE BANTER</h2><p class="book-meta">The Ultimate Book of One-Liners, Comebacks &amp; Cheeky Shit</p><p>Featuring <strong>DJ Disco Dan &amp; Mr Phoenix</strong> — 410 pieces of banter across 10 sections.</p><p><a class="btn book-btn" href="live-wire-banter.html">📖 BOOK PAGE</a> <a class="btn book-btn" href="https://amzn.eu/d/04ablGbt">⚡ ORDER NOW</a></p></div></div></section>
 <section><div class="wrap"><h1>📻 More Than Just A Live Show</h1><p>Live Wire Entertainment is growing into a home for music, nostalgia, live entertainment and community — bringing everything together in one place.</p><div class="feature-grid"><div class="card"><h2>🎧 Live Shows</h2><p>Catch the regular Live Wire shows and follow the latest entertainment from the DJs and presenters.</p></div><div class="card"><h2>💿 Music Memories</h2><p>Step back through the decades, rediscover forgotten gems and share the memories attached to the music.</p></div><div class="card"><h2>📸 Clips & Moments</h2><p>Funny moments, memorable clips and highlights from the Live Wire world will have a home here.</p></div><div class="card"><h2>🚀 What's Coming</h2><p>New interactive features, community ideas and more ways to experience Live Wire are planned for the future.</p></div></div></div></section>
 <section class="cta"><div class="wrap"><h1>⚡ Stay Connected With Live Wire</h1><p>Follow the action, find our latest links and keep up with the Live Wire Entertainment community.</p><p><span class="live-badge">⚡ LIVE WIRE ENTERTAINMENT ⚡</span></p><p><a class="btn" href="https://linktr.ee/livewireentertainment23">Open Live Wire Links</a></p></div></section>
 <section><div class="wrap"><h1>🎵 The Live Wire Promise</h1><p>Music comes first. Community matters. The banter is part of the fun. And whether you're here for a favourite tune, a live show, a laugh in the Live Wire Bar or simply a bit of nostalgia, there's always something happening.</p></div></section>
