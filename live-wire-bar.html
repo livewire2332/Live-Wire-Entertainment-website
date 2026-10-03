@@ -2687,7 +2687,7 @@ function getNextScheduledShow(){
     const show=getLiveWireShowForDate(iso,day,mins);
 
     // For future dates, ask using the actual programme start time.
-    const futureShow=offset>0?getLiveWireShowForDate(iso,day,start):show;
+    const futureShow=offset===0?(show||(mins<start?getLiveWireShowForDate(iso,day,start):null)):getLiveWireShowForDate(iso,day,start);
     if(futureShow)return futureShow;
   }
   return null;
