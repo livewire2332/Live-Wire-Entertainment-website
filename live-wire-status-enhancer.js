@@ -47,7 +47,14 @@ const setup=()=>{
     const today=scheduleForDate(now);
     const show=today[0];
     const isLive=!!show && ((d===3&&mins>=1200&&mins<1320)||(d===4&&mins>=1200&&mins<1320)||(d===5&&mins>=1170&&mins<1380)||(d===6&&mins>=1200&&mins<1380));
-    const isTonight=!!show && mins<1170;
+    const startMins = show ? (d===3||d===4 ? 1200 : d===5 ? 1170 : 1200) : 0;
+    const endMins = show ? (d===3||d===4 ? 1320 : d===5 ? 1380 : 1380) : 0;
+    // Keep tonight's show name after the advertised start time too, so a late
+    // start never makes the box jump to the next day. Once the show finishes
+    // early, the real stream status can move it on; without stream detection,
+    // keep the scheduled show visible rather than falsely skipping it.
+    const isTonight=!!show && mins<startMins;
+    const isAfterStart=!!show && mins>=startMins;
     pill.classList.toggle('live',isLive);
     if(isLive){
       pill.textContent='🔴 LIVE NOW';
@@ -59,6 +66,11 @@ const setup=()=>{
       title.textContent=show[0];
       time.textContent='Tonight • '+show[1];
       if(note)note.textContent='Tonight’s Live Wire show is coming up. Check back at showtime for LIVE NOW.';
+    }else if(isAfterStart){
+      pill.textContent='🟢 TONIGHT';
+      title.textContent=show[0];
+      time.textContent='Tonight • '+show[1];
+      if(note)note.textContent='Tonight’s Live Wire show is scheduled — the box will not skip it just because the start is late.';
     }else{
       pill.textContent='🟢 NEXT UP';
       const n=nextShow(now);
