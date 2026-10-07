@@ -3,11 +3,16 @@
 const scheduleForDate=date=>{
   const d=date.getDay();
   const iso=date.toISOString().slice(0,10);
+  if(d===3){
+    if(iso>='2026-10-14'&&iso<='2026-10-28')return [];
+    return [['The Wednesday Wire with DJ Disco Dan','8:00pm']];
+  }
+  if(d===4)return [['Surprise Package Thursdays with Mr Phoenix','8:00pm']];
   if(d===5){
     if(iso>='2026-10-14'&&iso<='2026-10-28')return [];
     return [['Feel Good Friday with DJ Disco Dan','7:30pm']];
   }
-  if(d===6)return [iso<'2026-10-03'?['Saturday Floor Fillers with DJ Disco Dan','7:30pm']:['The Music Train with Mr Phoenix','7:30pm']];
+  if(d===6)return [['The Music Train with Mr Phoenix','8:00pm']];
   return [];
 };
 const minsNow=()=>{const n=new Date();return n.getHours()*60+n.getMinutes()};
@@ -37,10 +42,11 @@ const setup=()=>{
   const nextTime=next.querySelector('.lw-next-time');
   const refresh=()=>{
     const now=new Date();
+    const d=now.getDay();
     const mins=minsNow();
     const today=scheduleForDate(now);
     const show=today[0];
-    const isLive=!!show && mins>=1170 && mins<1380;
+    const isLive=!!show && ((d===3&&mins>=1200&&mins<1320)||(d===4&&mins>=1200&&mins<1320)||(d===5&&mins>=1170&&mins<1380)||(d===6&&mins>=1200&&mins<1380));
     const isTonight=!!show && mins<1170;
     pill.classList.toggle('live',isLive);
     if(isLive){
