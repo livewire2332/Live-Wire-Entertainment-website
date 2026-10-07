@@ -96,15 +96,16 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     if(day===6)return ['The Music Train with Mr Phoenix','8:00pm',1200,1380];
     return null;
   };
-  const nextShow = now => {for(let i=0;i<=14;i++){const d=new Date(now);d.setDate(now.getDate()+i);const s=showForDate(d);if(!s)continue;const start=s[2];const mins=i===0?now.getHours()*60+now.getMinutes():-1;if(i===0&&mins>=start)continue;return {show:s,days:i}}return null};
-  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
-  let streamOnline=false,currentLiveShow=null;
-
-  const readStreamStatus = async () => {
-    const direct=await readDirectCasterStatus();
-    if(direct.ok){streamOnline=direct.online;refresh();return}
-    try{const r=await fetch('https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('status '+r.status);const data=await r.json();streamOnline=!!data?.online}catch(e){streamOnline=false}
-    refresh();
+  const nextShow = now => {
+    for(let i=0;i<=14;i++){
+      const d=new Date(now);d.setDate(now.getDate()+i);
+      const s=showForDate(d);if(!s)continue;
+      const start=s[2];
+      const mins=i===0?now.getHours()*60+now.getMinutes():-1;
+      if(i===0&&mins>=start+s[3]-s[2])continue;
+      return {show:s,days:i};
+    }
+    return null;
   };
 
   const refresh = () => {
