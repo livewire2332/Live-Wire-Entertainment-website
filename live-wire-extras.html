@@ -751,11 +751,11 @@ if(streamOnline && currentLiveShow){
   if(note)note.textContent='⚡ Live Wire';
 }else if(todayShow && mins>=startMins && !startedToday){
   pill.textContent='🟢 TONIGHT';pill.classList.remove('live');
-  title.textContent=todayShow[0];time.textContent='Tonight • '+todayShow[1];
+  title.textContent=todayShow[0];time.textContent='Starts at '+todayShow[1];
   if(note)note.textContent='⚡ Live Wire';
 }else if(todayShow && mins<startMins){
   pill.textContent='🟢 TONIGHT';pill.classList.remove('live');
-  title.textContent=todayShow[0];time.textContent='Tonight • '+todayShow[1];
+  title.textContent=todayShow[0];time.textContent='Starts at '+todayShow[1];
   if(note)note.textContent='⚡ Live Wire';
 }else{
   pill.textContent='🟢 NEXT UP';pill.classList.remove('live');
