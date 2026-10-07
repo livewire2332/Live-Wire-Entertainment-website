@@ -112,9 +112,9 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     let scheduledNow=null;
     if(day===3&&iso>='2026-10-03'&&!(iso>='2026-10-14'&&iso<='2026-10-28')&&mins>=1200&&mins<1320)scheduledNow=['The Wednesday Wire with DJ Disco Dan','8:00pm'];
     if(day===4&&iso>='2026-10-03'&&mins>=1200&&mins<1320)scheduledNow=['Surprise Package Thursdays with Mr Phoenix','8:00pm'];
-    if(day===5&&iso>='2026-10-03'&&!(iso>='2026-10-14'&&iso<='2026-10-26')&&mins>=1170&&mins<1380)scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
+    if(day===5&&iso>='2026-10-03'&&!(iso>='2026-10-14'&&iso<='2026-10-28')&&mins>=1170&&mins<1380)scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
     if(day===6&&iso>='2026-10-03'&&mins>=1200&&mins<1380)scheduledNow=['The Music Train with Mr Phoenix','8:00pm'];
-    if(day===6&&iso>='2026-10-03'&&mins<450&&!(iso>='2026-10-14'&&iso<='2026-10-26'))scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
+    if(day===6&&iso>='2026-10-03'&&mins<450&&!(iso>='2026-10-14'&&iso<='2026-10-28'))scheduledNow=['Feel Good Friday with DJ Disco Dan','7:30pm'];
     // Once a scheduled show is detected as live, keep that programme locked in the active box
     // for the entire time the stream remains online. This deliberately allows overruns past
     // midnight (or past the published end time) without jumping to the next scheduled show.
