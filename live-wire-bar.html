@@ -2652,7 +2652,7 @@ function getLiveWireShowForDate(iso,day,mins){
   if(day===5&&mins>=1170&&mins<1380)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
   if(day===6&&mins>=1200&&mins<1380)return ['The Music Train with Mr Phoenix','8:00pm'];
   // Only apply the Friday-after-midnight carry-over to the actual current time, never to future-date lookups.
-  if(day===6&&mins>=0&&mins<450&&!(iso>='2026-10-14'&&iso<='2026-10-26'))return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+  if(day===6&&mins>=0&&mins<450&&!(iso>='2026-10-14'&&iso<='2026-10-28'))return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
 
   return null;
 }
@@ -2686,8 +2686,11 @@ function getNextScheduledShow(){
     const mins=offset===0?now.getHours()*60+now.getMinutes():-1;
     const show=getLiveWireShowForDate(iso,day,mins);
 
-    // For future dates, ask using the actual programme start time.
-    const futureShow=offset===0?(show||(mins<start?getLiveWireShowForDate(iso,day,start):null)):getLiveWireShowForDate(iso,day,start);
+    // "Next scheduled" must mean a show that has not started yet.
+    // Once today's show time has passed, skip today and look forward.
+    const futureShow=offset===0
+      ? (mins<start ? getLiveWireShowForDate(iso,day,start) : null)
+      : getLiveWireShowForDate(iso,day,start);
     if(futureShow)return futureShow;
   }
   return null;
