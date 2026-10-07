@@ -68,44 +68,47 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 
 <script>
 (() => {
-  'use strict';
-  const STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json';
-  const MOUNT='/6W6zw';
-  const LIVE_WIRE_SCHEDULE_PAUSED=false;
+'use strict';
+const STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json',MOUNT='/6W6zw',LIVE_WIRE_SCHEDULE_PAUSED=false;
+let streamOnline=false,currentLiveShow=null;
+const readDirectCasterStatus=async()=>{const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),5000);try{const r=await fetch(STATUS_URL,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});if(!r.ok)throw new Error('caster '+r.status);const data=await r.json(),source=Array.isArray(data)?(data.find(item=>item?.source)?.source||{}):(data?.source||{}),online=Object.keys(source).some(m=>String(m).replace(/^\//,'')===MOUNT.replace(/^\//,''));return{ok:true,online}}catch(e){return{ok:false,online:false}}finally{clearTimeout(timer)}};
+const showForDate=date=>{const day=date.getDay(),iso=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');if(iso<'2026-10-03')return null;if(iso>='2026-10-14'&&iso<='2026-10-28'&&(day===3||day===5))return null;if(day===3)return['The Wednesday Wire with DJ Disco Dan','8:00pm',1200,1320];if(day===4)return['Surprise Package Thursdays with Mr Phoenix','8:00pm',1200,1320];if(day===5)return['Feel Good Friday with DJ Disco Dan','7:30pm',1170,1380];if(day===6)return['The Music Train with Mr Phoenix','8:00pm',1200,1380];return null};
+const nextShow=now=>{for(let i=0;i<=14;i++){const d=new Date(now);d.setDate(now.getDate()+i);const show=showForDate(d);if(!show)continue;if(i===0){const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(localStorage.getItem('lw-show-started-'+key)==='1'&&!streamOnline)continue}return{show,days:i}}return null};
+const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
+const refresh=()=>{const now=new Date(),mins=now.getHours()*60+now.getMinutes(),today=showForDate(now),key=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'),startedToday=localStorage.getItem('lw-show-started-'+key)==='1';if(LIVE_WIRE_SCHEDULE_PAUSED){currentLiveShow=null;set('homeLivePill','⏸️ SHOWS PAUSED');document.getElementById('homeLivePill')?.classList.remove('live');set('homeLiveTitle','We’ll Be Back Soon');set('homeLiveTime','New playout systems coming together');set('homeLiveNote','⚡ We’re working hard behind the scenes to get everything up & running — regular Live Wire shows will return soon.');return}if(streamOnline&&today){currentLiveShow=[today[0],today[1]];localStorage.setItem('lw-show-started-'+key,'1')}else if(!streamOnline)currentLiveShow=null;if(streamOnline){document.getElementById('homeLivePill')?.classList.add('live');set('homeLivePill','🔴 LIVE NOW');if(currentLiveShow){set('homeLiveTitle',currentLiveShow[0]);set('homeLiveTime','ON AIR NOW • '+currentLiveShow[1]);set('homeLiveNote','📡 Live stream detected • schedule also checked.')}else{set('homeLiveTitle','Live Wire Radio');set('homeLiveTime','ON AIR NOW • Live');set('homeLiveNote','📻 Live Wire Radio • Random music & Live Wire vibes')}return}document.getElementById('homeLivePill')?.classList.remove('live');if(today&&!startedToday){set('homeLivePill','🟡 TONIGHT');set('homeLiveTitle',today[0]);set('homeLiveTime','Starts '+today[1]);set('homeLiveNote',mins<today[2]?'⚡ Tonight on Live Wire.':'⚡ Tonight’s show is still due — it will not be skipped because the start is late.');return}set('homeLivePill','🟢 NEXT UP');const n=nextShow(now);if(n){set('homeLiveTitle',n.show[0]);set('homeLiveTime',(n.days===1?'Tomorrow':'In '+n.days+' days')+' • '+n.show[1])}else{set('homeLiveTitle','Live Wire Entertainment');set('homeLiveTime','No show currently scheduled')}set('homeLiveNote','⚡ Live Wire schedule')};
+const readStreamStatus=async()=>{const direct=await readDirectCasterStatus();if(direct.ok){streamOnline=direct.online;refresh();return}try{const r=await fetch('https://live-wire-entertainment-website.dlyons184.workers.dev/stream-status?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('status '+r.status);const data=await r.json();streamOnline=!!data?.online}catch(e){streamOnline=false}refresh()};
+refresh();readStreamStatus();setInterval(readStreamStatus,15000);
+})();
+</script>
 
-  const readDirectCasterStatus = async () => {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 5000);
-    try{
-      const r=await fetch(STATUS_URL,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
-      if(!r.ok)throw new Error('caster '+r.status);
-      const data=await r.json();
-      const source=Array.isArray(data)?(data.find(item=>item?.source)?.source||{}):(data?.source||{});
-      const online=Object.keys(source).some(mount=>String(mount).replace(/^\//,'')===MOUNT.replace(/^\//,''));
-      return {ok:true,online};
-    }catch(e){return {ok:false,online:false}}finally{clearTimeout(timer)}
-  };
+<section><div class="wrap">
+<div class="book-promo">
+  <div class="book-promo-inner">
+    <img class="book-promo-cover" src="live-wire-banter-cover.jpg?v=4" loading="eager" decoding="sync" width="105" height="158" alt="Live Wire Banter book cover">
+    <div class="book-promo-copy">
+      <div class="book-kicker">⚡ New from Live Wire ⚡</div>
+      <h2>LIVE WIRE BANTER</h2>
+      <p class="book-meta">The Ultimate Book of One-Liners, Comebacks &amp; Cheeky Shit</p>
+      <p>Featuring <strong>DJ Disco Dan &amp; Mr Phoenix</strong> — 410 pieces of banter across 10 sections.</p>
+      <a class="btn book-btn" href="live-wire-banter.html">📖 Book Page</a>
+      <a class="btn book-btn" href="https://amzn.eu/d/04ablGbt">⚡ Order Now</a>
+    </div>
+  </div>
+</div>
+</div></section>
 
-  const showForDate = date => {
-    const iso=date.toISOString().slice(0,10), day=date.getDay();
-    if(iso<'2026-10-03')return null;
-    if(iso>='2026-10-14'&&iso<='2026-10-28'&&(day===3||day===5))return null;
-    if(day===3)return ['The Wednesday Wire with DJ Disco Dan','8:00pm',1200,1320];
-    if(day===4)return ['Surprise Package Thursdays with Mr Phoenix','8:00pm',1200,1320];
-    if(day===5)return ['Feel Good Friday with DJ Disco Dan','7:30pm',1170,1380];
-    if(day===6)return ['The Music Train with Mr Phoenix','8:00pm',1200,1380];
-    return null;
-  };
-  const nextShow = now => {
-    for(let i=0;i<=14;i++){
-      const d=new Date(now);d.setDate(now.getDate()+i);
-      const show=showForDate(d);if(!show)continue;
-      if(i===0){
-        const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-        const started=localStorage.getItem('lw-show-started-'+key)==='1';
-        if(started && !streamOnline) continue;
-      }
-      return {show,days:i};
-    }
-    return null;
-  };>
+<section><div class="wrap">
+<h1>⚡ Our Flagship Shows</h1>
+<p>These are the two main Live Wire weekend shows — the nights that bring the biggest mix of music, banter, nostalgia and Live Wire vibes.</p>
+<div class="flagship-grid">
+<div class="card show-card flagship"><div class="show-kicker">🎧 Friday nights</div><h2>Feel Good Friday with DJ Disco Dan</h2><p class="show-time">🕢 Fridays from 7:30pm</p><p><strong>Your weekend starts here!</strong> Music spanning the decades, big singalong favourites, forgotten gems, nostalgia, banter and plenty of feel-good energy from DJ Disco Dan at the Live Wire Bar.</p><ul><li>🎶 Music spanning the decades</li><li>💿 Forgotten gems and nostalgia</li><li>🔥 Ham Bag Tune Dig</li><li>🌙 Midnight Magic</li><li>🕚 Serious Jockin’ at 11pm</li><li>🍹 Live Wire Bar atmosphere</li></ul></div>
+<div class="card show-card flagship"><div class="show-kicker">🚂 Saturday nights</div><h2>The Music Train with Mr Phoenix</h2><p class="show-time">🕗 Saturdays from 8pm</p><p><strong>Next stop... The Music Train!</strong> Mr Phoenix brings Live Wire's Saturday flagship show, taking the community on another musical journey through the decades.</p><p>Expect big tunes, nostalgia, banter and plenty of surprises as the Music Train rolls into another Saturday night. And then there's Mr Phoenix himself — wicked, always ready to wind someone up in the guest boxes, armed with plenty of wit and cheeky charm, and never far away from a Nickelback reference. 😂🔥</p><ul><li>🚂 A musical journey through the decades</li><li>🎵 Classic favourites and memorable tunes</li><li>😂 Live Wire banter, guest-box winding-up and cheeky charm</li><li>🎸 A healthy love of Nickelback</li></ul></div>
+</div>
+</div></section>
+
+<section><div class="wrap"><h1>📻 More Than Just A Live Show</h1><p>Live Wire Entertainment is growing into a home for music, nostalgia, live entertainment and community — bringing everything together in one place.</p><div class="feature-grid"><div class="card"><h2>🎧 Live Shows</h2><p>Catch the regular Live Wire shows and follow the latest entertainment from the DJs and presenters.</p></div><div class="card"><h2>💿 Music Memories</h2><p>Step back through the decades, rediscover forgotten gems and share the memories attached to the music.</p></div><div class="card"><h2>📸 Clips & Moments</h2><p>Funny moments, memorable clips and highlights from the Live Wire world will have a home here.</p></div><div class="card"><h2>🚀 What's Coming</h2><p>New interactive features, community ideas and more ways to experience Live Wire are planned for the future.</p></div></div></div></section>
+<section class="cta"><div class="wrap"><h1>⚡ Stay Connected With Live Wire</h1><p>Follow the action, find our latest links and keep up with the Live Wire Entertainment community.</p><p><span class="live-badge">⚡ LIVE WIRE ENTERTAINMENT ⚡</span></p><p><a class="btn" href="https://linktr.ee/livewireentertainment23">Open Live Wire Links</a></p></div></section>
+<section><div class="wrap"><h1>🎵 The Live Wire Promise</h1><p>Music comes first. Community matters. The banter is part of the fun. And whether you're here for a favourite tune, a live show, a laugh in the Live Wire Bar or simply a bit of nostalgia, there's always something happening.</p></div></section>
+<footer><p>© 2026 Live Wire Entertainment</p><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a> · <a class="admin-link" href="tiktok-publisher.html">⚙️ TikTok Publisher</a></p></footer>
+</body>
+</html>
