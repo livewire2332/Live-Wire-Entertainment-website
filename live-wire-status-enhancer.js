@@ -3,7 +3,10 @@
 const scheduleForDate=date=>{
   const d=date.getDay();
   const iso=date.toISOString().slice(0,10);
-  if(d===5)return [['Feel Good Friday with DJ Disco Dan','7:30pm']];
+  if(d===5){
+    if(iso>='2026-10-14'&&iso<='2026-10-28')return [];
+    return [['Feel Good Friday with DJ Disco Dan','7:30pm']];
+  }
   if(d===6)return [iso<'2026-10-03'?['Saturday Floor Fillers with DJ Disco Dan','7:30pm']:['The Music Train with Mr Phoenix','7:30pm']];
   return [];
 };
