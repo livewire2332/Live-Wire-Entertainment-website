@@ -60,22 +60,22 @@ const setup=()=>{
       pill.textContent='🔴 LIVE NOW';
       title.textContent=show[0];
       time.textContent='ON AIR NOW • Scheduled from '+show[1];
-      if(note)note.textContent='This is the scheduled Live Wire show for this time. Genuine live-stream detection can be connected later.';
+      if(note)note.textContent='';
     }else if(isTonight){
       pill.textContent='🟢 TONIGHT';
       title.textContent=show[0];
       time.textContent='Tonight • '+show[1];
-      if(note)note.textContent='Tonight’s Live Wire show is coming up. Check back at showtime for LIVE NOW.';
+      if(note)note.textContent='';
     }else if(isAfterStart){
       pill.textContent='🟢 TONIGHT';
       title.textContent=show[0];
       time.textContent='Tonight • '+show[1];
-      if(note)note.textContent='Tonight’s Live Wire show is scheduled — the box will not skip it just because the start is late.';
+      if(note)note.textContent='';
     }else{
       pill.textContent='🟢 NEXT UP';
       const n=nextShow(now);
       if(n){title.textContent=n.show[0];time.textContent=(n.days===1?'Tomorrow':'In '+n.days+' days')+' • '+n.show[1];}
-      if(note)note.textContent='Live Wire schedule updates automatically.';
+      if(note)note.textContent='';
     }
     const n=nextShow(now);
     if(n){
