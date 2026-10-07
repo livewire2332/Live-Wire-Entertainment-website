@@ -2645,10 +2645,10 @@ function getLiveWireShowForDate(iso,day,mins){
 
   // Daniel / DJ Disco Dan is away 14–26 October 2026.
   // Phoenix's Thursday and Saturday shows continue as normal.
-  if(iso>='2026-10-14'&&iso<='2026-10-26'&&(day===3||day===5))return null;
+  if(iso>='2026-10-14'&&iso<='2026-10-28'&&(day===3||day===5))return null;
 
-  if(day===3&&mins>=1200&&mins<1320)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
-  if(day===4&&mins>=1200&&mins<1320)return ['Thursday Surprise Package with Mr Phoenix','8:00pm'];
+  if(day===3&&mins>=1200)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
+  if(day===4&&mins>=1200&&mins<1320)return ['Surprise Package Thursdays with Mr Phoenix','8:00pm'];
   if(day===5&&mins>=1170&&mins<1380)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
   if(day===6&&mins>=1200&&mins<1380)return ['The Music Train with Mr Phoenix','8:00pm'];
   // Only apply the Friday-after-midnight carry-over to the actual current time, never to future-date lookups.
@@ -2716,12 +2716,27 @@ function setBarLiveStatus(online){
 
   const scheduled=getScheduledShow();
   const nextScheduled=getNextScheduledShow();
+  const now=new Date();
+  const iso=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  const day=now.getDay();
+  const mins=now.getHours()*60+now.getMinutes();
+  const todayShow=day===3?['The Wednesday Wire with DJ Disco Dan','8:00pm']:
+                   day===4?['Surprise Package Thursdays with Mr Phoenix','8:00pm']:
+                   day===5?['Feel Good Friday with DJ Disco Dan','7:30pm']:
+                   day===6?['The Music Train with Mr Phoenix','8:00pm']:null;
+  const todayStart=day===5?1170:1200;
+  const showStartedKey='lw-bar-show-started-'+iso;
+  const showWasStarted=localStorage.getItem(showStartedKey)==='1';
 
-  // A scheduled show becomes the live programme only when the stream
-  // is detected during its scheduled window. If it overruns, keep that
-  // programme name until the stream actually goes offline.
-  if(online && scheduled){
-    currentLiveShow=scheduled;
+  // Once the stream is detected from the advertised start onward, remember
+  // today's show. That lets the Jukebox keep the correct programme name
+  // through a late start or an overrun. It only advances when the stream
+  // actually goes offline.
+  if(online && todayShow && mins>=todayStart){
+    currentLiveShow=scheduled||todayShow;
+    localStorage.setItem(showStartedKey,'1');
+  }else if(online && showWasStarted && todayShow){
+    currentLiveShow=todayShow;
   }else if(!online){
     currentLiveShow=null;
   }
