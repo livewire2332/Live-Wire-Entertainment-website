@@ -2681,7 +2681,7 @@ function getNextScheduledShow(){
     const start=day===3||day===4||day===6?1200:1170;
 
     if(iso<'2026-10-03')continue;
-    if(iso>='2026-10-14'&&iso<='2026-10-26'&&(day===3||day===5))continue;
+    if(iso>='2026-10-14'&&iso<='2026-10-28'&&(day===3||day===5))continue;
 
     const mins=offset===0?now.getHours()*60+now.getMinutes():-1;
     const show=getLiveWireShowForDate(iso,day,mins);
