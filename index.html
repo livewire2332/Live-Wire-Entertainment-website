@@ -119,8 +119,12 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
     // Once a scheduled show is detected as live, keep that programme locked in the active box
     // for the entire time the stream remains online. This deliberately allows overruns past
     // midnight (or past the published end time) without jumping to the next scheduled show.
-    if(streamOnline&&scheduledNow&&!pauseActive)currentLiveShow=scheduledNow;
-    else if(!streamOnline||pauseActive)currentLiveShow=null;
+    // If the stream is online, keep today's scheduled show in the active box even
+    // after its published end time. This supports late starts and overruns.
+    // If the stream goes offline, the box immediately moves on to the next show.
+    const todayScheduled = today ? [today[0],today[1]] : null;
+    if(streamOnline && !pauseActive && todayScheduled) currentLiveShow=todayScheduled;
+    else if(!streamOnline || pauseActive) currentLiveShow=null;
 
     if(pauseActive){
       set('homeLivePill','⏸️ SHOWS PAUSED');document.getElementById('homeLivePill')?.classList.remove('live');set('homeLiveTitle','We’ll Be Back Soon');set('homeLiveTime','New playout systems coming together');set('homeLiveNote','⚡ We’re working hard behind the scenes to get everything up & running — regular Live Wire shows will return soon.');
