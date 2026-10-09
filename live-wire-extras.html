@@ -679,6 +679,7 @@ const getShowsForDate=(date)=>{
   const d=date.getDay();
   const iso=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
   if(iso<'2026-10-03')return [];
+  if(iso==='2026-10-09')return [['Phoenix Friday Takeover with Mr Phoenix','8:00pm']];
   if(LIVE_WIRE_SCHEDULE_PAUSED&&(d===3||d===5))return [];
   if(d===3)return [['The Wednesday Wire with DJ Disco Dan','8:00pm']];
   if(d===4)return [['Surprise Package Thursdays with Mr Phoenix','8:00pm']];
@@ -687,6 +688,8 @@ const getShowsForDate=(date)=>{
   return [];
 };
 const getScheduleWindow=(date)=>{
+  const iso=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+  if(iso==='2026-10-09')return [1200,1380];
   const d=date.getDay();
   if(d===3)return [1200,1320];
   if(d===4)return [1200,1320];
