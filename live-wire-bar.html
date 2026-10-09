@@ -2643,8 +2643,9 @@ function getLiveWireShowForDate(iso,day,mins){
   // The resumed Live Wire schedule starts Saturday 3 October 2026.
     if(iso<'2026-10-03')return null;
 
-  // Daniel / DJ Disco Dan is away 14–26 October 2026.
-  // Phoenix's Thursday and Saturday shows continue as normal.
+  // One-off Phoenix Friday Takeover, Friday 9 October 2026, from 8pm.
+  if(iso==='2026-10-09'&&day===5&&mins>=1200&&mins<1380)return ['Phoenix Friday Takeover with Mr Phoenix','8:00pm'];
+  // DJ Disco Dan's regular Wednesday and Friday shows remain paused.
   if(day===3||day===5)return null;
 
   if(day===3&&mins>=1200)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
@@ -2678,7 +2679,7 @@ function getNextScheduledShow(){
     d.setDate(base.getDate()+offset);
     const iso=localDateKey(d);
     const day=d.getDay();
-    const start=day===3||day===4||day===6?1200:1170;
+    const start=iso==='2026-10-09'?1200:(day===3||day===4||day===6?1200:1170);
 
     if(iso<'2026-10-03')continue;
     if(day===3||day===5)continue;
