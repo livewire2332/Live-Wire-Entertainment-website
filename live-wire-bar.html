@@ -2713,7 +2713,8 @@ function setBarLiveStatus(online){
   const iso=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
   const day=now.getDay();
   const mins=now.getHours()*60+now.getMinutes();
-   const todayShow=day===4?['Surprise Package Thursdays with Mr Phoenix','8:00pm']:
+   const todayShow=iso==='2026-10-09'?['Phoenix Friday Takeover with Mr Phoenix','8:00pm']:
+                    day===4?['Surprise Package Thursdays with Mr Phoenix','8:00pm']:
                     day===6?['The Music Train with Mr Phoenix','8:00pm']:null;
    const todayStart=1200;
   const showStartedKey='lw-bar-show-started-'+iso;
