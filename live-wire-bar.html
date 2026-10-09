@@ -2691,7 +2691,7 @@ function getNextScheduledShow(){
     const futureShow=offset===0
       ? (mins<start ? getLiveWireShowForDate(iso,day,start) : null)
       : getLiveWireShowForDate(iso,day,start);
-    if(futureShow)return futureShow;
+    if(futureShow)return {show:futureShow,days:offset};
   }
   return null;
 }
@@ -2740,7 +2740,7 @@ function setBarLiveStatus(online){
     }else if(online){
       showEl.textContent='📻 Live Wire Radio • Continuous music outside scheduled shows';
     }else if(nextScheduled){
-      showEl.textContent='📅 Next up: '+nextScheduled[0]+' • '+nextScheduled[1];
+      showEl.innerHTML='📅 Next up: '+nextScheduled.show[0]+' • '+nextScheduled.show[1]+'<br><span class="jukebox-next-day">'+(nextScheduled.days===1?'Tomorrow':nextScheduled.days===0?'Today':'In '+nextScheduled.days+' days')+'</span>';
     }else{
       showEl.textContent='📻 Live Wire Radio • Continuous music outside scheduled shows';
     }
