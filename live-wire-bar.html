@@ -2645,14 +2645,14 @@ function getLiveWireShowForDate(iso,day,mins){
 
   // Daniel / DJ Disco Dan is away 14–26 October 2026.
   // Phoenix's Thursday and Saturday shows continue as normal.
-  if(iso>='2026-10-14'&&iso<='2026-10-28'&&(day===3||day===5))return null;
+  if(day===3||day===5)return null;
 
   if(day===3&&mins>=1200)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
   if(day===4&&mins>=1200&&mins<1320)return ['Surprise Package Thursdays with Mr Phoenix','8:00pm'];
   if(day===5&&mins>=1170&&mins<1380)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
   if(day===6&&mins>=1200&&mins<1380)return ['The Music Train with Mr Phoenix','8:00pm'];
   // Only apply the Friday-after-midnight carry-over to the actual current time, never to future-date lookups.
-  if(day===6&&mins>=0&&mins<450&&!(iso>='2026-10-14'&&iso<='2026-10-28'))return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
+  // DJ Disco Dan's Friday show is paused, including the after-midnight carry-over.
 
   return null;
 }
@@ -2681,7 +2681,7 @@ function getNextScheduledShow(){
     const start=day===3||day===4||day===6?1200:1170;
 
     if(iso<'2026-10-03')continue;
-    if(iso>='2026-10-14'&&iso<='2026-10-28'&&(day===3||day===5))continue;
+    if(day===3||day===5)continue;
 
     const mins=offset===0?now.getHours()*60+now.getMinutes():-1;
     const show=getLiveWireShowForDate(iso,day,mins);
@@ -2697,25 +2697,16 @@ function getNextScheduledShow(){
 }
 
 let currentLiveShow=null;
-// Master schedule pause: keep every scheduled show paused until Dan explicitly says Live Wire is ready to resume.
-const LIVE_WIRE_SCHEDULE_PAUSED=true;
-const isPausePeriod=()=>{
-  return LIVE_WIRE_SCHEDULE_PAUSED;
+// DJ Disco Dan's shows are paused; Mr Phoenix's shows and Live Wire Radio remain active.
+const isPausePeriod=()=>false;
 };
 
 function setBarLiveStatus(online){
   const el=document.getElementById('barLiveStatus');
   const showEl=document.getElementById('barLiveShow');
   const jukebox=document.querySelector('.proper-jukebox');
-  if(jukebox){jukebox.classList.toggle('live-stream',!!online && !isPausePeriod());jukebox.classList.toggle('shows-paused',isPausePeriod());}
+  if(jukebox){jukebox.classList.toggle('live-stream',!!online);jukebox.classList.toggle('shows-paused',false);}
   if(!el)return;
-  if(isPausePeriod()){
-    currentLiveShow=null;
-    el.textContent='⏸️ SHOWS PAUSED';
-    el.classList.remove('live');
-    if(showEl)showEl.textContent='⚡ We’ll be back soon — new playout systems are being brought up behind the scenes.';
-    return;
-  }
 
   const scheduled=getScheduledShow();
   const nextScheduled=getNextScheduledShow();
