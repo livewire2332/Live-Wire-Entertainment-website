@@ -757,10 +757,6 @@ if(streamOnline && !todayShow){
   pill.textContent='🔴 LIVE NOW';pill.classList.add('live');
   title.textContent=currentLiveShow[0];time.textContent='ON AIR NOW • '+currentLiveShow[1];
   if(note)note.textContent='On Live Wire ⚡️';
-}else if(todayShow && mins>=startMins && !startedToday){
-  pill.textContent='🟢 TONIGHT';pill.classList.remove('live');
-  title.textContent=todayShow[0];time.textContent='Starts at '+todayShow[1];
-  if(note)note.textContent='On Live Wire ⚡️';
 }else if(todayShow && mins<startMins){
   pill.textContent='🟢 TONIGHT';pill.classList.remove('live');
   title.textContent=todayShow[0];time.textContent='Starts at '+todayShow[1];
