@@ -2687,11 +2687,13 @@ function getNextScheduledShow(){
 
     const mins=offset===0?now.getHours()*60+now.getMinutes():-1;
     const show=getLiveWireShowForDate(iso,day,mins);
+    const startedKey='lw-bar-show-started-'+iso;
+    const showWasStarted=localStorage.getItem(startedKey)==='1';
 
-    // "Next scheduled" must mean a show that has not started yet.
-    // Once today's show time has passed, skip today and look forward.
+    // Keep today's scheduled show visible through a late start. Only advance
+    // after a detected stream has actually gone offline.
     const futureShow=offset===0
-      ? (mins<start ? getLiveWireShowForDate(iso,day,start) : null)
+      ? ((!showWasStarted || mins<start) ? getLiveWireShowForDate(iso,day,start) : null)
       : getLiveWireShowForDate(iso,day,start);
     if(futureShow)return {show:futureShow,days:offset};
   }
