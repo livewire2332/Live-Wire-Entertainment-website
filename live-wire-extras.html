@@ -671,7 +671,7 @@ const getShowsForDate=(date)=>{
   const d=date.getDay();
   const iso=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
   if(iso<'2026-10-03')return [];
-  if(iso>='2026-10-14'&&iso<='2026-10-28'&&(d===3||d===5))return [];
+  if(LIVE_WIRE_SCHEDULE_PAUSED&&(d===3||d===5))return [];
   if(d===3)return [['The Wednesday Wire with DJ Disco Dan','8:00pm']];
   if(d===4)return [['Surprise Package Thursdays with Mr Phoenix','8:00pm']];
   if(d===5)return [['Feel Good Friday with DJ Disco Dan','7:30pm']];
@@ -721,31 +721,29 @@ status();
 }
 function status(){
 const now=new Date(),mins=now.getHours()*60+now.getMinutes(),day=now.getDay(),iso=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-const pauseActive=LIVE_WIRE_SCHEDULE_PAUSED;
+const todayShows=getShowsForDate(now),window=getScheduleWindow(now),todayShow=todayShows[0];
 const todayShows=pauseActive?[]:getShowsForDate(now),window=getScheduleWindow(now),todayShow=todayShows[0];
 const pill=document.getElementById('statusPill'),title=document.getElementById('statusTitle'),time=document.getElementById('statusTime'),note=document.getElementById('statusNote');
 if(!pill||!title||!time)return;
 const todayKey='lw-show-started-'+iso;
 let startedToday=localStorage.getItem(todayKey)==='1';
 
-if(pauseActive){
-currentLiveShow=null;
-pill.textContent='⏸️ SHOWS PAUSED';pill.classList.remove('live');
-title.textContent='We’ll Be Back Soon';time.textContent='New playout systems coming together';
-if(note)note.textContent='⚡ We’re working hard behind the scenes to get everything up & running — regular Live Wire shows will return soon.';
-return;
-}
 
 if(streamOnline && todayShow){
   startedToday=true;
   localStorage.setItem(todayKey,'1');
   currentLiveShow=[todayShow[0],todayShow[1]];
 }
-if(!streamOnline && startedToday) currentLiveShow=null;
+if(!streamOnline) currentLiveShow=null;
+if(streamOnline&&!todayShow)currentLiveShow=null;
 
 const startMins=window?window[0]:0;
 const endMins=window?window[1]:0;
-if(streamOnline && currentLiveShow){
+if(streamOnline && !todayShow){
+  pill.textContent='🔴 LIVE NOW';pill.classList.add('live');
+  title.textContent='Live Wire Radio';time.textContent='ON AIR NOW • Continuous music';
+  if(note)note.textContent='📻 Live Wire Radio keeps the music going outside scheduled shows. ⚡💜';
+}else if(streamOnline && currentLiveShow){
   pill.textContent='🔴 LIVE NOW';pill.classList.add('live');
   title.textContent=currentLiveShow[0];time.textContent='ON AIR NOW • '+currentLiveShow[1];
   if(note)note.textContent='On Live Wire ⚡️';
