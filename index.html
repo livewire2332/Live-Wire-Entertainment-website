@@ -30,12 +30,15 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 @media(prefers-reduced-motion:reduce){section::before,.feature-grid .card::before,.card:not(.show-card)::before,.flagship::after{animation:none}}
 
 /* Compact homepage live-status */
-.home-live-status{max-width:760px;margin:18px auto 0;padding:12px 16px;border:1px solid rgba(0,234,255,.48);border-radius:14px;background:linear-gradient(135deg,rgba(8,12,25,.94),rgba(24,8,28,.92));box-shadow:0 0 14px rgba(0,234,255,.14),0 0 26px rgba(255,43,214,.08);text-align:center}
-.home-live-status .home-live-pill{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1px;padding:4px 10px;border-radius:999px;border:1px solid rgba(0,234,255,.6);color:#58eaff}
+.home-live-status{max-width:760px;margin:18px auto 0;padding:12px 16px;border:1px solid rgba(0,234,255,.65);border-radius:14px;background:linear-gradient(135deg,rgba(8,12,25,.94),rgba(24,8,28,.92));box-shadow:0 0 12px rgba(0,234,255,.24),0 0 22px rgba(255,43,214,.16),inset 0 0 12px rgba(0,234,255,.04);text-align:center;animation:homeStatusGlow 4s ease-in-out infinite}
+.home-live-status .home-live-pill{display:inline-block;font-size:12px;font-weight:900;letter-spacing:1px;padding:4px 10px;border-radius:999px;border:1px solid rgba(0,234,255,.6);color:#58eaff;animation:homeNextPulse 2.8s ease-in-out infinite}
 .home-live-status .home-live-pill.live{color:#fff;border-color:#ff2b55;box-shadow:0 0 10px rgba(255,43,85,.45)}
 .home-live-status .home-live-title{margin:5px 0 1px;font-size:18px;font-weight:900}
 .home-live-status .home-live-time{margin:0;color:#58eaff;font-weight:800;font-size:13px}
 .home-live-status .home-live-note{margin:3px 0 0;font-size:12px;opacity:.82}
+@keyframes homeStatusGlow{0%,100%{box-shadow:0 0 10px rgba(0,234,255,.18),0 0 18px rgba(255,43,214,.1),inset 0 0 8px rgba(0,234,255,.03)}50%{box-shadow:0 0 17px rgba(0,234,255,.32),0 0 27px rgba(255,43,214,.2),inset 0 0 12px rgba(0,234,255,.06)}}
+@keyframes homeNextPulse{0%,100%{box-shadow:0 0 4px rgba(0,234,255,.18);transform:scale(1)}50%{box-shadow:0 0 9px rgba(0,234,255,.42),0 0 13px rgba(255,43,214,.18);transform:scale(1.025)}}
+@media(prefers-reduced-motion:reduce){.home-live-status,.home-live-status .home-live-pill{animation:none;}}
 @media(max-width:600px){.home-live-status{margin-left:10px;margin-right:10px;padding:10px 12px}.home-live-status .home-live-title{font-size:16px}}
 </style>
 
