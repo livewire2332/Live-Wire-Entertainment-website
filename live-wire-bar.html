@@ -2731,7 +2731,7 @@ function setBarLiveStatus(online){
     currentLiveShow=null;
   }
 
-  el.textContent=online ? '🔴 LIVE NOW — LISTEN LIVE' : '⚫ RADIO STANDBY — CHECK NEXT SHOW';
+  el.textContent=online ? '🔴 LIVE NOW — LISTEN LIVE' : '⚫ OFF AIR — CHECK NEXT SHOW';
   el.classList.toggle('live',online);
 
   if(showEl){
@@ -2740,7 +2740,7 @@ function setBarLiveStatus(online){
     }else if(online){
       showEl.textContent='📻 Live Wire Radio • Continuous music outside scheduled shows';
     }else if(nextScheduled){
-      showEl.textContent='📻 Live Wire Radio • Continuous music outside scheduled shows. 📅 Next up: '+nextScheduled[0]+' • '+nextScheduled[1];
+      showEl.textContent='📅 Next up: '+nextScheduled[0]+' • '+nextScheduled[1];
     }else{
       showEl.textContent='📻 Live Wire Radio • Continuous music outside scheduled shows';
     }
