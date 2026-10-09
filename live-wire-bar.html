@@ -2699,7 +2699,6 @@ function getNextScheduledShow(){
 let currentLiveShow=null;
 // DJ Disco Dan's shows are paused; Mr Phoenix's shows and Live Wire Radio remain active.
 const isPausePeriod=()=>false;
-};
 
 function setBarLiveStatus(online){
   const el=document.getElementById('barLiveStatus');
@@ -2717,7 +2716,6 @@ function setBarLiveStatus(online){
    const todayShow=day===4?['Surprise Package Thursdays with Mr Phoenix','8:00pm']:
                     day===6?['The Music Train with Mr Phoenix','8:00pm']:null;
    const todayStart=1200;
-  const todayStart=day===5?1170:1200;
   const showStartedKey='lw-bar-show-started-'+iso;
   const showWasStarted=localStorage.getItem(showStartedKey)==='1';
 
