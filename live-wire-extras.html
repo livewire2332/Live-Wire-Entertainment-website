@@ -722,7 +722,6 @@ status();
 function status(){
 const now=new Date(),mins=now.getHours()*60+now.getMinutes(),day=now.getDay(),iso=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
 const todayShows=getShowsForDate(now),window=getScheduleWindow(now),todayShow=todayShows[0];
-const todayShows=pauseActive?[]:getShowsForDate(now),window=getScheduleWindow(now),todayShow=todayShows[0];
 const pill=document.getElementById('statusPill'),title=document.getElementById('statusTitle'),time=document.getElementById('statusTime'),note=document.getElementById('statusNote');
 if(!pill||!title||!time)return;
 const todayKey='lw-show-started-'+iso;
