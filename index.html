@@ -69,7 +69,7 @@ section:not(#shows)::after,section#shows::after{content:"";position:absolute;ins
 <script>
 (() => {
 'use strict';
-const STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json',MOUNT='/6W6zw',LIVE_WIRE_SCHEDULE_PAUSED=false;
+const STATUS_URL='https://sapircast.caster.fm:12036/admin/publicstats.json',MOUNT='/6W6zw',LIVE_WIRE_SCHEDULE_PAUSED=true;
 let streamOnline=false,currentLiveShow=null;
 const readDirectCasterStatus=async()=>{const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),5000);try{const r=await fetch(STATUS_URL,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});if(!r.ok)throw new Error('caster '+r.status);const data=await r.json(),source=Array.isArray(data)?(data.find(item=>item?.source)?.source||{}):(data?.source||{}),online=Object.keys(source).some(m=>String(m).replace(/^\//,'')===MOUNT.replace(/^\//,''));return{ok:true,online}}catch(e){return{ok:false,online:false}}finally{clearTimeout(timer)}};
 const showForDate=date=>{const day=date.getDay(),iso=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');if(iso<'2026-10-03')return null;if(iso>='2026-10-14'&&iso<='2026-10-28'&&(day===3||day===5))return null;if(day===3)return['The Wednesday Wire with DJ Disco Dan','8:00pm',1200,1320];if(day===4)return['Surprise Package Thursdays with Mr Phoenix','8:00pm',1200,1320];if(day===5)return['Feel Good Friday with DJ Disco Dan','7:30pm',1170,1380];if(day===6)return['The Music Train with Mr Phoenix','8:00pm',1200,1380];return null};
