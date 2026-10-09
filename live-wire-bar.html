@@ -2697,8 +2697,7 @@ function getNextScheduledShow(){
 }
 
 let currentLiveShow=null;
-// DJ Disco Dan's shows are paused; Mr Phoenix's shows and Live Wire Radio remain active.
-const isPausePeriod=()=>false;
+// DJ Disco Dan's Wednesday and Friday shows are excluded; Mr Phoenix and Live Wire Radio run normally.
 
 function setBarLiveStatus(online){
   const el=document.getElementById('barLiveStatus');
@@ -2732,18 +2731,18 @@ function setBarLiveStatus(online){
     currentLiveShow=null;
   }
 
-  el.textContent=online ? '🔴 LIVE NOW — LISTEN LIVE' : '⚫ OFF AIR — CHECK SCHEDULE';
+  el.textContent=online ? '🔴 LIVE NOW — LISTEN LIVE' : '⚫ RADIO STANDBY — CHECK NEXT SHOW';
   el.classList.toggle('live',online);
 
   if(showEl){
     if(online && currentLiveShow){
       showEl.textContent='🎧 '+currentLiveShow[0]+' • '+currentLiveShow[1];
     }else if(online){
-      showEl.textContent='📻 Live Wire Radio • Random music & Live Wire vibes';
+      showEl.textContent='📻 Live Wire Radio • Continuous music outside scheduled shows';
     }else if(nextScheduled){
-      showEl.textContent='📻 Live Wire Radio remains available outside scheduled streams. 📅 Next scheduled: '+nextScheduled[0]+' • '+nextScheduled[1];
+      showEl.textContent='📻 Live Wire Radio • Continuous music outside scheduled shows. 📅 Next up: '+nextScheduled[0]+' • '+nextScheduled[1];
     }else{
-      showEl.textContent='⚡ No Live Wire show scheduled right now';
+      showEl.textContent='📻 Live Wire Radio • Continuous music outside scheduled shows';
     }
   }
 }
