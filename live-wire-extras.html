@@ -753,7 +753,7 @@ if(streamOnline&&!todayShow)currentLiveShow=null;
 
 const startMins=window?window[0]:0;
 const endMins=window?window[1]:0;
-if(streamOnline && !todayShow){
+if(streamOnline && !currentLiveShow){
   pill.textContent='🔴 LIVE NOW';pill.classList.add('live');
   title.textContent='Live Wire Radio';time.textContent='ON AIR NOW • Continuous music';
   if(note)note.textContent='On Live Wire ⚡️';
