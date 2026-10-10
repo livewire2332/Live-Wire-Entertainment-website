@@ -2645,15 +2645,13 @@ function getLiveWireShowForDate(iso,day,mins){
 
   // One-off Phoenix Friday Takeover, Friday 9 October 2026, from 8pm.
   if(iso==='2026-10-09'&&day===5&&mins>=1200&&mins<1380)return ['Phoenix Friday Takeover with Mr Phoenix','8:00pm'];
-  // DJ Disco Dan's regular Wednesday and Friday shows remain paused.
-  if(day===3||day===5)return null;
+  // Dan's shows remain on break through 28 October; Feel Good Friday returns on 30 October.
+  if((day===3||day===5)&&iso<'2026-10-30')return null;
 
   if(day===3&&mins>=1200)return ['The Wednesday Wire with DJ Disco Dan','8:00pm'];
   if(day===4&&mins>=1200&&mins<1320)return ['Surprise Package Thursdays with Mr Phoenix','8:00pm'];
   if(day===5&&mins>=1170&&mins<1380)return ['Feel Good Friday with DJ Disco Dan','7:30pm'];
   if(day===6&&mins>=1200&&mins<1380)return ['The Music Train with Mr Phoenix','8:00pm'];
-  // Only apply the Friday-after-midnight carry-over to the actual current time, never to future-date lookups.
-  // DJ Disco Dan's Friday show is paused, including the after-midnight carry-over.
 
   return null;
 }
@@ -2682,8 +2680,8 @@ function getNextScheduledShow(){
     const start=iso==='2026-10-09'?1200:(day===3||day===4||day===6?1200:1170);
 
     if(iso<'2026-10-03')continue;
-    // Allow the one-off Friday 9 October takeover through the normal paused-Friday filter.
-    if((day===3||day===5)&&!(iso==='2026-10-09'&&day===5))continue;
+    // Keep Dan's Wednesday/Friday shows hidden only during his break; allow the one-off Phoenix takeover.
+    if((day===3||day===5)&&iso<'2026-10-30'&&!(iso==='2026-10-09'&&day===5))continue;
 
     const mins=offset===0?now.getHours()*60+now.getMinutes():-1;
     const show=getLiveWireShowForDate(iso,day,mins);
@@ -2717,9 +2715,11 @@ function setBarLiveStatus(online){
   const day=now.getDay();
   const mins=now.getHours()*60+now.getMinutes();
    const todayShow=iso==='2026-10-09'?['Phoenix Friday Takeover with Mr Phoenix','8:00pm']:
+                    day===3&&iso>='2026-10-30'?['The Wednesday Wire with DJ Disco Dan','8:00pm']:
                     day===4?['Surprise Package Thursdays with Mr Phoenix','8:00pm']:
+                    day===5&&iso>='2026-10-30'?['Feel Good Friday with DJ Disco Dan','7:30pm']:
                     day===6?['The Music Train with Mr Phoenix','8:00pm']:null;
-   const todayStart=1200;
+   const todayStart=day===5?1170:1200;
   const showStartedKey='lw-bar-show-started-'+iso;
   const showWasStarted=localStorage.getItem(showStartedKey)==='1';
 
