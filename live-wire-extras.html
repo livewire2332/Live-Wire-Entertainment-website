@@ -743,7 +743,7 @@ const todayKey='lw-show-started-'+iso;
 let startedToday=localStorage.getItem(todayKey)==='1';
 
 
-if(streamOnline && todayShow){
+if(streamOnline && todayShow && window && mins>=window[0]){
   startedToday=true;
   localStorage.setItem(todayKey,'1');
   currentLiveShow=[todayShow[0],todayShow[1]];
