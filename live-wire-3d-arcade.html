@@ -8,11 +8,29 @@
 <nav class="games" aria-label="Choose a 3D game"><button data-game="darts" class="active">🎯 Darts 301</button><button data-game="fruit">🍒 Fruit Machine</button><button data-game="bowling">🎳 Pub Bowling</button><button data-game="coin">🪙 Coin Pusher</button><button data-game="killer">🎯 Killer Darts</button><button data-game="skittles">🎳 Pub Skittles</button><button data-game="shuffle">🟠 Shuffleboard</button><button data-game="cards">🃏 Higher or Lower</button><button data-game="bagatelle">🟡 Bagatelle</button><button data-game="football">⚽ Table Football</button></nav>
 <div class="layout"><section class="stageWrap"><div id="stage" class="stage" aria-label="Interactive 3D game scene"><div class="hud"><span class="chip" id="gameTitle">DARTS 301</span><span class="chip" id="score">YOU 301 · CPU 301</span></div></div></section><aside class="side"><h2 id="sideTitle">Darts 301</h2><p id="description">Aim at the board, then throw your dart. Try to finish on a double.</p><div id="status" class="status" aria-live="polite">Tap the board to aim, then throw.</div><div id="controls"></div><p class="help">Drag to orbit the camera a little. Tap or click objects to interact. Works best in a modern browser with WebGL enabled.</p></aside></div>
 <a class="back" href="live-wire-arcade.html">← Back to the original Live Wire Arcade</a><div class="foot">Live Wire Entertainment ⚡💜 · 3D scenes use Three.js delivered through a public CDN. Gameplay is an evolving browser simulation, not a commercial physics engine.</div></main>
-<script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js" onerror="this.onerror=function(){this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/0.164.1/three.min.js';};this.src='https://unpkg.com/three@0.164.1/build/three.min.js';"></script>
+<script>
+(function(){
+ const sources=[
+  'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js',
+  'https://unpkg.com/three@0.164.1/build/three.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.164.1/three.min.js'
+ ];
+ let index=0;
+ function loadNext(){
+  if(index>=sources.length)return;
+  const script=document.createElement('script');
+  script.src=sources[index++];
+  script.onload=function(){window.dispatchEvent(new Event('livewire-three-ready'));};
+  script.onerror=function(){script.remove();loadNext();};
+  document.head.appendChild(script);
+ }
+ loadNext();
+})();
+</script>
 <script>
 (function(){
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-if(!window.THREE){$('#stage').innerHTML='<div style="padding:24px;color:#fff"><h2 style="color:#39f5ff">3D graphics could not load</h2><p>Your browser could not download the 3D engine from the available CDNs. Check that content blockers or network restrictions are not blocking the graphics library, then reload this page.</p><button onclick="location.reload()" style="padding:12px 18px;border-radius:8px;background:#b52cff;color:#fff;border:1px solid #39f5ff;font-weight:800">RETRY 3D ARCADE</button></div>';return;}
+if(!window.THREE){$('#stage').innerHTML='<div style="padding:24px;color:#fff"><h2 style="color:#39f5ff">3D graphics could not load</h2><p>The browser could not download the 3D engine. Try opening one of these library sources directly, then return to this arcade page:</p><p><a style="color:#39f5ff" href="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js" target="_blank" rel="noopener">Test graphics source 1</a></p><p><a style="color:#39f5ff" href="https://unpkg.com/three@0.164.1/build/three.min.js" target="_blank" rel="noopener">Test graphics source 2</a></p><p><a style="color:#39f5ff" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.164.1/three.min.js" target="_blank" rel="noopener">Test graphics source 3</a></p><a href="./live-wire-3d-arcade.html?retry=1" style="display:inline-block;padding:12px 18px;border-radius:8px;background:#b52cff;color:#fff;border:1px solid #39f5ff;font-weight:800;text-decoration:none">RETRY 3D ARCADE</a></div>';return;}
 let scene,camera,renderer,clock,active='darts',objects=[],animators=[],raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),drag=null,scoreState={},targetGroup=null,aimPoint=null,selected=null;
 const meta={
 darts:['Darts 301','Aim at the dartboard and throw. Finish on exactly zero with a double.'],
