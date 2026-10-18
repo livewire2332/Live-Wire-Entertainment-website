@@ -41,6 +41,55 @@ input[type=range]{accent-color:#c04dff;cursor:pointer}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 @media(max-width:720px){.cabinet{box-shadow:inset 0 2px 0 #ffffff26,0 0 0 3px #140b20,0 0 0 5px #54247b,0 0 22px #39f5ff28}.board{max-width:280px}}
 
+
+/* GAME-SPECIFIC DEPTH PASS: DARTBOARD + BOWLING */
+.board{
+  width:min(100%,330px);padding:0;isolation:isolate;
+  background:
+    radial-gradient(circle at 50% 50%,transparent 0 7.4%,#d8d3c8 7.5% 8.2%,#191919 8.3% 9.1%,transparent 9.2%),
+    repeating-conic-gradient(from -9deg,#202020 0 9deg,#eee9dc 9deg 18deg);
+  border:12px solid #8e8e98;
+  outline:3px solid #d6d5df;
+  box-shadow:inset 0 0 0 3px #f7f3e9,inset 0 0 0 7px #24212a,inset 0 0 24px #000d,0 5px 0 #5b5664,0 9px 0 #28232f,0 17px 22px #000c,0 0 25px #c04dff30;
+  transform:perspective(900px) rotateX(2deg);
+}
+.board:before{
+  inset:19%;border:7px solid #d23c4e;
+  background:
+    radial-gradient(circle,#d8d2c4 0 9%,#202020 9.5% 12%,transparent 12.5%),
+    repeating-conic-gradient(from -9deg,#202020 0 9deg,#eee9dc 9deg 18deg);
+  box-shadow:inset 0 0 0 3px #e4d8c9,inset 0 0 0 6px #202020,inset 0 0 14px #000c,0 0 0 2px #a7a1ac;
+}
+.board:after{
+  inset:38%;border:7px solid #48bd76;
+  background:radial-gradient(circle,#c93042 0 30%,#e9d8c6 31% 36%,#242126 37% 44%,#c93042 45% 100%);
+  box-shadow:inset 0 0 0 2px #f4d6c6,inset 0 0 12px #000b,0 0 0 2px #d9d2c9;
+}
+.board button{z-index:4}
+.board button:focus-visible{outline:3px solid var(--cyan);outline-offset:-7px}
+.lane{
+  height:255px;perspective:600px;
+  background:
+    linear-gradient(90deg,#2d1914 0 4%,transparent 4% 96%,#2d1914 96%),
+    repeating-linear-gradient(90deg,#553322 0 2px,#956843 2px 24px,#b8875c 24px 27px,#8d603f 27px 49px);
+  border:5px solid #7a5135;border-radius:9px;
+  box-shadow:inset 0 0 0 2px #d8ae7c,inset 0 0 25px #1a0d08,0 4px 0 #54351f,0 9px 0 #2a1710,0 15px 22px #000b;
+  transform:perspective(650px) rotateX(8deg);transform-origin:center bottom;
+}
+.lane:before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(90deg,transparent 12%,#f6d6a515 50%,transparent 88%),linear-gradient(180deg,#ffffff20,transparent 42%,#0006);
+}
+.lane:after{
+  content:"";position:absolute;left:8%;right:8%;top:0;bottom:0;pointer-events:none;
+  border-left:2px solid #e6c28b55;border-right:2px solid #e6c28b55;
+  background:repeating-linear-gradient(180deg,transparent 0 34px,#e5c18a22 35px 36px);
+}
+.pins{z-index:2;top:8px;filter:drop-shadow(0 4px 2px #0008);text-shadow:0 2px 0 #fff,0 4px 3px #0008;line-height:1.5;letter-spacing:.12em}
+.ball{z-index:3;font-size:2.15rem;filter:drop-shadow(0 5px 3px #000b);text-shadow:0 1px 0 #fff}
+#aim{accent-color:#c04dff}
+@media(max-width:720px){.board{width:min(100%,300px);border-width:10px}.lane{height:235px}}
+
 </style></head>
 <body><header><h1>⚡ LIVE WIRE RETRO ARCADE ⚡</h1><p>CLASSIC PUB GAMES • NEON ARCADE STYLE</p></header>
 <main class="wrap"><div class="notice"><strong>WELCOME TO THE LIVE WIRE RETRO ARCADE ⚡</strong> Ten classic-style pub and arcade games. This is a first release, with some game outcomes and physics simulated rather than fully physical.</div><nav class="tabs" aria-label="Choose a game"><button data-game="darts" aria-selected="true">🎯 Darts 301</button><button data-game="fruit" aria-selected="false">🍒 Fruit Machine</button><button data-game="bowling" aria-selected="false">🎳 Pub Bowling</button><button data-game="coin" aria-selected="false">🪙 Coin Pusher</button><button data-game="killer" aria-selected="false">🎯 Killer Darts</button><button data-game="skittles" aria-selected="false">🎳 Pub Skittles</button><button data-game="shuffle" aria-selected="false">🟠 Shuffleboard</button><button data-game="cards" aria-selected="false">🃏 Higher or Lower</button><button data-game="bagatelle" aria-selected="false">🟡 Bagatelle</button><button data-game="football" aria-selected="false">⚽ Table Football</button></nav><section class="cabinet"><div class="marquee">LIVE WIRE • ARCADE COLLECTION</div><div id="game"></div></section><p class="muted"><a href="../live-wire-extras.html" style="color:var(--cyan)">← Back to Live Wire Fun & Extras</a></p></main>
