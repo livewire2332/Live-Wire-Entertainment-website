@@ -27,9 +27,9 @@ bagatelle:['Bagatelle','Drop a ball through the pegs and score in the pockets.']
 football:['Table Football','Tap a direction to shoot. Beat the keeper to score.']
 };
 function mat(color,rough=.55,metal=0){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal})}
-function box(w,h,d,color,x,y,z,rough=.5,metal=0){let m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color,rough,metal));m.position.set(x,y,z);scene.add(m);objects.push(m);return m}
-function sphere(r,color,x,y,z,metal=0){let m=new THREE.Mesh(new THREE.SphereGeometry(r,24,18),mat(color,.28,metal));m.position.set(x,y,z);scene.add(m);objects.push(m);return m}
-function cyl(rt,rb,h,color,x,y,z,metal=0){let m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,32),mat(color,.3,metal));m.position.set(x,y,z);scene.add(m);objects.push(m);return m}
+function box(w,h,d,color,x,y,z,rough=.5,metal=0){let m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color,rough,metal));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);objects.push(m);return m}
+function sphere(r,color,x,y,z,metal=0){let m=new THREE.Mesh(new THREE.SphereGeometry(r,32,24),mat(color,.24,metal));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;m.position.set(x,y,z);scene.add(m);objects.push(m);return m}
+function cyl(rt,rb,h,color,x,y,z,metal=0){let m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,40),mat(color,.24,metal));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);objects.push(m);return m}
 function textSprite(text,color='#ffffff',size=48){let c=document.createElement('canvas');c.width=512;c.height=128;let ctx=c.getContext('2d');ctx.clearRect(0,0,512,128);ctx.font='bold '+size+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor=color;ctx.shadowBlur=12;ctx.fillStyle=color;ctx.fillText(text,256,64);let tex=new THREE.CanvasTexture(c),m=new THREE.Mesh(new THREE.PlaneGeometry(3.2,.8),new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));return m}
 function clearScene(){objects.forEach(o=>{scene.remove(o);o.geometry?.dispose();if(o.material?.map)o.material.map.dispose();o.material?.dispose()});objects=[];animators=[];targetGroup=null;aimPoint=null;selected=null}
 function setup(){
@@ -43,7 +43,20 @@ animate();
 function resize(){if(!renderer)return;let el=$('#stage'),w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
 function floor(color='#21172a'){box(18,.2,18,color,0,-.25,0,.8)}
 function wall(){box(18,8,.25,'#100b1b',0,3.7,-5,.8);for(let x=-7;x<=7;x+=2){let l=box(.035,5,.04,x%4===0?'#39f5ff':'#b94bff',x,2.6,-4.82,.2,.2);l.material.emissive.set(l.material.color);l.material.emissiveIntensity=1.5}}
-function stageBase(){floor();wall();box(8,.18,1,'#3a214b',0,-.08,3,.3,.5)}
+function stageBase(){
+floor('#17111f');wall();
+ // A more immersive neon pub-arcade room: layered floorboards, glowing trim, ceiling beams and a branded back-wall sign.
+ for(let i=0;i<18;i++){let z=-8.1+i*.95;let plank=box(17.7,.035,.91,i%2?'#30202f':'#241827',0,-.135,z,.42,.12);plank.receiveShadow=true;for(let x=-8;x<8;x+=2.95)box(.018,.012,.9,'#6e4353',x,-.112,z,.4,.1)}
+ box(18,.12,.18,'#29133b',0,6.7,-4.72,.3,.4);
+ for(let x=-8;x<=8;x+=4)box(.08,.12,10,'#34203e',x,6.3,-.2,.35,.35);
+ ring(1.7,.035,'#39f5ff',0,4.45,-4.63);
+ ring(1.48,.025,'#c04dff',0,4.45,-4.59);
+ let sign=textSprite('LIVE WIRE ARCADE','#39f5ff',54);sign.position.set(0,4.45,-4.5);sign.scale.set(3.4,.72,1);scene.add(sign);objects.push(sign);
+ // Glowing skirting and cabinet-side rails add scale and depth to the room.
+ box(17.5,.08,.08,'#39f5ff',0,.02,-4.68,.2,.25);
+ box(.08,.08,15,'#c04dff',-8.7,.02,1,.2,.25);box(.08,.08,15,'#39f5ff',8.7,.02,1,.2,.25);
+ box(8,.18,1,'#3a214b',0,-.08,3,.3,.5);
+}
 function ring(radius,tube,color,x,y,z,rotX=0){let m=new THREE.Mesh(new THREE.TorusGeometry(radius,tube,10,64),new THREE.MeshStandardMaterial({color,metalness:.75,roughness:.24,emissive:color,emissiveIntensity:.12}));m.position.set(x,y,z);m.rotation.x=rotX;scene.add(m);objects.push(m);return m}
 function dartboard(){let g=new THREE.Group();g.position.set(0,2.65,-2.3);g.rotation.y=0;scene.add(g);targetGroup=g;
 let back=new THREE.Mesh(new THREE.CylinderGeometry(1.55,1.55,.24,64),mat('#29232e',.25,.7));back.rotation.x=Math.PI/2;g.add(back);
