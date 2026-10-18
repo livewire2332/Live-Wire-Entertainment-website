@@ -40,5 +40,24 @@ if(game==="bagatelle")$("#drop").onclick=()=>{if(s.busy||!s.balls)return;s.busy=
 if(game==="football"){let goal=who=>{if(s.done)return;s[who]++;$("#you").textContent=s.you;$("#cpu").textContent=s.cpu;$("#msg").textContent=who==="you"?"GOAL!":"CPU scores!";$("#ball").style.left=who==="you"?"88%":"8%";tone(who==="you"?850:210,.15);if(s.you>=5||s.cpu>=5){s.done=true;$("#msg").textContent+=(s.you>s.cpu?" FULL TIME — YOU WIN!":" FULL TIME — CPU WINS!")}else setTimeout(()=>$("#ball").style.left="48%",500)};$("#shoot").onclick=()=>Math.random()<.58?goal("you"):goal("cpu");$("#defend").onclick=()=>Math.random()<.6?$("#msg").textContent="GREAT SAVE!":goal("cpu")}
 }
 function bowlingScore(r){let total=0,i=0;for(let f=0;f<10;f++){if(r[i]===undefined)break;if(r[i]===10){if(r[i+1]===undefined||r[i+2]===undefined)break;total+=10+r[i+1]+r[i+2];i++}else{if(r[i+1]===undefined)break;if(r[i]+r[i+1]===10){if(r[i+2]===undefined)break;total+=10+r[i+2]}else total+=r[i]+r[i+1];i+=2}}return total}
-$$(".tabs button").forEach(b=>b.onclick=()=>{game=b.dataset.game;reset()});reset();
+// Robust startup: delegate game-tab taps and initialise after the DOM is ready.
+function startArcade(){
+  const nav=document.querySelector(".tabs");
+  if(!nav) throw new Error("Arcade game tabs could not be found.");
+  nav.addEventListener("click",function(event){
+    const button=event.target.closest("button[data-game]");
+    if(!button || !nav.contains(button)) return;
+    event.preventDefault();
+    game=button.dataset.game;
+    reset();
+  });
+  reset();
+}
+if(document.readyState==="loading"){
+  document.addEventListener("DOMContentLoaded",function(){
+    try{startArcade()}catch(error){console.error("Live Wire Arcade startup error:",error);const box=document.querySelector("#game");if(box)box.innerHTML='<p class="msg">ARCADE ERROR: '+String(error.message||error)+'</p>';}
+  },{once:true});
+}else{
+  try{startArcade()}catch(error){console.error("Live Wire Arcade startup error:",error);const box=document.querySelector("#game");if(box)box.innerHTML='<p class="msg">ARCADE ERROR: '+String(error.message||error)+'</p>';}
+}
 </script></body></html>
