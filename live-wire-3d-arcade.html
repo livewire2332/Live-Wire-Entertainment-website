@@ -55,6 +55,11 @@ function floor(color='#21172a'){
 function wall(){box(18,8,.25,'#100b1b',0,3.7,-5,.8);for(let x=-7;x<=7;x+=2){let l=box(.035,5,.04,x%4===0?'#39f5ff':'#b94bff',x,2.6,-4.82,.2,.2);l.material.emissive.set(l.material.color);l.material.emissiveIntensity=1.5}}
 function stageBase(){
 floor('#17111f');wall();
+ // Background arcade cabinets give the scene real scale and a recognisable amusement-arcade setting.
+ arcadeCabinet(-6.65,-2.0,'#39f5ff','#102438');
+ arcadeCabinet(6.65,-2.0,'#c04dff','#281038');
+ arcadeCabinet(-5.35,-4.0,'#ff3fb4','#241027');
+ arcadeCabinet(5.35,-4.0,'#ffe45c','#30240d');
  // A more immersive neon pub-arcade room: layered floorboards, glowing trim, ceiling beams and a branded back-wall sign.
  for(let i=0;i<18;i++){let z=-8.1+i*.95;let plank=box(17.7,.035,.91,i%2?'#30202f':'#241827',0,-.135,z,.42,.12);plank.receiveShadow=true;for(let x=-8;x<8;x+=2.95)box(.018,.012,.9,'#6e4353',x,-.112,z,.4,.1)}
  box(18,.12,.18,'#29133b',0,6.7,-4.72,.3,.4);
@@ -66,6 +71,18 @@ floor('#17111f');wall();
  box(17.5,.08,.08,'#39f5ff',0,.02,-4.68,.2,.25);
  box(.08,.08,15,'#c04dff',-8.7,.02,1,.2,.25);box(.08,.08,15,'#39f5ff',8.7,.02,1,.2,.25);
  box(8,.18,1,'#3a214b',0,-.08,3,.3,.5);
+}
+function arcadeCabinet(x,z,accent,screenColor='#101827'){
+ let g=new THREE.Group();g.position.set(x,0,z);
+ const add=(geo,material,pos,rot)=>{let m=new THREE.Mesh(geo,material);m.position.set(...pos);if(rot)m.rotation.set(...rot);m.castShadow=true;m.receiveShadow=true;g.add(m);return m};
+ add(new THREE.BoxGeometry(1.25,2.6,.85),mat('#17121f',.28,.45),[0,1.3,0]);
+ add(new THREE.BoxGeometry(1.12,1.05,.08),mat('#070b15',.2,.35),[0,1.85,.46],[-.12,0,0]);
+ add(new THREE.BoxGeometry(.98,.8,.025),new THREE.MeshStandardMaterial({color:screenColor,emissive:accent,emissiveIntensity:.65,roughness:.2}),[0,1.87,.515],[-.12,0,0]);
+ for(let xx of [-.51,.51])add(new THREE.BoxGeometry(.035,1.2,.04),new THREE.MeshStandardMaterial({color:accent,emissive:accent,emissiveIntensity:1.3}),[xx,1.95,.49]);
+ add(new THREE.BoxGeometry(1.05,.28,.08),mat('#33223f',.25,.5),[0,1.12,.47]);
+ for(let i=0;i<3;i++){let b=add(new THREE.CylinderGeometry(.075,.075,.07,20),mat(['#ff3fb4','#39f5ff','#ffe45c'][i],.25,.3),[-.27+i*.27,.98,.53],[Math.PI/2,0,0]);b.material.emissive.set(b.material.color);b.material.emissiveIntensity=.4}
+ add(new THREE.BoxGeometry(1.12,.08,.08),new THREE.MeshStandardMaterial({color:accent,emissive:accent,emissiveIntensity:1.2}),[0,.08,.45]);
+ scene.add(g);objects.push(g);return g
 }
 function ring(radius,tube,color,x,y,z,rotX=0){let m=new THREE.Mesh(new THREE.TorusGeometry(radius,tube,10,64),new THREE.MeshStandardMaterial({color,metalness:.75,roughness:.24,emissive:color,emissiveIntensity:.12}));m.position.set(x,y,z);m.rotation.x=rotX;scene.add(m);objects.push(m);return m}
 function dartboard(){let g=new THREE.Group();g.position.set(0,2.65,-2.3);g.rotation.y=0;scene.add(g);targetGroup=g;
