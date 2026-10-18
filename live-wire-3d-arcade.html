@@ -17,7 +17,7 @@
  ];
  let index=0;
  function loadNext(){
-  if(index>=sources.length)return;
+  if(index>=sources.length){window.dispatchEvent(new Event('livewire-three-ready'));return;}
   const script=document.createElement('script');
   script.src=sources[index++];
   script.onload=function(){window.dispatchEvent(new Event('livewire-three-ready'));};
