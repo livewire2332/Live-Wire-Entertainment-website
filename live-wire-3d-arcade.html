@@ -28,8 +28,9 @@
 })();
 </script>
 <script>
+window.addEventListener("livewire-three-ready",function(){
 (function(){
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const $=s=>document.querySelector(s), $=s=>[...document.querySelectorAll(s)];
 if(!window.THREE){$('#stage').innerHTML='<div style="padding:24px;color:#fff"><h2 style="color:#39f5ff">3D graphics could not load</h2><p>The browser could not download the 3D engine. Try opening one of these library sources directly, then return to this arcade page:</p><p><a style="color:#39f5ff" href="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js" target="_blank" rel="noopener">Test graphics source 1</a></p><p><a style="color:#39f5ff" href="https://unpkg.com/three@0.164.1/build/three.min.js" target="_blank" rel="noopener">Test graphics source 2</a></p><p><a style="color:#39f5ff" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.164.1/three.min.js" target="_blank" rel="noopener">Test graphics source 3</a></p><a href="./live-wire-3d-arcade.html?retry=1" style="display:inline-block;padding:12px 18px;border-radius:8px;background:#b52cff;color:#fff;border:1px solid #39f5ff;font-weight:800;text-decoration:none">RETRY 3D ARCADE</a></div>';return;}
 let scene,camera,renderer,clock,active='darts',objects=[],animators=[],raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),drag=null,scoreState={},targetGroup=null,aimPoint=null,selected=null;
 const meta={
@@ -136,4 +137,5 @@ function animate(){requestAnimationFrame(animate);let now=performance.now();anim
 $$('.games button').forEach(b=>b.addEventListener('click',()=>buildGame(b.dataset.game)));
 setup();buildGame('darts');
 })();
+});
 </script></body></html>
