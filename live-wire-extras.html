@@ -698,6 +698,12 @@ const getShowsForDate=(date)=>{
   if(iso<'2026-10-03')return [];
   if(iso==='2026-10-09')return [['Phoenix Friday Takeover with Mr Phoenix','8:00pm']];
   if((d===3||d===5)&&iso<'2026-10-30')return [];
+  if(iso>='2026-11-09'&&iso<='2026-12-12'){
+    if(d===3)return [['The Wednesday Wire with DJ Disco Dan','8:00pm']];
+    if(d===5)return [['Feel Good Friday with DJ Disco Dan','7:30pm']];
+    if(d===6)return [['Saturday Floor Fillers with DJ Disco Dan','8:00pm']];
+    return [];
+  }
   if(d===3)return [['The Wednesday Wire with DJ Disco Dan','8:00pm']];
   if(d===4)return [['Surprise Package Thursdays with Mr Phoenix','8:00pm']];
   if(d===5)return [['Feel Good Friday with DJ Disco Dan','7:30pm']];
@@ -793,7 +799,7 @@ const decadeBox=document.getElementById('decadeButtons');if(decadeBox)Object.key
 const friday=document.getElementById('fridayMoodBtn');if(friday)friday.addEventListener('click',function(){const m=pick(fridayMoods);document.getElementById('fridayMood').textContent=m[0];document.getElementById('fridaySub').textContent=m[1];});
 const banterBtn=document.getElementById('banterBtn');if(banterBtn)banterBtn.addEventListener('click',function(){document.getElementById('banterText').textContent=pick(banter);});
 const train=document.getElementById('trainBtn');if(train)train.addEventListener('click',function(){document.getElementById('destination').textContent='NEXT STOP: '+pick(destinations).toUpperCase();});
-const data={Wednesday:'The Wednesday Wire with DJ Disco Dan from around 8pm. ⚡',Thursday:'Surprise Package with Mr Phoenix from around 8pm. 🎁',Friday:'Feel-good tunes, nostalgia and the weekend starting from 7:30pm. 🎧',Saturday:'The Music Train with Mr Phoenix from 8pm. 🚂'};document.querySelectorAll('.night').forEach(b=>b.addEventListener('click',function(){document.getElementById('selectedNight').textContent=this.dataset.night+': '+data[this.dataset.night];}));try{status();}catch(e){} readStreamStatus(); setInterval(readStreamStatus,15000);}
+const data={Wednesday:'The Wednesday Wire with DJ Disco Dan from around 8pm. ⚡',Thursday:'Surprise Package with Mr Phoenix from around 8pm (except 9 Nov–12 Dec while Phoenix is away). 🎁',Friday:'Feel-good tunes, nostalgia and the weekend starting from 7:30pm. 🎧',Saturday:'The Music Train with Mr Phoenix from 8pm, or Saturday Floor Fillers with DJ Disco Dan from 9 Nov–12 Dec. 🚂🎧'};document.querySelectorAll('.night').forEach(b=>b.addEventListener('click',function(){document.getElementById('selectedNight').textContent=this.dataset.night+': '+data[this.dataset.night];}));try{status();}catch(e){} readStreamStatus(); setInterval(readStreamStatus,15000);}
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init,{once:true});}else{init();}})();
 </script>
 <script>
